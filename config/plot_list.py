@@ -12,9 +12,9 @@ def standard_list( pindex, sindex, nbins = 100) :
     d = standard_variables( pindex, sindex, nbins )
     l = [
             Space( d["m0"],    d["m12"]  ),
-            Space( d["m0"],    d["tanb"] ),
-            Space( d["m12"],   d["tanb"] ),
-            Space( d["mneu1"], d["ssi"], logx = True, logy = True )
+#            Space( d["m0"],    d["tanb"] ),
+#            Space( d["m12"],   d["tanb"] ),
+#            Space( d["mneu1"], d["ssi"], logx = True, logy = True )
         ]
     return l
 
