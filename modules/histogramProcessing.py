@@ -15,9 +15,20 @@ def histo_call_count() :
 
 def entry_histo_prefix() :
     return "iHist"
-
 def entry_histo_name( v1, v2 ) :
     return "%s_%d_%d" % ( entry_histo_prefix(), v1, v2 )
+
+def save_hlist_to_root_file( hlist, filename, directory = None ) :
+    f = r.TFile( filename, "UPDATE" )
+    f.cd()
+    if directory is not None :
+        if not f.cd( directory ) :
+            f.mkdir( directory ).cd()
+            f.cd( directory )
+    for h in hlist :
+        h.Write("",r.TObject.kOverwrite)
+    f.Close()
+
 
 def initialize_2d_histo ( space ) :
     xmin, xmax = space.xaxis.min_val, space.xaxis.max_val
@@ -103,9 +114,20 @@ def calculate_entry_histograms( spaces, chain ) :
                     c.SetBinContent(ibin, chi2) 
                     h.SetBinContent(ibin, entry)
     return histos
+ 
+def count_ndof( c, min_contrib, inputs ) :
+    count = 0
+    for x in c[1:] :    
+        if x > min_contrib
+        count += 1
+    count -= inputs
+    return count
 
-def get_data_hists( rfile, d, hlist ) :
-    p_hists = []
+def make_all_data_hists( rfile, d, hlist ) :
+    # p_hists[0] = chi2
+    # p_hists[1] = pval
+    # p_hists[2] = dchi2
+    p_hists = [[]*3]
     chain = MCC.MCchain( rfile, d )
     nentries = chain.GetEntries()
     for h in hlist :
@@ -130,7 +152,11 @@ def get_data_hists( rfile, d, hlist ) :
         title = "%s;%s;%s" % ( h.GetTitle(), h.GetXaxis().GetTitle(),
         h.GetYaxis().GetTitle() )
 
-        p_hists.append( r.TH2D( h.GetName() + "_chi2", title, nbinsx,
+        p_hists[0].append( r.TH2D( h.GetName() + "_chi2", title, nbinsx,
+            xmin, xmax, nbinsy, ymin, ymax ) )
+        p_hists[1].append( r.TH2D( h.GetName() + "_pval", title, nbinsx,
+            xmin, xmax, nbinsy, ymin, ymax ) )
+        p_hists[2].append( r.TH2D( h.GetName() + "_dchi", title, nbinsx,
             xmin, xmax, nbinsy, ymin, ymax ) )
 
         nbins = nbinsx * nbinsy
@@ -146,21 +172,16 @@ def get_data_hists( rfile, d, hlist ) :
             if entry > 0 :
                 chain.GetEntry(entry)
                 content = chain.chi2vars[0]
-            p_hists[-1].SetBinContent( i, content )
+            p_hists[0][-1].SetBinContent( i, content )
+            if content > 0 and MCchain.contrib_state :
+                count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
+                p_hists[1][-1].SetBinContent( i, r.TMath.Prob( content, ndof )
+            p_hists[2][-1].SetBinContent( i, content )
+    perform_zero_offset( p_hists[2] )
     return p_hists
 
-def save_hlist_to_root_file( hlist, filename, directory = None ) :
-    f = r.TFile( filename, "UPDATE" )
-    f.cd()
-    if directory is not None :
-        if not f.cd( directory ) :
-            f.mkdir( directory ).cd()
-            f.cd( directory )
-    for h in hlist :
-        h.Write("",r.TObject.kOverwrite)
-    f.Close()
 
-def get_hist_list( rfile, d, spaces ) :
+def get_entry_hist_list( rfile, d, spaces ) :
     hl = []
     entry_hist_dict = d["EntryDirectory"]
     hnames = []
@@ -174,10 +195,56 @@ def get_hist_list( rfile, d, spaces ) :
     f.Close()
     return hl
 
+def get_hist_minimum_values( hl ) :
+    mins = []
+    for h in hl :
+        nbins = h.GetNbinsX()*GetNbinsY()
+        min_val = 1e9
+        for bin in range(nbins+1) :
+            c = h.GetBinContent(bin)
+            if c < min_val and c > 0 : min_val = c
+        mins.append(min_val)
+    return mins
 
-def set_chi2_hist_properties( h ) :
-    h.GetYaxis().SetTitleOffset(1.5)
-    h.GetZaxis().SetTitle( "#chi^{2}" )
-    h.SetMinimum(20.)
-    h.SetMaximum(30.)
-    h.SetContour(10)
+def perform_zero_offset( hl ) :
+    for h in hl :
+        nbins = h.GetNbinsX()*GetNbinsY()
+        min_val = 1e9
+        for bin in range(nbins+1) :
+            c = h.GetBinContent(bin)
+            if c < min_val and c > 0 : min_val = c
+        for bin in range(nbins+1) :
+            content = h.GetBinContent(bin)
+            h.SetBinContent( bin, content - min_val )
+
+def set_hist_properties( mode = "chi2", hl ) :
+    d = { "dchi" : { "YaxisTitleOffset" : 1.5,
+                     "ZaxisTitle"       : "#Delta#chi^{2}"
+                     "ZaxisTitleOffset" : 2.5,
+                     "Minimum"          : 0.,
+                     "Maximum"          : 25.,
+                   }
+          "pval" : { "YaxisTitleOffset" : 1.5,
+                     "ZaxisTitle"       : "P(#chi^{2},N_{DOF})",
+                     "ZaxisTitleOffset" : 2.5,
+                     "Minimum"          : 0.,
+                     "Maximum"          : 1.,
+                   }
+          "chi2" : { "YaxisTitleOffset" : 1.5,
+                     "ZaxisTitle"       : "#chi^{2}",
+                     "ZaxisTitleOffset" : 2.0,
+                     "Minimum"          : get_hist_minimum_values(hl),
+                     "Maximum"          : 25.,
+                   }
+    e = d[mode]
+    for i,h in enumerate(hl) :
+        h.GetYaxis().SetTitleOffset( e["YaxisTitleOffset"] )
+        h.GetZaxis().SetTitle( e["ZaxisTitle"] )
+        h.GetZaxis().SetTitleOffset( e["ZaxisTitleOffset"] )
+
+        if len e["Minimum"] > 0 :
+            h.SetMinimum( e["Minimum"][i] )
+            h.SetMaximum( e["Minimum"][i] + e["Maximum"] )
+        else :
+            h.SetMinimum( e["Minimum"] )
+            h.SetMaximum( e["Maximum"] )
