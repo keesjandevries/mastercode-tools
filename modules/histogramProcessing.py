@@ -175,7 +175,8 @@ def make_all_data_hists( rfile, d, hlist ) :
             p_hists[0][-1].SetBinContent( i, content )
             if content > 0 and chain.contrib_state :
                 ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
-                p_hists[1][-1].SetBinContent( i, r.TMath.Prob( content, ndof ) )
+                pval = r.TMath.Prob( content, ndof )
+                p_hists[1][-1].SetBinContent( i, pval )
             p_hists[2][-1].SetBinContent( i, content )
     perform_zero_offset( p_hists[2] )
     return p_hists
