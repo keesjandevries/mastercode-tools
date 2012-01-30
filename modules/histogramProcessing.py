@@ -118,8 +118,8 @@ def calculate_entry_histograms( spaces, chain ) :
 def count_ndof( c, min_contrib, inputs ) :
     count = 0
     for x in c[1:] :    
-        if x > min_contrib
-        count += 1
+        if x > min_contrib :
+            count += 1
     count -= inputs
     return count
 
@@ -127,7 +127,7 @@ def make_all_data_hists( rfile, d, hlist ) :
     # p_hists[0] = chi2
     # p_hists[1] = pval
     # p_hists[2] = dchi2
-    p_hists = [[]*3]
+    p_hists = [ [],[],[] ]
     chain = MCC.MCchain( rfile, d )
     nentries = chain.GetEntries()
     for h in hlist :
@@ -173,9 +173,9 @@ def make_all_data_hists( rfile, d, hlist ) :
                 chain.GetEntry(entry)
                 content = chain.chi2vars[0]
             p_hists[0][-1].SetBinContent( i, content )
-            if content > 0 and MCchain.contrib_state :
-                count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
-                p_hists[1][-1].SetBinContent( i, r.TMath.Prob( content, ndof )
+            if content > 0 and chain.contrib_state :
+                ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
+                p_hists[1][-1].SetBinContent( i, r.TMath.Prob( content, ndof ) )
             p_hists[2][-1].SetBinContent( i, content )
     perform_zero_offset( p_hists[2] )
     return p_hists
@@ -198,7 +198,7 @@ def get_entry_hist_list( rfile, d, spaces ) :
 def get_hist_minimum_values( hl ) :
     mins = []
     for h in hl :
-        nbins = h.GetNbinsX()*GetNbinsY()
+        nbins = h.GetNbinsX()*h.GetNbinsY()
         min_val = 1e9
         for bin in range(nbins+1) :
             c = h.GetBinContent(bin)
@@ -208,7 +208,7 @@ def get_hist_minimum_values( hl ) :
 
 def perform_zero_offset( hl ) :
     for h in hl :
-        nbins = h.GetNbinsX()*GetNbinsY()
+        nbins = h.GetNbinsX()*h.GetNbinsY()
         min_val = 1e9
         for bin in range(nbins+1) :
             c = h.GetBinContent(bin)
@@ -217,34 +217,36 @@ def perform_zero_offset( hl ) :
             content = h.GetBinContent(bin)
             h.SetBinContent( bin, content - min_val )
 
-def set_hist_properties( mode = "chi2", hl ) :
+def set_hist_properties( mode = "chi2", hl = None ) :
     d = { "dchi" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "#Delta#chi^{2}"
+                     "ZaxisTitle"       : "#Delta#chi^{2}",
                      "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : 0.,
-                     "Maximum"          : 25.,
-                   }
+                     "Minimum"          : [0.],
+                     "Maximum"          : [25.],
+                   },
           "pval" : { "YaxisTitleOffset" : 1.5,
                      "ZaxisTitle"       : "P(#chi^{2},N_{DOF})",
                      "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : 0.,
-                     "Maximum"          : 1.,
-                   }
+                     "Minimum"          : [0.],
+                     "Maximum"          : [1.],
+                   },
           "chi2" : { "YaxisTitleOffset" : 1.5,
                      "ZaxisTitle"       : "#chi^{2}",
                      "ZaxisTitleOffset" : 2.0,
                      "Minimum"          : get_hist_minimum_values(hl),
-                     "Maximum"          : 25.,
+                     "Maximum"          : [25.],
                    }
+        }
+
     e = d[mode]
     for i,h in enumerate(hl) :
         h.GetYaxis().SetTitleOffset( e["YaxisTitleOffset"] )
         h.GetZaxis().SetTitle( e["ZaxisTitle"] )
         h.GetZaxis().SetTitleOffset( e["ZaxisTitleOffset"] )
 
-        if len e["Minimum"] > 0 :
+        if len(e["Minimum"]) > 0 :
             h.SetMinimum( e["Minimum"][i] )
-            h.SetMaximum( e["Minimum"][i] + e["Maximum"] )
+            h.SetMaximum( e["Minimum"][i] + e["Maximum"][0] )
         else :
-            h.SetMinimum( e["Minimum"] )
-            h.SetMaximum( e["Maximum"] )
+            h.SetMinimum( e["Minimum"][0] )
+            h.SetMaximum( e["Maximum"][0] )
