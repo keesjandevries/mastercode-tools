@@ -11,7 +11,7 @@ def files() :
                 "PredictionIndex"   : 10,
                 "SpectrumIndex"     : 74,
                 "Inputs"            : 10,
-                "MinContrib"        : 0.1,
+                "MinContrib"        : 0.0,
                 "EntryDirectory"    : "entry_histograms",
                 "DataDirectory"     : "data_histograms",
             }
