@@ -38,7 +38,7 @@ class Space( object ):
             r = "{%s, %s}" % ( repr(self.xaxis), repr(self.yaxis) )
         if not self.logx and self.logy :
             r = "{%s, %s (LOG)}" % ( repr(self.xaxis), repr(self.yaxis) )
-        if logx and not logy :
+        if self.logx and not self.logy :
             r = "{%s (LOG), %s}" % ( repr(self.xaxis), repr(self.yaxis) )
         else :
             r = "{%s (LOG), %s (LOG)}" % ( repr(self.xaxis), repr(self.yaxis) )
