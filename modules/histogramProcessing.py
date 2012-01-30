@@ -100,7 +100,6 @@ def calculate_entry_histograms( spaces, chain ) :
             if ibin != 0 and ibin < nbins+1 :
                 chi2 = chain.chi2vars[0]
                 if chi2 < c.GetBinContent(ibin) :
-                    print "setting bin(%d) content to %d(%f)" % ( ibin, entry, chi2 )
                     c.SetBinContent(ibin, chi2) 
                     h.SetBinContent(ibin, entry)
     return histos

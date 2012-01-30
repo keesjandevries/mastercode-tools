@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import sys
+sys.path.append( "../modules/" )
 from Variables import *
 
 def get_list( pindex, sindex, nbins = 100 ) :

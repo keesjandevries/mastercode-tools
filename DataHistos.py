@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import sys
 sys.path.append( "./modules/" )
+sys.path.append( "./config/" )
 
 import plot_list as pl
 import histogramProcessing as hfuncs

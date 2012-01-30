@@ -4,6 +4,7 @@
 import ROOT as r
 import sys
 sys.path.append( "./modules/" )
+sys.path.append( "./config/" )
 
 import MCchain as MCC
 import file_dict as fd

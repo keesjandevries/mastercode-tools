@@ -11,7 +11,7 @@ def files() :
                 "PredictionIndex"   : 10,
                 "SpectrumIndex"     : 74,
                 "EntryDirectory"    : "entry_histograms",
-                "DataDirectory"     : "chi2_histograms",
+                "DataDirectory"     : "data_histograms",
             }
         }
     return d
