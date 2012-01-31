@@ -167,17 +167,18 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
         title = "%s;%s;%s" % ( h.GetTitle(), h.GetXaxis().GetTitle(),
         h.GetYaxis().GetTitle() )
 
+        nbins = nbinsx * nbinsy
+        firstbin = h.FindBin( xmin, ymin )
+        lastbin = h.FindBin( xmax, ymax )
         for mode in toFill.keys() :
             toFill[mode].append( r.TH2D( h.GetName() + "_" + mode , title, nbinsx,
             xmin, xmax, nbinsy, ymin, ymax ) )
             base_val = 1e9
             if mode == "pval" : 
                base_val = 0.0 
-            nbins = toFill[mode][-1].GetNbinsX()*toFill[mode][-1].GetNbinsY()
-            for bin in range( 0, nbins + 1 ) :
+            for bin in range( firstbin, lastbin+ 1 ) :
                 toFill[mode][-1].SetBinContent( bin, base_val )
 
-        nbins = nbinsx * nbinsy
 
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
         for i in range( 0, nbins+1 ) :
