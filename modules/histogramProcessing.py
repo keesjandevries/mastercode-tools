@@ -6,6 +6,7 @@ import MCchain as MCC
 from progress_bar import ProgressBar
 from sys import stdout
 from array import array
+from copy import deepcopy
 
 def histo_call_count() :
     c = 0
@@ -123,11 +124,19 @@ def count_ndof( c, min_contrib, inputs ) :
     count -= inputs
     return count
 
-def make_all_data_hists( rfile, d, hlist ) :
-    # p_hists[0] = chi2
-    # p_hists[1] = pval
-    # p_hists[2] = dchi2
-    p_hists = [ [],[],[] ]
+def fill_bins( toFill, bin, chain, d ) : 
+    for mode in toFill.keys() :
+        content = 0.
+        if mode == "chi2" :  
+            content = chain.chi2vars[0]
+        if mode == "pval" :
+            if chain.contrib_state :
+                ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
+                content = r.TMath.Prob( content, ndof )
+        toFill[mode][-1].SetBinContent(bin,content)
+
+def fill_all_data_hists( rfile, d, hlist, toFill ) :
+    # toFill is a dictionary:  { "mode" : [] } of empty lists
     chain = MCC.MCchain( rfile, d )
     nentries = chain.GetEntries()
     for h in hlist :
@@ -152,15 +161,11 @@ def make_all_data_hists( rfile, d, hlist ) :
         title = "%s;%s;%s" % ( h.GetTitle(), h.GetXaxis().GetTitle(),
         h.GetYaxis().GetTitle() )
 
-        p_hists[0].append( r.TH2D( h.GetName() + "_chi2", title, nbinsx,
-            xmin, xmax, nbinsy, ymin, ymax ) )
-        p_hists[1].append( r.TH2D( h.GetName() + "_pval", title, nbinsx,
-            xmin, xmax, nbinsy, ymin, ymax ) )
-        p_hists[2].append( r.TH2D( h.GetName() + "_dchi", title, nbinsx,
+        for mode in toFill.keys() :
+            toFill[mode].append( r.TH2D( h.GetName() + "_" + mode , title, nbinsx,
             xmin, xmax, nbinsy, ymin, ymax ) )
 
         nbins = nbinsx * nbinsy
-        #po.set_hist_properties( p_hists[-1] )
 
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
         for i in range( 0, nbins+1 ) :
@@ -168,18 +173,10 @@ def make_all_data_hists( rfile, d, hlist ) :
             print "   ", prog,'\r',
             stdout.flush()
             entry = int( h.GetBinContent(i) )
-            content = -1
             if entry > 0 :
                 chain.GetEntry(entry)
-                content = chain.chi2vars[0]
-            p_hists[0][-1].SetBinContent( i, content )
-            if content > 0 and chain.contrib_state :
-                ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
-                pval = r.TMath.Prob( content, ndof )
-                p_hists[1][-1].SetBinContent( i, pval )
-            p_hists[2][-1].SetBinContent( i, content )
-    perform_zero_offset( p_hists[2] )
-    return p_hists
+            fill_bins( toFill, i, chain, d )
+    perform_zero_offset( toFill["chi2"] )
 
 
 def get_entry_hist_list( rfile, d, spaces ) :
@@ -218,36 +215,38 @@ def perform_zero_offset( hl ) :
             content = h.GetBinContent(bin)
             h.SetBinContent( bin, content - min_val )
 
-def set_hist_properties( mode = "chi2", hl = None ) :
+def set_hist_properties(  hd = None ) :
     d = { "dchi" : { "YaxisTitleOffset" : 1.5,
                      "ZaxisTitle"       : "#Delta#chi^{2}",
                      "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : [0.],
-                     "Maximum"          : [25.],
+                     "Minimum"          : 0.,
+                     "Maximum"          : 25.,
                    },
           "pval" : { "YaxisTitleOffset" : 1.5,
                      "ZaxisTitle"       : "P(#chi^{2},N_{DOF})",
                      "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : [0.],
-                     "Maximum"          : [1.],
+                     "Minimum"          : 0.,
+                     "Maximum"          : 1.,
                    },
           "chi2" : { "YaxisTitleOffset" : 1.5,
                      "ZaxisTitle"       : "#chi^{2}",
                      "ZaxisTitleOffset" : 2.0,
-                     "Minimum"          : get_hist_minimum_values(hl),
-                     "Maximum"          : [25.],
+                     "Minimum"          : get_hist_minimum_values,
+                     "Maximum"          : 25.,
                    }
         }
 
-    e = d[mode]
-    for i,h in enumerate(hl) :
-        h.GetYaxis().SetTitleOffset( e["YaxisTitleOffset"] )
-        h.GetZaxis().SetTitle( e["ZaxisTitle"] )
-        h.GetZaxis().SetTitleOffset( e["ZaxisTitleOffset"] )
-
-        if len(e["Minimum"]) > 0 :
-            h.SetMinimum( e["Minimum"][i] )
-            h.SetMaximum( e["Minimum"][i] + e["Maximum"][0] )
-        else :
-            h.SetMinimum( e["Minimum"][0] )
-            h.SetMaximum( e["Maximum"][0] )
+    for mode in hd.keys() :
+        e = deepcopy(d[mode])
+        if mode == "chi2" :
+            e["Minimum"] = e["Minimum"]( hd[mode] )
+        for i,h in enumerate(hd[mode]) :
+            h.GetYaxis().SetTitleOffset( e["YaxisTitleOffset"] )
+            h.GetZaxis().SetTitle( e["ZaxisTitle"] )
+            h.GetZaxis().SetTitleOffset( e["ZaxisTitleOffset"] )
+            if isinstance(e["Minimum"],list) :
+                h.SetMinimum( e["Minimum"][i] )
+                h.SetMaximum( e["Minimum"][i] + e["Maximum"] )
+            else :
+                h.SetMinimum( e["Minimum"] )
+                h.SetMaximum( e["Maximum"] )
