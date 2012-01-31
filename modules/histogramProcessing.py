@@ -126,14 +126,20 @@ def count_ndof( c, min_contrib, inputs ) :
 
 def fill_bins( toFill, bin, chain, d ) : 
     for mode in toFill.keys() :
+        fill = False
+        curr_content = toFill[mode][-1].GetBinContent(bin)
         content = 0.
-        if mode == "chi2" :  
+        if mode == "chi2" or mode == "dchi" :  
+            # for dchi offset is done later
             content = chain.chi2vars[0]
+            fill = ( content < curr_content )
         if mode == "pval" :
             if chain.contrib_state :
                 ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
-                content = r.TMath.Prob( content, ndof )
-        toFill[mode][-1].SetBinContent(bin,content)
+                chi2 = chain.chi2vars[0]
+                content = r.TMath.Prob( chi2, ndof )
+                fill = ( content > curr_content )
+        if fill : toFill[mode][-1].SetBinContent(bin,content)
 
 def fill_all_data_hists( rfile, d, hlist, toFill ) :
     # toFill is a dictionary:  { "mode" : [] } of empty lists
@@ -164,6 +170,12 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
         for mode in toFill.keys() :
             toFill[mode].append( r.TH2D( h.GetName() + "_" + mode , title, nbinsx,
             xmin, xmax, nbinsy, ymin, ymax ) )
+            base_val = 1e9
+            if mode == "pval" : 
+               base_val = 0.0 
+            nbins = toFill[mode][-1].GetNbinsX()*toFill[mode][-1].GetNbinsY()
+            for bin in range( 0, nbins + 1 ) :
+                toFill[mode][-1].SetBinContent( bin, base_val )
 
         nbins = nbinsx * nbinsy
 
@@ -175,7 +187,7 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
                 chain.GetEntry(entry)
-            fill_bins( toFill, i, chain, d )
+                fill_bins( toFill, i, chain, d )
     perform_zero_offset( toFill["chi2"] )
 
 
