@@ -188,7 +188,7 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
             if entry > 0 :
                 chain.GetEntry(entry)
                 fill_bins( toFill, i, chain, d )
-    perform_zero_offset( toFill["chi2"] )
+    perform_zero_offset( toFill["dchi"] )
 
 
 def get_entry_hist_list( rfile, d, spaces ) :
