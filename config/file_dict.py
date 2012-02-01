@@ -17,3 +17,16 @@ def files() :
             }
         }
     return d
+
+def recalc_files() :
+    d = {
+        "~/Documents/mastercode_data/cmssm_test.root" :
+            {
+                "Chi2TreeName"      : "tree",
+                "Chi2BranchName"    : "vars",
+                "ContribTreeName"   : "contribtree",
+                "ContribBranchName" : "vars",
+                "ModelFile"         : "models/tester.model"
+            }
+        }
+    return d
