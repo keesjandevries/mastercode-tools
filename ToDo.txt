@@ -1,0 +1,2 @@
+
+* Debug problems with logx and logy not working 
