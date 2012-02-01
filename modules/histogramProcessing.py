@@ -183,7 +183,7 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
         for i in range( 0, nbins+1 ) :
             prog.increment_amount()
-            print "   ", prog,'\r',
+            print prog,'\r',
             stdout.flush()
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
