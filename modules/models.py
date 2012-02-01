@@ -28,7 +28,7 @@ class Constraint( object ) :
             
 
 def get_model_from_file( filename ):
-    d = cd.get_dict()
+    d = cd.get_constraint_dict()
     
     out = {}
     with open(filename, 'rb') as f:
