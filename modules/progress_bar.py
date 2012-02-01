@@ -21,6 +21,7 @@
 #
  
 import sys,os
+from commands import getoutput
  
 class ProgressBar:
     def __init__(self, min_value = 0, max_value = 100, width=77,**kwargs):
@@ -33,6 +34,8 @@ class ProgressBar:
         self.min = min_value
         self.max = max_value
         self.span = max_value - min_value
+        max_width = int(getoutput('tput cols')) - 8
+        if width > max_width : width = max_width
         self.width = width
         self.amount = 0       # When amount == max, we are 100% done 
         self.update_amount(0) 
