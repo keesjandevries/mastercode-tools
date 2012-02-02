@@ -24,21 +24,25 @@ def setup_chain( fd ) :
 
     return chain
 
-def recalc_to_file( chain, model, outfile ) :
+def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
     nentries = chain.GetEntries()
     total_delta = 0
 
     # create trees in scope of outfile
     out = r.TFile(outfile,"recreate")
     chi2tree = chain.chi2chain.CloneTree(0)
-    contribvars = array('d',[0]*chain.nTotVars)
+
+    # might need to do address of on contirbvars
+    contribvars = array('f',[0.0]*chain.nTotVars)
     contribtree = r.TTree( "contribtree", "chi2 contributions")
     varsOutName = "vars[%d]" % ( chain.nTotVars )
     contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
 
-    prog = ProgressBar(0, nentries, 77, mode='fixed', char='#')
-    for entry in range(0,nentries) :
+    if begin is None : begin = 0 
+    if end is None   : end   = nentries+1 
+    prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
+    for entry in range(begin,end) :
         prog.increment_amount()
         print prog,'\r',
         stdout.flush()
@@ -70,7 +74,7 @@ def recalc_to_file( chain, model, outfile ) :
     if __DEBUG :
         print "\n--------------------------\n"
         print "   TOTAL    (    MEAN    )"
-        print "%10e(%10e)" % ( total_delta, (total_delta/nentries) )
+        print "%10e(%10e)" % ( total_delta, (total_delta/(end-begin)) )
         print "\n--------------------------\n"
 
 def go( fd, output ) :
@@ -78,4 +82,7 @@ def go( fd, output ) :
     m = models.get_model_from_file(indict["ModelFile"])
     chain = setup_chain( fd )
     assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
-    recalc_to_file( chain, m, output )
+    nentries = chain.GetEntries()
+    start = indict.get("StartEntry", 0)
+    end   = indict.get("EndEntry", nentries)
+    recalc_to_file( chain, m, output, start, end )
