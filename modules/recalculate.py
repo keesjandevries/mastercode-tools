@@ -33,9 +33,9 @@ def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
     chi2tree = chain.chi2chain.CloneTree(0)
 
     # might need to do address of on contirbvars
-    contribvars = array('f',[0.0]*chain.nTotVars)
+    contribvars = array('d',[0.0]*chain.nTotVars)
     contribtree = r.TTree( "contribtree", "chi2 contributions")
-    varsOutName = "vars[%d]" % ( chain.nTotVars )
+    varsOutName = "vars[%d]/D" % ( chain.nTotVars )
     contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
 
