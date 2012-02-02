@@ -26,7 +26,9 @@ def recalc_files() :
                 "Chi2BranchName"    : "vars",
                 "ContribTreeName"   : "contribtree",
                 "ContribBranchName" : "vars",
-                "ModelFile"         : "models/tester.model"
+                "ModelFile"         : "models/tester.model",
+#                "StartEntry"        : 0,
+#                "EndEntry"          : 1,
             }
         }
     return d
