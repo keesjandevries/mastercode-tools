@@ -33,7 +33,7 @@ def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
     chi2tree = chain.chi2chain.CloneTree(0)
 
     # might need to do address of on contirbvars
-    contribvars = array('f',[0.0]*chain.nTotVars)
+    contribvars = array('d',[0.0]*chain.nTotVars)
     contribtree = r.TTree( "contribtree", "chi2 contributions")
     varsOutName = "vars[%d]" % ( chain.nTotVars )
     contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
@@ -52,7 +52,7 @@ def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
         chi2 = 0
         for key in model.keys() :
             chi2_t = model[key].get_chi2( chain.chi2vars[key] )
-            contribvars[key] = chi2_t
+            contribvars[key] = r.Double(chi2_t)
             chi2 += chi2_t
 
         # This was inserted to check on if there was a significant
