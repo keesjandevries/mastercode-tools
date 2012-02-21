@@ -1,31 +1,40 @@
-lhood	= libLHood.so
-
-srcdir		= lhoods/src/
-objdir		= obj/
-incdir		= includes/
-
-# for processAll
-lhobjects	= Contour.o ContourLikelihood.o LikelihoodFunctions.o \
-				Coords.o Likelihood1D.o LikelihoodFunctions1D.o
-
 ROOTCFLAGS = $(shell root-config --cflags)
-ROOTFLAGS = $(shell root-config --cflags --ldflags --libs)
-ROOTXFLAGS = $(shell root-config --cflags --libs)
+#ROOTFLAGS = $(shell root-config --cflags --ldflags --libs)
+#ROOTXFLAGS = $(shell root-config --cflags --libs)
 
-$(objdir)/Contour.o :
-	g++ -c Contour.cpp
+CPP          =	g++ 
+CPPFLAGS     =	-c -fPIC 
+LINKER       =	g++ 
+LINKERFLAGS  =	-shared -Wl,-soname,$@ -o
+RM           =	rm -f 
+MAKE         =	make 
+OBJDIR		 =	lhoods/obj
+SRCDIR	     =	lhoods/src
+OBJS         =	$(OBJDIR)/Contour.o \
+				$(OBJDIR)/ContourLikelihood.o \
+				$(OBJDIR)/LikelihoodFunctions.o \
+				$(OBJDIR)/Coords.o \
+				$(OBJDIR)/Likelihood1D.o \
+			    $(OBJDIR)/LikelihoodFunctions1D.o
+TARGET       =	libLH.so
 
-$(objdir)/ContourLikelihood.o :
-	g++ -c ContourLikelihood.cpp
+.IGNORE: 
+.SILENT: 
+.SUFFIXES: .o .cpp
 
-$(objdir)/LikelihoodFunctions.o :
-	g++ -c LikelihoodFunctions.cpp
+$(TARGET): $(OBJS) 
+		$(LINKER) $(LINKERFLAGS) libs/$@ $(OBJS) 
 
-$(objdir)/Coords.o :
-	g++ -c Coords.cpp
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp 
+		$(CPP) $(CPPFLAGS) -o $@ $? $(ROOTCFLAGS)
 
-$(objdir)/Likelihood1D.o :
-	g++ -c Likelihood1D.cpp
+clean: 
+		$(RM) *.o 
 
-$(objdir)/LikelihoodFunctions1D.o :
-	g++ -c LikelihoodFunctions1D.cpp $(ROOTCFLAGS)
+distclean: 
+		$(MAKE) clean 
+		$(RM) $(TARGET) 
+
+again: 
+		$(MAKE) distclean 
+		$(MAKE) $(TARGET)
