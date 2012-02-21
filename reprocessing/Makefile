@@ -1,6 +1,6 @@
 ROOTCFLAGS = $(shell root-config --cflags)
-#ROOTFLAGS = $(shell root-config --cflags --ldflags --libs)
-#ROOTXFLAGS = $(shell root-config --cflags --libs)
+ROOTFLAGS = $(shell root-config --cflags --ldflags --libs)
+ROOTXFLAGS = $(shell root-config --cflags --libs)
 
 CPP         =	g++ 
 CPPFLAGS    =	-c -fPIC 
@@ -27,10 +27,10 @@ TARGET      =	libLH.so
 
 
 $(TARGET): $(APIOBJ) $(OBJS)
-		$(LINKER) $(LINKERFLAGS) libs/$@ $(APIOBJ) $(OBJS) 
+		$(LINKER) $(LINKERFLAGS) libs/$@ $(APIOBJ) $(OBJS) $(ROOTFLAGS)
 
 $(APIOBJ): $(OBJS)
-		$(CPP) $(CPPFLAGS) -o $@ $(APIFILE)
+		$(CPP) $(CPPFLAGS) -o $@ $(APIFILE) $(ROOTFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp 
 		$(CPP) $(CPPFLAGS) -o $@ $? $(ROOTCFLAGS)
