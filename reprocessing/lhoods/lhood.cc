@@ -16,6 +16,6 @@ extern "C"
                                    int *ndf, const char *filename)
     {
         std::string f(filename);
-        return new Likelihood1D( *function, *mu, *sigma, *ndf, *filename );
+        return new Likelihood1D( *function, *mu, *sigma, *ndf, f );
     }
 }
