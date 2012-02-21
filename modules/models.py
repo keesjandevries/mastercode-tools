@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
 import constraint_dict as cd
+import lhood_dict as ld
+import lhood_module as lhm
 from math import sqrt
 
 
@@ -25,9 +27,33 @@ class Constraint( object ) :
         n_sigma = self.get_n_sigma( val )
         chi2 = n_sigma*n_sigma
         return chi2
-            
 
-def get_model_from_file( filename ):
+class LHood( object ) :
+    def __init__( self, var_pos, lh ) :
+        self.var_pos = var_pos # i.e. [1,2] for m0,m12
+        lh_type = lh[0]
+        self.name = lh[2]
+        if lh_type == "CONT" :
+            self.LH = lhm.ContourLikelihood( *lh[1] )
+        if lh_type == "LH1D" :
+            self.LH = lhm.Likelihood1D( *lh[1] )
+
+    def get_chi2( self, inputs ) :
+
+def get_lhood_from_file( filename ) :
+    d = ld.get_lhood_dict()
+
+    out = {}
+    with open(filename, 'rb') as f:
+        for line in f :
+            l = line.split()
+            name = l[0]
+            variables = l[1:]
+            if name in d :
+                out[name] = LHood( variables, d[name] )
+    return out
+
+def get_model_from_file( filename ) :
     d = cd.get_constraint_dict()
     
     out = {}
