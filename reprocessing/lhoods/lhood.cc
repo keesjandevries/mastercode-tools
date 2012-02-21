@@ -18,4 +18,9 @@ extern "C"
         std::string f(filename);
         return new Likelihood1D( *function, *mu, *sigma, *ndf, f );
     }
+    void getChi2( LHood *lh, double *x, double *y, double* chi2 )
+    {
+        *chi2 = lh->getChi2(*x,*y);
+    }
+    
 }
