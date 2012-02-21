@@ -1,8 +1,8 @@
 #include "MultiAB.h"
-#include "LHood.h"
-#include "ContourLikelihood.h"
-#include "Likelihood1D.h"
-#include "FileConstants.h"
+#include "src/LHood.h"
+#include "src/ContourLikelihood.h"
+#include "src/Likelihood1D.h"
+#include "src/FileConstants.h"
 
 void mc6_lhoods_cmssm( std::vector<LHdata>&, FileInfo& );
 void mc6_lhoods_nuhm1( std::vector<LHdata>&, FileInfo& );

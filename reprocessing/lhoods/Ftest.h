@@ -1,7 +1,7 @@
 #ifndef H_Ftest
 #define H_Ftest
 
-#include "../includes/SMvals.h"
+#include "SMvals.h"
 
 double get_Fchi( double Xm, double Xmr, int Nm, int r )
 {
