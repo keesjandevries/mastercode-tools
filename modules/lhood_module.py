@@ -4,10 +4,13 @@ from ctypes import cdll
 from ctypes import byref
 from ctypes import c_double
 from ctypes import c_int
-lhoodLib = cdll.LoadLibrary('../reprocessing/libs/libLH.so')
+lhoodLib = cdll.LoadLibrary('./reprocessing/libs/libLH.so')
 
 contour_base_dir = '../reprocessing/lhoods/contour_lookups/'
 lh1d_base_dir = '../reprocessing/lhoods/1d_lookups/'
+
+# should update to have getChi2 inherited from base LHood
+# can abstract the constructor as well and have a function as a member of the class (i.e. LH1D just sets. self.lhood = ContourLikelihood_new
 
 class ContourLikelihood( object ):
     def __init__(self, filename="", chi2 = 5.99, chi2_inf = 0.0) :
@@ -31,3 +34,9 @@ class Likelihood1D( object ) :
         self.obj = lhoodLib.Likelihood1D_new( byref(function_c), byref(mu_c),
                                               byref(sigma_c), byref(ndof_c),
                                               str(filename) )
+    def getChi2( self, x, y ) :
+        x_c = c_double(x)
+        y_c = c_double(y)
+        c2_c = c_double()
+        lhoodLib.getChi2( self.obj, byref(x_c), byref(y_c), byref(c2_c))
+        return c2_c.value
