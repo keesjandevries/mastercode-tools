@@ -34,7 +34,7 @@ class Likelihood1D( object ) :
         self.obj = lhoodLib.Likelihood1D_new( byref(function_c), byref(mu_c),
                                               byref(sigma_c), byref(ndof_c),
                                               str(filename) )
-    def getChi2( self, x, y ) :
+    def getChi2( self, x, y = 0. ) :
         x_c = c_double(x)
         y_c = c_double(y)
         c2_c = c_double()
