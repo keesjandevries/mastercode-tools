@@ -24,7 +24,7 @@ def setup_chain( fd ) :
 
     return chain
 
-def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
+def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
     nentries = chain.GetEntries()
     total_delta = 0
 
@@ -54,6 +54,8 @@ def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
             chi2_t = model[key].get_chi2( chain.chi2vars[key] )
             contribvars[key] = chi2_t
             chi2 += chi2_t
+        for lh in lhoods.values() :
+            chi2 += lh.get_chi2( chain.chi2vars )
 
         # This was inserted to check on if there was a significant
         # calculation error ( average deltachi2 per entry: 1e-15 )
@@ -80,9 +82,10 @@ def recalc_to_file( chain, model, outfile, begin = None, end = None ) :
 def go( fd, output ) :
     indict = fd[sorted(fd.keys())[0]]
     m = models.get_model_from_file(indict["ModelFile"])
+    l = models.get_lhood_from_file(indict["LHoodFile"])
     chain = setup_chain( fd )
     assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
     nentries = chain.GetEntries()
     start = indict.get("StartEntry", 0)
     end   = indict.get("EndEntry", nentries)
-    recalc_to_file( chain, m, output, start, end )
+    recalc_to_file( chain, m, l, output, start, end )
