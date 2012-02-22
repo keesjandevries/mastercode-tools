@@ -54,8 +54,10 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
             chi2_t = model[key].get_chi2( chain.chi2vars[key] )
             contribvars[key] = chi2_t
             chi2 += chi2_t
-        for lh in lhoods.values() :
-            chi2 += lh.get_chi2( chain.chi2vars )
+        for i,lh in enumerate(lhoods.values()) :
+            chi2_t = lh.get_chi2( chain.chi2vars )
+            contribvars[i] = chi2_t 
+            chi2 += chi2_t
 
         # This was inserted to check on if there was a significant
         # calculation error ( average deltachi2 per entry: 1e-15 )
