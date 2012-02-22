@@ -28,10 +28,10 @@ void Likelihood1D::configure(int function, double mu, double sigma, int ndf,
         case 1: //Xenon MC6 
         {
             std::cout << "Using Likelihood1D default Xenon MC6" << std::endl;
-            lfuncs.set_values(1.2,3.2,1);
+            lfuncs.set_values(mu,sigma,ndf);
             lhood = new LikelihoodFunctor1D<LikelihoodFunctions1D> 
                 (&lfuncs,&LikelihoodFunctions1D::XenonMC6);
-            valindex.doPopulate(XenonContour_file);
+            valindex.doPopulate(filename);
             break;
         }
         case 2:  // Bsmm MC6
@@ -114,7 +114,7 @@ void Likelihood1D::configure(int function, double mu, double sigma, int ndf,
                 std::endl;
             lhood = new LikelihoodFunctor1D<LikelihoodFunctions1D>
                 (&lfuncs,&LikelihoodFunctions1D::HAttStd);
-            valindex.doPopulate(HAtautau_16_file);
+            valindex.doPopulate(filename);
             break;
         }
         default: // Gaussian
