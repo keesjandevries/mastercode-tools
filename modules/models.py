@@ -45,7 +45,6 @@ class LHood( object ) :
 
 def get_lhood_from_file( filename ) :
     d = ld.get_lhood_dict()
-    print d
 
     out = {}
     with open(filename, 'rb') as f:
