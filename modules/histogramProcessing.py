@@ -119,7 +119,6 @@ def calculate_entry_histograms( spaces, chain ) :
 def count_ndof( c, min_contrib, inputs ) :
     count = 0
     for x in c[1:] :    
-        print x
         if x > min_contrib :
             count += 1
     count -= inputs
@@ -138,7 +137,6 @@ def fill_bins( toFill, bin, chain, d ) :
             if chain.contrib_state :
                 ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
                 chi2 = chain.chi2vars[0]
-                print "%d,%f" % (ndof,chi2)
                 content = r.TMath.Prob( chi2, ndof )
                 fill = ( content > curr_content )
         if fill : toFill[mode][-1].SetBinContent(bin,content)
