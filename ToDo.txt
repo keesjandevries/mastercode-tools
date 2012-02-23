@@ -1,5 +1,2 @@
 
 * Debug problems with logx and logy not working 
-
-* Modify make file in reprocessing to produce library to link again so we can do
-  some nice python likelihood in reprocessing (also, rename this folder :) )
