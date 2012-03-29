@@ -15,7 +15,7 @@ def standard_spaces( d ) :
     return l
 
 def standard_1d_histos( d ) :
-    l = [ d["mneu1"], ]
+    l = [ d["mneu1"].update( { "log" : False } ), ]
     return l
 
 def standard_variables( pindex, sindex, nbins ) :
