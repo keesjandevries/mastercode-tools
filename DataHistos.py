@@ -9,16 +9,16 @@ def main( argv=None ) :
     for file in files.keys() :
         single_vars, spaces = pl.get_plots( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
 
-        hl = hfuncs.get_entry_hist_list( file, files[file], spaces )
+        space_hists = hfuncs.get_entry_hist_list( file, files[file], spaces )
+        single_hists = hfuncs.get_entry_hist_list( file, files[file], single_vars )
 
         hists = { "pval" : [], "chi2" : [], "dchi" : [] }
 
-        hfuncs.fill_all_data_hists( file, files[file], hl, hists )
-        # hists is now a list of list of histograms
-        hfuncs.set_hist_properties(hists)
+        hfuncs.fill_all_data_hists( file, files[file], space_hists, hists )
+        #hfuncs.fill_all_data_hists_1d( file, files[file], singel_hists, hists )
 
         for hl in hists.values() :
-            hfuncs.save_hlist_to_root_file( hl, file, files[file]["DataDirectory"])
+            hfuncs.save_hlist_to_root_file( space_hists, file, files[file]["DataDirectory"])
 
 if __name__ == "__main__":
     main()
