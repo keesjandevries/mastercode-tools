@@ -240,12 +240,12 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
     perform_zero_offset( toFill["dchi"] )
 
 
-def get_entry_hist_list( rfile, d, spaces ) :
+def get_entry_hist_list( rfile, d, plots ) :
     hl = []
     entry_hist_dict = d["EntryDirectory"]
     hnames = []
-    for space in spaces :
-        hist_name =  histo_name( [space.xaxis.index, space.yaxis.index], entry_histo_prefix )
+    for plot in plots :
+        hist_name =  histo_name( plot.get_indices(), entry_histo_prefix )
         hnames.append( "%s/%s" % ( d["EntryDirectory"], hist_name ) )
     f = r.TFile.Open( rfile )
     r.gROOT.cd()
@@ -275,39 +275,3 @@ def perform_zero_offset( hl ) :
         for bin in range(nbins+1) :
             content = h.GetBinContent(bin)
             h.SetBinContent( bin, content - min_val )
-
-def set_hist_properties(  hd = None ) :
-    d = { "dchi" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "#Delta#chi^{2}",
-                     "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : 0.,
-                     "Maximum"          : 25.,
-                   },
-          "pval" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "P(#chi^{2},N_{DOF})",
-                     "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : 0.,
-                     "Maximum"          : 1.,
-                   },
-          "chi2" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "#chi^{2}",
-                     "ZaxisTitleOffset" : 2.0,
-                     "Minimum"          : get_hist_minimum_values,
-                     "Maximum"          : 25.,
-                   }
-        }
-
-    for mode in hd.keys() :
-        e = deepcopy(d[mode])
-        if mode == "chi2" :
-            e["Minimum"] = e["Minimum"]( hd[mode] )
-        for i,h in enumerate(hd[mode]) :
-            h.GetYaxis().SetTitleOffset( e["YaxisTitleOffset"] )
-            h.GetZaxis().SetTitle( e["ZaxisTitle"] )
-            h.GetZaxis().SetTitleOffset( e["ZaxisTitleOffset"] )
-            if isinstance(e["Minimum"],list) :
-                h.SetMinimum( e["Minimum"][i] )
-                h.SetMaximum( e["Minimum"][i] + e["Maximum"] )
-            else :
-                h.SetMinimum( e["Minimum"] )
-                h.SetMaximum( e["Maximum"] )
