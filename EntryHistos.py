@@ -1,15 +1,11 @@
 #! /usr/bin/env python
-
-
 import ROOT as r
-import sys
-sys.path.append( "./modules/" )
-sys.path.append( "./config/" )
 
-import MCchain as MCC
-import file_dict as fd
-import histogramProcessing as hists
-import plot_list as VarList
+from modules import MCchain as MCC
+from modules import histogramProcessing as hists
+
+from config import file_dict as fd
+from config import plot_list as VarList
 
 
 def print_spaces( p, s ) :

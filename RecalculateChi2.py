@@ -1,11 +1,6 @@
 #! /usr/bin/env python
-
-import sys
-sys.path.append( "./modules/" )
-sys.path.append( "./config/" )
-
-import file_dict as fd
-import recalculate as recalc
+from config import file_dict as fd
+from modules import recalculate as recalc
 
 from optparse import OptionParser
 
