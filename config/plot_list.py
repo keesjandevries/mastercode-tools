@@ -1,18 +1,21 @@
 #! /usr/bin/env python
 from modules import Variables as v
 
-def get_list( pindex, sindex, nbins = 100 ) :
-    return standard_list(pindex, sindex, nbins )
-
-def standard_list( pindex, sindex, nbins = 100) :
-    # local assignment
+def get_plots( pindex, sindex, nbins = 100 ) : 
     d = standard_variables( pindex, sindex, nbins )
+    return standard_1d_histos(d), standard_spaces(d)
+
+def standard_spaces( d ) :
     l = [
             v.Space( d["m0"],    d["m12"]  ),
             v.Space( d["m0"],    d["tanb"] ),
             v.Space( d["tanb"],  d["m12"]  ),
 #            Space( d["mneu1"], d["ssi"], logx = True, logy = True )
         ]
+    return l
+
+def standard_1d_histos( d ) :
+    l = [ d["mneu1"], ]
     return l
 
 def standard_variables( pindex, sindex, nbins ) :

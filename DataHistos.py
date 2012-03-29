@@ -6,9 +6,8 @@ from modules import histogramProcessing as hfuncs
 def main( argv=None ) :
     files = fd.files()
 
-
     for file in files.keys() :
-        spaces = pl.get_list( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
+        single_vars, spaces = pl.get_plots( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
 
         hl = hfuncs.get_entry_hist_list( file, files[file], spaces )
 
