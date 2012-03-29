@@ -27,7 +27,7 @@ def recalc_files() :
                 "ContribTreeName"   : "contribtree",
                 "ContribBranchName" : "vars",
                 "ModelFile"         : "models/tester.model",
-                "LHoodFile"         : "models/tester.lhood",
+#                "LHoodFile"         : "models/tester.lhood",
 #                "StartEntry"        : 0,
 #                "EndEntry"          : 1,
             }
