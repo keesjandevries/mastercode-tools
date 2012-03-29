@@ -9,7 +9,7 @@ def files() :
                 "ContribTreeName"   : "contribtree",
                 "ContribBranchName" : "vars",
                 "PredictionIndex"   : 10,
-                "SpectrumIndex"     : 74,
+                "SpectrumIndex"     : 117,
                 "Inputs"            : 10,
                 "MinContrib"        : 0.0,
                 "EntryDirectory"    : "entry_histograms",
