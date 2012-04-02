@@ -22,6 +22,13 @@ def histo_name( vl = [], f = entry_histo_prefix ) :
     format_string = "%s"
     for v in vl : format_string += "_%d"
     return format_string % ( tuple([f()] + vl) )
+# assume histogram naming as above: PREFIX_d1_d2_d3....
+def get_histogram_dimension_from_name( name, delim = "_" ) :
+    x = name.split(delim)
+    return len(x)-1
+
+def get_histogram_dimension( h ):
+    return int( h.Class()[2] )
 
 def save_hlist_to_root_file( hlist, filename, directory = None ) :
     f = r.TFile( filename, "UPDATE" )
