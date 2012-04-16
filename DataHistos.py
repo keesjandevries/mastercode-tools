@@ -1,11 +1,9 @@
 #! /usr/bin/env python
 import sys
-sys.path.append( "./modules/" )
-sys.path.append( "./config/" )
 
-import plot_list as pl
-import histogramProcessing as hfuncs
-import file_dict as fd
+from config import plot_list as pl
+from config import file_dict as fd
+from modules import histogramProcessing as hfuncs
 
 def main( argv=None ) :
     files = fd.files()
