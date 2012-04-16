@@ -16,8 +16,19 @@ def histo_call_count() :
 
 def entry_histo_prefix() :
     return "iHist"
-def entry_histo_name( v1, v2 ) :
-    return "%s_%d_%d" % ( entry_histo_prefix(), v1, v2 )
+def chi2_histo_prefix() :
+    return "cHist"
+def histo_name( vl = [], f = entry_histo_prefix ) :
+    format_string = "%s"
+    for v in vl : format_string += "_%d"
+    return format_string % ( tuple([f()] + vl) )
+# assume histogram naming as above: PREFIX_d1_d2_d3....
+def get_histogram_dimension_from_name( name, delim = "_" ) :
+    x = name.split(delim)
+    return len(x)-1
+
+def get_histogram_dimension( h ):
+    return int( h.Class()[2] )
 
 def save_hlist_to_root_file( hlist, filename, directory = None ) :
     f = r.TFile( filename, "UPDATE" )
@@ -30,6 +41,43 @@ def save_hlist_to_root_file( hlist, filename, directory = None ) :
         h.Write("",r.TObject.kOverwrite)
     f.Close()
 
+# these two can be combined (1d and 2d init functions) using blot
+def initialize_1d_histo( line ) :
+    xmin, xmax = line.min_val, line.max_val
+    nxbins = int( line.bins )
+
+    xbins = array('d',[0.0] * nxbins)
+
+    logx = line.log if hasattr(line,"log") else False
+
+    if logx :
+        logxmin = r.TMath.Log10(xmin)
+        logxmax = r.TMath.Log10(xmax)
+        xbinwidth = (logxmax - logxmin ) / nxbins
+        for i, xb in enumerate(xbins) :
+            xb = r.TMath.Power(10,logxmin*i*xbinwidth)
+
+    title = ";%s" % ( line.name )
+    hname = histo_name( [line.index], entry_histo_prefix )
+    cname = histo_name( [line.index], chi2_histo_prefix )
+
+    if logx :
+        histo   = r.TH1I( hname, title, nxbins, xbins )
+        c2histo = r.TH1D( cname, title, nxbins, xbins )
+    else :
+        histo   = r.TH1I( hname, title, nxbins, xmin, xmax )
+        c2histo = r.TH1D( cname, title, nxbins, xmin, xmax )
+
+    # set our chi2 histogram to some ridiculous values
+    content = r.Long(1e9)
+    econtent = -1
+    nbins = histo.GetNbinsX()
+    for i in range(0,nbins+1) :
+        if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
+           c2histo.SetBinContent(i,content)
+           histo.SetBinContent(i,econtent)
+
+    return histo, c2histo
 
 def initialize_2d_histo ( space ) :
     xmin, xmax = space.xaxis.min_val, space.xaxis.max_val
@@ -59,8 +107,8 @@ def initialize_2d_histo ( space ) :
 
     title = ";%s;%s" % ( space.xaxis.name, space.yaxis.name )
 
-    hname = entry_histo_name( space.xaxis.index, space.yaxis.index )
-    cname = "cHist_%d_%d" % ( space.xaxis.index, space.yaxis.index )
+    hname = histo_name( [space.xaxis.index, space.yaxis.index], entry_histo_prefix )
+    cname = histo_name( [space.xaxis.index, space.yaxis.index], chi2_histo_prefix )
 
     if logx and logy :
         histo   = r.TH2I( hname, title, nxbins, xbins, nybins, ybins )
@@ -87,8 +135,8 @@ def initialize_2d_histo ( space ) :
     return histo, c2histo
 
 
-def calculate_entry_histograms( spaces, chain ) :
-    #assert canvas is not None, "Canvas must be specified in calculate_histograms"
+def calculate_entry_histograms( spaces, lines, chain ) :
+    ##assert canvas is not None, "Canvas must be specified in calculate_histograms"
     # setup our 2d histos
     histos = []
     chi2histos = []
@@ -96,6 +144,12 @@ def calculate_entry_histograms( spaces, chain ) :
         entryhisto, chi2histo = initialize_2d_histo( s )
         histos.append(entryhisto)
         chi2histos.append(chi2histo)
+    for l in lines :
+        entryhisto, chi2histo = initialize_1d_histo( l )
+        histos.append(entryhisto)
+        chi2histos.append(chi2histo)
+
+    s_n_l = spaces + lines
 
     nentries = chain.GetEntries()
     prog = ProgressBar(0, nentries+1, 77, mode='fixed', char='#')
@@ -104,16 +158,17 @@ def calculate_entry_histograms( spaces, chain ) :
         print prog,'\r',
         stdout.flush()
         chain.GetEntry(entry) 
-        for h, c, s in zip( histos, chi2histos, spaces ) :
-            xindex, yindex = s.get_indices()
-            x, y = chain.chi2vars[ xindex ], chain.chi2vars[ yindex ]
-            nbins = s.xaxis.bins * s.yaxis.bins
-            ibin = h.FindBin(x,y)
+        for h, c, plot in zip( histos, chi2histos, s_n_l ) :
+            indices = plot.get_indices()
+            vals = [ chain.chi2vars[ index ] for index in indices ]
+            nbins = plot.bins
+            ibin = h.FindBin(*vals)
             if ibin != 0 and ibin < nbins+1 :
                 chi2 = chain.chi2vars[0]
                 if chi2 < c.GetBinContent(ibin) :
                     c.SetBinContent(ibin, chi2) 
                     h.SetBinContent(ibin, entry)
+
     return histos
  
 def count_ndof( c, min_contrib, inputs ) :
@@ -192,12 +247,12 @@ def fill_all_data_hists( rfile, d, hlist, toFill ) :
     perform_zero_offset( toFill["dchi"] )
 
 
-def get_entry_hist_list( rfile, d, spaces ) :
+def get_entry_hist_list( rfile, d, plots ) :
     hl = []
     entry_hist_dict = d["EntryDirectory"]
     hnames = []
-    for space in spaces :
-        hist_name =  entry_histo_name( space.xaxis.index, space.yaxis.index )
+    for plot in plots :
+        hist_name =  histo_name( plot.get_indices(), entry_histo_prefix )
         hnames.append( "%s/%s" % ( d["EntryDirectory"], hist_name ) )
     f = r.TFile.Open( rfile )
     r.gROOT.cd()
@@ -227,39 +282,3 @@ def perform_zero_offset( hl ) :
         for bin in range(nbins+1) :
             content = h.GetBinContent(bin)
             h.SetBinContent( bin, content - min_val )
-
-def set_hist_properties(  hd = None ) :
-    d = { "dchi" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "#Delta#chi^{2}",
-                     "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : 0.,
-                     "Maximum"          : 25.,
-                   },
-          "pval" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "P(#chi^{2},N_{DOF})",
-                     "ZaxisTitleOffset" : 2.5,
-                     "Minimum"          : 0.,
-                     "Maximum"          : 1.,
-                   },
-          "chi2" : { "YaxisTitleOffset" : 1.5,
-                     "ZaxisTitle"       : "#chi^{2}",
-                     "ZaxisTitleOffset" : 2.0,
-                     "Minimum"          : get_hist_minimum_values,
-                     "Maximum"          : 25.,
-                   }
-        }
-
-    for mode in hd.keys() :
-        e = deepcopy(d[mode])
-        if mode == "chi2" :
-            e["Minimum"] = e["Minimum"]( hd[mode] )
-        for i,h in enumerate(hd[mode]) :
-            h.GetYaxis().SetTitleOffset( e["YaxisTitleOffset"] )
-            h.GetZaxis().SetTitle( e["ZaxisTitle"] )
-            h.GetZaxis().SetTitleOffset( e["ZaxisTitleOffset"] )
-            if isinstance(e["Minimum"],list) :
-                h.SetMinimum( e["Minimum"][i] )
-                h.SetMaximum( e["Minimum"][i] + e["Maximum"] )
-            else :
-                h.SetMinimum( e["Minimum"] )
-                h.SetMaximum( e["Maximum"] )

@@ -47,14 +47,15 @@ def get_lhood_from_file( filename ) :
     d = ld.get_lhood_dict()
 
     out = {}
-    with open(filename, 'rb') as f:
-        for line in f :
-            l = line.split()
-            name = l[0]
-            variables = l[1:]
-            var_ints = [ int(x) for x in variables ]
-            if name in d :
-                out[name] = LHood( var_ints, d[name] )
+    if filename is not None :
+        with open(filename, 'rb') as f:
+            for line in f :
+                l = line.split()
+                name = l[0]
+                variables = l[1:]
+                var_ints = [ int(x) for x in variables ]
+                if name in d :
+                    out[name] = LHood( var_ints, d[name] )
     return out
 
 def get_model_from_file( filename ) :

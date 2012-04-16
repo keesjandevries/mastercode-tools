@@ -9,7 +9,7 @@ def files() :
                 "ContribTreeName"   : "contribtree",
                 "ContribBranchName" : "vars",
                 "PredictionIndex"   : 10,
-                "SpectrumIndex"     : 74,
+                "SpectrumIndex"     : 117,
                 "Inputs"            : 10,
                 "MinContrib"        : 0.0,
                 "EntryDirectory"    : "entry_histograms",
@@ -27,7 +27,7 @@ def recalc_files() :
                 "ContribTreeName"   : "contribtree",
                 "ContribBranchName" : "vars",
                 "ModelFile"         : "models/tester.model",
-                "LHoodFile"         : "models/tester.lhood",
+#                "LHoodFile"         : "models/tester.lhood",
 #                "StartEntry"        : 0,
 #                "EndEntry"          : 1,
             }
