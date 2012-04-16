@@ -16,8 +16,8 @@ class ContourLikelihood( object ):
     def __init__(self, filename="", chi2 = 5.99, chi2_inf = 0.0) :
         chi2_c     = c_double( chi2 )
         chi2_inf_c = c_double( chi2_inf )
-        self.obj = lhoodLib.ContourLikelihood_new( str(filename), byref(chi2_c),
-                                                   byref(chi2_inf_c) )
+        self.obj = lhoodLib.RadialLikelihood_new( str(filename), byref(chi2_c),
+                                                  byref(chi2_inf_c) )
     def getChi2( self, x, y ) :
         x_c = c_double(x)
         y_c = c_double(y)
@@ -31,9 +31,9 @@ class Likelihood1D( object ) :
         mu_c = c_double( mu )
         sigma_c = c_double( sigma )
         ndof_c = c_int( ndof )
-        self.obj = lhoodLib.Likelihood1D_new( byref(function_c), byref(mu_c),
-                                              byref(sigma_c), byref(ndof_c),
-                                              str(filename) )
+        self.obj = lhoodLib.CartesianLikelihood_new( byref(function_c), byref(mu_c),
+                                                     byref(sigma_c), byref(ndof_c),
+                                                     str(filename) )
     def getChi2( self, x, y = 0. ) :
         x_c = c_double(x)
         y_c = c_double(y)

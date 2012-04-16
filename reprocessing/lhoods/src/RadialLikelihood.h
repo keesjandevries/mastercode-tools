@@ -1,18 +1,18 @@
-#ifndef H_ContourLikelihood
-#define H_ContourLikelihood
+#ifndef H_RadialLikelihood
+#define H_RadialLikelihood
 
 #include <iostream>
 #include <string>
 #include <cmath>
 
 #include "LHood.h"
-#include "LikelihoodFunctions.h"
+#include "RadialLikelihoodFunctions.h"
 #include "FileConstants.h"
 #include "Contour.h"
 
 #define _USE_MATHS_DEFINES
 
-class ContourLikelihood : public LHood
+class RadialLikelihood : public LHood
 {
     private:
         // parameters corresponding to each segment of the first contour (primary
@@ -25,24 +25,24 @@ class ContourLikelihood : public LHood
         double max_theta_;
         double min_theta_;
 
-        LikelihoodFunctions lfuncs;
+        RadialLikelihoodFunctions lfuncs;
 
         TLikelihood_functor* lhood;
         TParams_functor* params;
 
         // do not allow copying -> should add some constructors but for now this
         // removes double free errors
-        ContourLikelihood(const ContourLikelihood&);
-        ContourLikelihood& operator=( ContourLikelihood& );
+        RadialLikelihood(const RadialLikelihood&);
+        RadialLikelihood& operator=( RadialLikelihood& );
 
     public:
-        ContourLikelihood(int function = 0) : lhood(0),params(0) // NULL
+        RadialLikelihood(int function = 0) : lhood(0),params(0) // NULL
         { this->configure(function); }
-        ContourLikelihood(std::string onefile, double chicont = 5.99, 
+        RadialLikelihood(std::string onefile, double chicont = 5.99, 
             double continf = 0) : lhood(0),params(0)
         { this->configure(-1,onefile,chicont,continf); }
 
-        ~ContourLikelihood()
+        ~RadialLikelihood()
         { delete lhood; delete params; }
 
         void set_max_theta_(double theta) { max_theta_ = theta; }
@@ -69,4 +69,4 @@ class ContourLikelihood : public LHood
         }
         virtual double getChi2(double, double);
 };
-#endif    /* H_ContourLikelihood */
+#endif    /* H_RadialLikelihood */

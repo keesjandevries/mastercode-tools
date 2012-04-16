@@ -1,7 +1,7 @@
 #include "MultiAB.h"
 #include "src/LHood.h"
-#include "src/ContourLikelihood.h"
-#include "src/Likelihood1D.h"
+#include "src/RadialLikelihood.h"
+#include "src/CartesianLikelihood.h"
 #include "src/FileConstants.h"
 
 void mc6_lhoods_cmssm( std::vector<LHdata>&, FileInfo& );
@@ -73,31 +73,31 @@ void mc6_lhoods_cmssm( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(5);    
 
-    lhoods[0].lhood = new ContourLikelihood(1);
+    lhoods[0].lhood = new RadialLikelihood(1);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS MEt 03/2011";
 
-    lhoods[1].lhood = new ContourLikelihood(2);
+    lhoods[1].lhood = new RadialLikelihood(2);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 1l+0l 35pb^-1";
 
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
     lhoods[2].name = "Xenon100 2011";
 
-    lhoods[3].lhood = new Likelihood1D(2);
+    lhoods[3].lhood = new CartesianLikelihood(2);
     lhoods[3].varX = fInfo.pred_index+2;
     lhoods[3].varY = 0;
     lhoods[3].group = 3;
     lhoods[3].name = "LHCb/CDF/D0 Bsmumu MC6";
 
-    lhoods[4].lhood = new Likelihood1D(3);
+    lhoods[4].lhood = new CartesianLikelihood(3);
     lhoods[4].varX = fInfo.spec_index+24;
     lhoods[4].varY = 4;
     lhoods[4].group = 4;
@@ -108,31 +108,31 @@ void mc6_lhoods_nuhm1( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(5);    
 
-    lhoods[0].lhood = new ContourLikelihood(1);
+    lhoods[0].lhood = new RadialLikelihood(1);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS MEt 03/2011";
 
-    lhoods[1].lhood = new ContourLikelihood(2);
+    lhoods[1].lhood = new RadialLikelihood(2);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 1l+0l 35pb^-1";
 
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
     lhoods[2].name = "Xenon100 2011";
 
-    lhoods[3].lhood = new Likelihood1D(2);
+    lhoods[3].lhood = new CartesianLikelihood(2);
     lhoods[3].varX = fInfo.pred_index+2;
     lhoods[3].varY = 0;
     lhoods[3].group = 3;
     lhoods[3].name = "LHCb/CDF/D0 Bsmumu MC6";
 
-    lhoods[4].lhood = new Likelihood1D(4);
+    lhoods[4].lhood = new CartesianLikelihood(4);
     lhoods[4].varX = fInfo.spec_index+24;
     lhoods[4].varY = 4;
     lhoods[4].group = 4;
@@ -142,34 +142,34 @@ void mc6_lhoods_nuhm1( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_lhoods( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(5);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // Xenon
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
     lhoods[2].name = "Xenon100 2011";
 
     // BSMM LHCb CMS 
-    lhoods[3].lhood = new Likelihood1D(6,0,0,0,Bsmumu_LHCb_CMS_file);
+    lhoods[3].lhood = new CartesianLikelihood(6,0,0,0,Bsmumu_LHCb_CMS_file);
     lhoods[3].varX = fInfo.pred_index+2;
     lhoods[3].varY = 0;
     lhoods[3].group = 3;
     lhoods[3].name = "LHCb/CMS Bsmum mc7";
 
     // Just need an HA implementation
-    lhoods[4].lhood = new Likelihood1D(9);
+    lhoods[4].lhood = new CartesianLikelihood(9);
     lhoods[4].varX = fInfo.spec_index+24;
     lhoods[4].varY = 4;
     lhoods[4].group = 4;
@@ -179,20 +179,20 @@ void mc7_lhoods( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_simple( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(3);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // BSMM LHCb CMS 
-    lhoods[2].lhood = new Likelihood1D(6,0,0,0,Bsmumu_LHCb_CMS_file);
+    lhoods[2].lhood = new CartesianLikelihood(6,0,0,0,Bsmumu_LHCb_CMS_file);
     lhoods[2].varX = fInfo.pred_index+2;
     lhoods[2].varY = 0;
     lhoods[2].group = 2;
@@ -204,7 +204,7 @@ void diego_7pm2( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(1);
     // BSMM LHCb CMS 
-    lhoods[0].lhood = new Likelihood1D(-1,7e-9,2e-9);
+    lhoods[0].lhood = new CartesianLikelihood(-1,7e-9,2e-9);
     lhoods[0].varX = fInfo.pred_index+2;
     lhoods[0].varY = 0;
     lhoods[0].group = 1;
@@ -216,7 +216,7 @@ void diego_35pm1( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(1);
     // BSMM LHCb CMS 
-    lhoods[0].lhood = new Likelihood1D(-1,3.5e-9,1e-9);
+    lhoods[0].lhood = new CartesianLikelihood(-1,3.5e-9,1e-9);
     lhoods[0].varX = fInfo.pred_index+2;
     lhoods[0].varY = 0;
     lhoods[0].group = 1;
@@ -227,20 +227,20 @@ void diego_35pm1( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_METBMM( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(3);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // BSMM:LHCb CMS 
-    lhoods[2].lhood = new Likelihood1D(6,0,0,0,Bsmumu_LHCb_CMS_file);
+    lhoods[2].lhood = new CartesianLikelihood(6,0,0,0,Bsmumu_LHCb_CMS_file);
     lhoods[2].varX = fInfo.pred_index+2;
     lhoods[2].varY = 0;
     lhoods[2].group = 2;
@@ -250,34 +250,34 @@ void mc7_METBMM( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_CDFBSMM( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(5);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // Xenon
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
     lhoods[2].name = "Xenon100 2011";
 
     // BSMM LHCb CMS 
-    lhoods[3].lhood = new Likelihood1D(6,0,0,0,Bsmumu_LHCb_CMS_CDF_file);
+    lhoods[3].lhood = new CartesianLikelihood(6,0,0,0,Bsmumu_LHCb_CMS_CDF_file);
     lhoods[3].varX = fInfo.pred_index+2;
     lhoods[3].varY = 0;
     lhoods[3].group = 3;
     lhoods[3].name = "LHCb/CMS/CDF Bsmum mc7";
 
     // Just need an HA implementation
-    lhoods[4].lhood = new Likelihood1D(8);
+    lhoods[4].lhood = new CartesianLikelihood(8);
     lhoods[4].varX = fInfo.spec_index+24;
     lhoods[4].varY = 4;
     lhoods[4].group = 4;
@@ -287,27 +287,27 @@ void mc7_CDFBSMM( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_wBMMnHTT( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(4);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // Xenon
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
     lhoods[2].name = "Xenon100 2011";
 
     // BSMM LHCb CMS 
-    lhoods[3].lhood = new Likelihood1D(6,0,0,0,
+    lhoods[3].lhood = new CartesianLikelihood(6,0,0,0,
         "/vols/cms03/samr/MasterCode-Afterburners/MultiAB/LHoods/1d_lookups/mc7/bs_cms_lhcb_s_sb.dat");
     lhoods[3].varX = fInfo.pred_index+2;
     lhoods[3].varY = 0;
@@ -319,20 +319,20 @@ void mc7_wBMMnHTT( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_nBMMnHTT( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(3);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // Xenon
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
@@ -343,27 +343,27 @@ void mc7_nBMMnHTT( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 void mc7_nBMMwHTT( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(4);
-    lhoods[0].lhood = new ContourLikelihood(3);
+    lhoods[0].lhood = new RadialLikelihood(3);
     lhoods[0].varX = 1;
     lhoods[0].varY = 2;
     lhoods[0].group = 1;
     lhoods[0].name = "CMS Alpha_t 1.1fb^-1";
 
-    lhoods[1].lhood = new ContourLikelihood(4);
+    lhoods[1].lhood = new RadialLikelihood(4);
     lhoods[1].varX = 1;
     lhoods[1].varY = 2;
     lhoods[1].group = 1;
     lhoods[1].name = "ATLAS 0l 1.04fb^-1";
     
     // Xenon
-    lhoods[2].lhood = new Likelihood1D(1);
+    lhoods[2].lhood = new CartesianLikelihood(1);
     lhoods[2].varX = fInfo.spec_index+2;
     lhoods[2].varY = fInfo.pred_index+64;
     lhoods[2].group = 2;
     lhoods[2].name = "Xenon100 2011";
 
     // Just need an HA implementation
-    lhoods[3].lhood = new Likelihood1D(8);
+    lhoods[3].lhood = new CartesianLikelihood(8);
     lhoods[3].varX = fInfo.spec_index+24;
     lhoods[3].varY = 4;
     lhoods[3].group = 4;
@@ -375,7 +375,7 @@ void mc7_xenonOnly( std::vector<LHdata>& lhoods, FileInfo& fInfo )
 {
     lhoods.resize(1);
     // Xenon
-    lhoods[0].lhood = new Likelihood1D(1);
+    lhoods[0].lhood = new CartesianLikelihood(1);
     lhoods[0].varX = fInfo.spec_index+2;
     lhoods[0].varY = fInfo.pred_index+64;
     lhoods[0].group = 2;

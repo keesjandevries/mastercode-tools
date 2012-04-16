@@ -1,4 +1,4 @@
-#include "LikelihoodFunctions1D.h"
+#include "CartesianLikelihoodFunctions.h"
 #include "FileConstants.h"
 #include <TMath.h>
 #include <cmath>
@@ -39,7 +39,7 @@ double getGaussChi2(double x, double mu, double sigma, int ndof)
   return chi2;
 }
 
-void LikelihoodFunctions1D::add_supplementary(std::vector<std::string>& files)
+void CartesianLikelihoodFunctions::add_supplementary(std::vector<std::string>& files)
 {
     c_.resize( files.size() ); 
     std::vector<std::string>::iterator f_it;
@@ -51,29 +51,29 @@ void LikelihoodFunctions1D::add_supplementary(std::vector<std::string>& files)
     }
 }
 
-void LikelihoodFunctions1D::set_values(double mu, double sigma, int ndof)
+void CartesianLikelihoodFunctions::set_values(double mu, double sigma, int ndof)
 {
     mu_=mu;
     sigma_=sigma;
     ndof_=ndof;
 }
 
-double LikelihoodFunctions1D::Gauss( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::Gauss( double P, double Q, Coords &c )
 {
     return getGaussChi2(P,mu_,sigma_,ndof_);
 }
 
-double LikelihoodFunctions1D::PDF( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::PDF( double P, double Q, Coords &c )
 {
     return getChi2_PDF( c, P );
 }
 
-double LikelihoodFunctions1D::CL( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::CL( double P, double Q, Coords &c )
 {
     return getChi2_CL( c, P );
 }
 
-double LikelihoodFunctions1D::XenonMC6( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::XenonMC6( double P, double Q, Coords &c )
 {
     double chi2 = 0;
     /* for Xenon implementation */
@@ -85,7 +85,7 @@ double LikelihoodFunctions1D::XenonMC6( double P, double Q, Coords &c )
     return chi2;
 }
 
-double LikelihoodFunctions1D::BsmmMC6( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::BsmmMC6( double P, double Q, Coords &c )
 {
     double chi2 = 0;
     /* bsmm way */
@@ -97,7 +97,7 @@ double LikelihoodFunctions1D::BsmmMC6( double P, double Q, Coords &c )
     return chi2;
 }
 
-double LikelihoodFunctions1D::MAcmssmMC6( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::MAcmssmMC6( double P, double Q, Coords &c )
 {
     double chi2 = 0;
     // MA stuff
@@ -120,7 +120,7 @@ double LikelihoodFunctions1D::MAcmssmMC6( double P, double Q, Coords &c )
     return chi2;
 }
 
-double LikelihoodFunctions1D::MAnuhm1MC6( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::MAnuhm1MC6( double P, double Q, Coords &c )
 {
     double chi2 = 0;
     /* mA nuhm1 sigma*BR calc */
@@ -143,7 +143,7 @@ double LikelihoodFunctions1D::MAnuhm1MC6( double P, double Q, Coords &c )
     return chi2;
 }
 
-double LikelihoodFunctions1D::CDF2011( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::CDF2011( double P, double Q, Coords &c )
 {
     double chi2 = 0;
     if( P < 1.8e-8 ) {
@@ -154,7 +154,7 @@ double LikelihoodFunctions1D::CDF2011( double P, double Q, Coords &c )
     return chi2;
 }
 
-double LikelihoodFunctions1D::HAttStd( double P, double Q, Coords &c )
+double CartesianLikelihoodFunctions::HAttStd( double P, double Q, Coords &c )
 {
     double chi2 = 0;
     double MA = P;
