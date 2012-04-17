@@ -196,6 +196,28 @@ def fill_bins( toFill, bin, chain, d ) :
                 fill = ( content > curr_content )
         if fill : toFill[mode][-1].SetBinContent(bin,content)
 
+# attempt to have dimension independant filling
+def fill_all_data_hists_nd( rfile, rfileopts, hlist, toFill) :
+    axes = [ "X", "Y", "Z" ]
+    chain = MCC.MCchain( rfile, rfileopts )
+    nentries = chain.GetEntries()
+
+    for h in hlist :
+        h_dim = int(h.ClassName()[2])
+        dim_range = range(h_dim)
+        
+        axis_nbins = [],
+        axis_mins = [],
+        axis_maxs = [],
+        axis_bins = [],
+        for axis in dim_range :
+            axis_nbins.append( eval( "h.GetNbins%s()" % axes[axis] ) )
+            axis_mins.append( eval( "h.Get%saxis().GetXmin()" % axes[axis] ) )
+            axis_maxs.append( eval( "h.Get%saxis().GetXmax()" % axes[axis] ) )
+            axis_bins.append( eval( "h.Get%saxis().GetXbins().GetArray()" % axes[axis] ) )
+        print axis_nbins
+    return
+
 def fill_all_data_hists( rfile, d, hlist, toFill ) :
     # toFill is a dictionary:  { "mode" : [] } of empty lists
     chain = MCC.MCchain( rfile, d )
