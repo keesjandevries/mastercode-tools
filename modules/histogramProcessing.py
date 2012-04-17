@@ -206,17 +206,34 @@ def fill_all_data_hists_nd( rfile, rfileopts, hlist, toFill) :
         h_dim = int(h.ClassName()[2])
         dim_range = range(h_dim)
         
-        axis_nbins = [],
-        axis_mins = [],
-        axis_maxs = [],
-        axis_bins = [],
+        axis_nbins = []
+        axis_mins = []
+        axis_maxs = []
+        axis_bins = []
+        axis_titles = []
+
+        user_notify_format = ""
+        user_notify = []
+
+        title_format = "%s"
+        title_items = [ h.GetTitle() ]
         for axis in dim_range :
             axis_nbins.append( eval( "h.GetNbins%s()" % axes[axis] ) )
             axis_mins.append( eval( "h.Get%saxis().GetXmin()" % axes[axis] ) )
             axis_maxs.append( eval( "h.Get%saxis().GetXmax()" % axes[axis] ) )
             axis_bins.append( eval( "h.Get%saxis().GetXbins().GetArray()" % axes[axis] ) )
-        print axis_nbins
-    return
+            axis_titles.append( eval( "h.Get%saxis().GetTitle()" % axes[axis] ) )
+
+            user_notify_format += ": [ %f, %f ] :"
+            user_notify.append( axis_mins[-1] )
+            user_notify.append( axis_maxs[-1] )
+
+            title_format += ";%s"
+            title_items.append( axis_titles[-1] )
+
+        print user_notify_format % tuple(user_notify)
+        print title_format % tuple(title_items)
+        #title_format = "%s" + (";%s" * h_dim)
 
 def fill_all_data_hists( rfile, d, hlist, toFill ) :
     # toFill is a dictionary:  { "mode" : [] } of empty lists
