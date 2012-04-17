@@ -13,7 +13,9 @@ def main( argv=None ) :
         single_hists = hfuncs.get_entry_hist_list( file, files[file], single_vars )
 
         hists = { "pval" : [], "chi2" : [], "dchi" : [] }
-        hfuncs.fill_all_data_hists( file, files[file], space_hists, hists )
+        hfuncs.fill_all_data_hists_nd( file, files[file], space_hists, hists )
+        assert False
+        #hfuncs.fill_all_data_hists( file, files[file], space_hists, hists )
         #hfuncs.fill_all_data_hists_1d( file, files[file], singel_hists, hists )
 
         for hl in hists.values() :
