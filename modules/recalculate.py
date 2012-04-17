@@ -9,7 +9,7 @@ from sys import stdout
 from array import array
 
 # avoid namespace clash
-__DEBUG=True
+__DEBUG=False
 
 def setup_chain( fd ) :
     filenames = sorted(fd.keys())
