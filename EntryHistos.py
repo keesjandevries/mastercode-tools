@@ -7,7 +7,6 @@ from modules import histogramProcessing as hists
 from config import file_dict as fd
 from config import plot_list as pl
 
-
 def print_spaces( p, s ) :
     border = "=" * len(s)
     print "%s\n%s\n%s" % (border, s, border )

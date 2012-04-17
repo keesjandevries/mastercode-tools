@@ -1,5 +1,5 @@
-#ifndef H_LikelihoodFunctions
-#define H_LikelihoodFunctions
+#ifndef H_RadialLikelihoodFunctions
+#define H_RadialLikelihoodFunctions
 
 #include <utility>
 #include <vector>
@@ -12,7 +12,7 @@
 // functions, rather than rely on this crass labelling
 
 
-class LikelihoodFunctions
+class RadialLikelihoodFunctions
 {
   private:
     std::vector<double> chi_vals;
@@ -20,7 +20,7 @@ class LikelihoodFunctions
     double rescale_num, rescale_denom;
 
   public:
-    LikelihoodFunctions() {};
+    RadialLikelihoodFunctions() {};
     void set_values(std::vector<double>&, double, double, double);
 
     // likelihood functions
@@ -88,4 +88,4 @@ template <class TClass> class ParamsFunctor : public TParams_functor
 
 };
 
-#endif    /* H_LikelihoodFunctions */
+#endif    /* H_RadialLikelihoodFunctions */

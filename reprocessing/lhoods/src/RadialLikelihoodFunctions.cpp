@@ -1,4 +1,4 @@
-#include "LikelihoodFunctions.h"
+#include "RadialLikelihoodFunctions.h"
 
 #include <string>
 #include <iostream>
@@ -16,7 +16,7 @@ bool range_check(int e1=0, int e2=0, int p1=0, int p2=0)
     return range_state;
 }
 
-void LikelihoodFunctions::set_values(std::vector<double>& chivals,
+void RadialLikelihoodFunctions::set_values(std::vector<double>& chivals,
         double chiinf,double rnum, double rdenom)
 {
     rescale_num = rnum;
@@ -31,7 +31,7 @@ void LikelihoodFunctions::set_values(std::vector<double>& chivals,
     }
 }
 
-void LikelihoodFunctions::params_simple(double theta, std::vector<Contour>& c, std::vector<double>* params)
+void RadialLikelihoodFunctions::params_simple(double theta, std::vector<Contour>& c, std::vector<double>* params)
 {
     int expected_contours = 1;
     int expected_boundaries = 1;
@@ -48,7 +48,7 @@ void LikelihoodFunctions::params_simple(double theta, std::vector<Contour>& c, s
     return;
 }
 
-void LikelihoodFunctions::params_asymptote(double theta, std::vector<Contour>& c, std::vector<double>* params)
+void RadialLikelihoodFunctions::params_asymptote(double theta, std::vector<Contour>& c, std::vector<double>* params)
 {
     int expected_contours = 2;
     int expected_boundaries = 2;
@@ -104,7 +104,7 @@ void LikelihoodFunctions::params_asymptote(double theta, std::vector<Contour>& c
     return;
 }
 
-void LikelihoodFunctions::params_cutoff(double theta, std::vector<Contour>& c, std::vector<double>* params)
+void RadialLikelihoodFunctions::params_cutoff(double theta, std::vector<Contour>& c, std::vector<double>* params)
 {
     int expected_contours = 2;
     int expected_boundaries = 2;
@@ -124,7 +124,7 @@ void LikelihoodFunctions::params_cutoff(double theta, std::vector<Contour>& c, s
     return;
 }
 
-void LikelihoodFunctions::params_ATLAS(double theta, std::vector<Contour>& c, std::vector<double>* params )
+void RadialLikelihoodFunctions::params_ATLAS(double theta, std::vector<Contour>& c, std::vector<double>* params )
 {
     int expected_contours = 2;
     int expected_boundaries = 2;
@@ -150,7 +150,7 @@ void LikelihoodFunctions::params_ATLAS(double theta, std::vector<Contour>& c, st
     return;
 }
 
-void LikelihoodFunctions::params_ATLAS_exp(double theta, std::vector<Contour>& c, std::vector<double>* params)
+void RadialLikelihoodFunctions::params_ATLAS_exp(double theta, std::vector<Contour>& c, std::vector<double>* params)
 {
     int expected_contours = 2;
     int expected_boundaries = 2;
@@ -171,7 +171,7 @@ void LikelihoodFunctions::params_ATLAS_exp(double theta, std::vector<Contour>& c
     return;
 }
 
-void LikelihoodFunctions::params_ATLAS_scale(double theta, std::vector<Contour>& c, std::vector<double>* params)
+void RadialLikelihoodFunctions::params_ATLAS_scale(double theta, std::vector<Contour>& c, std::vector<double>* params)
 {
     int expected_contours = 1;
     int expected_boundaries = 2;
@@ -192,7 +192,7 @@ void LikelihoodFunctions::params_ATLAS_scale(double theta, std::vector<Contour>&
 
 /* LIKELIHOOD FUNCTIONS */
 
-double LikelihoodFunctions::likelihood_simple(double m0, double m12, std::vector<double>& fParas)
+double RadialLikelihoodFunctions::likelihood_simple(double m0, double m12, std::vector<double>& fParas)
 {
     double X2 = 0;
     int expected_params = 1;
@@ -206,7 +206,7 @@ double LikelihoodFunctions::likelihood_simple(double m0, double m12, std::vector
     return X2;
 }
 
-double LikelihoodFunctions::likelihood_asymptote(double m0, double m12, std::vector<double>& fParas)
+double RadialLikelihoodFunctions::likelihood_asymptote(double m0, double m12, std::vector<double>& fParas)
 {
     double X2 = 0;
     int expected_params = 2;
@@ -219,7 +219,7 @@ double LikelihoodFunctions::likelihood_asymptote(double m0, double m12, std::vec
     return X2;
 }
 
-double LikelihoodFunctions::likelihood_cutoff(double m0,double m12, std::vector<double>& fParas)
+double RadialLikelihoodFunctions::likelihood_cutoff(double m0,double m12, std::vector<double>& fParas)
 {
     double X2 = 0;
     int expected_params = 2;
@@ -233,7 +233,7 @@ double LikelihoodFunctions::likelihood_cutoff(double m0,double m12, std::vector<
     return X2;
 }
 
-double LikelihoodFunctions::likelihood_ATLAS(double m0, double m12, 
+double RadialLikelihoodFunctions::likelihood_ATLAS(double m0, double m12, 
     std::vector<double>& fParas)
 {
     double X2 = 0;
@@ -251,7 +251,7 @@ double LikelihoodFunctions::likelihood_ATLAS(double m0, double m12,
     return X2;
 }
 
-double LikelihoodFunctions::likelihood_ATLAS_exp(double m0, double m12,
+double RadialLikelihoodFunctions::likelihood_ATLAS_exp(double m0, double m12,
     std::vector<double>& fParas )
 {
     double X2 = 0;

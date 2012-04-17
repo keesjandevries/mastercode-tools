@@ -1,16 +1,16 @@
-#ifndef H_LikelihoodFunctions1D
-#define H_LikelihoodFunctions1D
+#ifndef H_CartesianLikelihoodFunctions
+#define H_CartesianLikelihoodFunctions
 
 #include "Coords.h"
 
-class LikelihoodFunctions1D
+class CartesianLikelihoodFunctions
 {
   private:
     double mu_,sigma_;
     int ndof_;
     std::vector<Coords> c_;
   public:
-    LikelihoodFunctions1D() {};
+    CartesianLikelihoodFunctions() {};
     void set_values(double, double, int);
     void add_supplementary(std::vector<std::string>& files);
 
@@ -50,4 +50,4 @@ template <class TClass> class LikelihoodFunctor1D : public TLikelihood_functor1D
       {  return (*pt2Object.*fpt)(v1,v2,c); };
 };
 
-#endif /* H_LikelihoodFunctions1D */
+#endif /* H_CartesianLikelihoodFunctions */

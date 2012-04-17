@@ -1,9 +1,9 @@
 #include "FileConstants.h"
-#include "ContourLikelihood.h"
+#include "RadialLikelihood.h"
 
 #include <new>
 
-double ContourLikelihood::getChi2(double x, double y)
+double RadialLikelihood::getChi2(double x, double y)
 {
     double theta = atan(y/x);
     double X2 = 0; //
@@ -17,12 +17,12 @@ double ContourLikelihood::getChi2(double x, double y)
     }
     else
     {
-        std::cerr << "*** Attempted to use badly configured ContourLikelihood" << std::endl;
+        std::cerr << "*** Attempted to use badly configured RadialLikelihood" << std::endl;
     }
     return X2;
 }
 
-void ContourLikelihood::configure(int function, std::string filename,
+void RadialLikelihood::configure(int function, std::string filename,
         double chival, double Achiinf)
 {
     // clear out previous versions
@@ -48,10 +48,10 @@ void ContourLikelihood::configure(int function, std::string filename,
             cont_files.push_back(cms_new_at);
             chi_vals.push_back(chisq_95percent_2d);
             chiinf = 0;
-            lhood = new LikelihoodFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::likelihood_simple);
-            params = new ParamsFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::params_simple);
+            lhood = new LikelihoodFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::likelihood_simple);
+            params = new ParamsFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::params_simple);
             break;
         }
         case 2: // ATLAS combined 1l and 0l contour
@@ -60,10 +60,10 @@ void ContourLikelihood::configure(int function, std::string filename,
             cont_files.push_back(atlas_combined);
             chi_vals.push_back(chisq_95percent_2d);
             chiinf = 0;
-            lhood = new LikelihoodFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::likelihood_simple);
-            params = new ParamsFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::params_simple);
+            lhood = new LikelihoodFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::likelihood_simple);
+            params = new ParamsFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::params_simple);
             break;
         }
         case 3: // 1.1 Alpha t analysis
@@ -72,10 +72,10 @@ void ContourLikelihood::configure(int function, std::string filename,
             cont_files.push_back(cmsATeps);
             chi_vals.push_back(chisq_95percent_2d);
             chiinf = 0;
-            lhood = new LikelihoodFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::likelihood_simple);
-            params = new ParamsFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::params_simple);
+            lhood = new LikelihoodFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::likelihood_simple);
+            params = new ParamsFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::params_simple);
             break;
         }
         case 4: // ATLAS 1.04 0l analysis
@@ -84,10 +84,10 @@ void ContourLikelihood::configure(int function, std::string filename,
             cont_files.push_back(atlas0leps);
             chi_vals.push_back(chisq_95percent_2d);
             chiinf = 0;
-            lhood = new LikelihoodFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::likelihood_simple);
-            params = new ParamsFunctor<LikelihoodFunctions> 
-                (&lfuncs,&LikelihoodFunctions::params_simple);
+            lhood = new LikelihoodFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::likelihood_simple);
+            params = new ParamsFunctor<RadialLikelihoodFunctions> 
+                (&lfuncs,&RadialLikelihoodFunctions::params_simple);
             break;
         }
         default:
@@ -100,10 +100,10 @@ void ContourLikelihood::configure(int function, std::string filename,
                 << "\t - Taking file + vals from argument" << std::endl;
             if( filename != "" )
             {
-                lhood = new LikelihoodFunctor<LikelihoodFunctions> 
-                    (&lfuncs,&LikelihoodFunctions::likelihood_simple);
-                params = new ParamsFunctor<LikelihoodFunctions> 
-                    (&lfuncs,&LikelihoodFunctions::params_simple);
+                lhood = new LikelihoodFunctor<RadialLikelihoodFunctions> 
+                    (&lfuncs,&RadialLikelihoodFunctions::likelihood_simple);
+                params = new ParamsFunctor<RadialLikelihoodFunctions> 
+                    (&lfuncs,&RadialLikelihoodFunctions::params_simple);
                 cont_files.push_back(filename);
             }
             else
@@ -142,7 +142,7 @@ void ContourLikelihood::configure(int function, std::string filename,
     }
 }
 
-std::vector<double> ContourLikelihood::get_segment_params(double theta)
+std::vector<double> RadialLikelihood::get_segment_params(double theta)
 {
 
     std::vector<std::vector<double> >::iterator it = functionParameters.begin();

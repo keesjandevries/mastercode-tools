@@ -5,8 +5,8 @@
 #include <numeric>
 
 #include "LHood.h"
-#include "ContourLikelihood.h"
-#include "Likelihood1D.h"
+#include "RadialLikelihood.h"
+#include "CartesianLikelihood.h"
 
 struct FileInfo {
     int spec_index, pred_index;

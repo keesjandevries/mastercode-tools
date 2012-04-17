@@ -1,18 +1,18 @@
-#ifndef H_Likelihood1D
-#define H_Likelihood1D
+#ifndef H_CartesianLikelihood
+#define H_CartesianLikelihood
 
 #include "LHood.h"
-#include "LikelihoodFunctions1D.h"
+#include "CartesianLikelihoodFunctions.h"
 #include "Coords.h"
 
 #include <vector>
 
-class Likelihood1D : public LHood
+class CartesianLikelihood : public LHood
 {
   private:
     //  parameters corresponding to each segment of the first contour (primary
     //  contour)
-    LikelihoodFunctions1D lfuncs;
+    CartesianLikelihoodFunctions lfuncs;
 
     TLikelihood_functor1D *lhood;
     
@@ -22,15 +22,15 @@ class Likelihood1D : public LHood
 
     // do not allow copying -> should add some constructors but for now this
     // removes double free errors
-    Likelihood1D(const Likelihood1D&); 
-    Likelihood1D& operator=( Likelihood1D& );
+    CartesianLikelihood(const CartesianLikelihood&); 
+    CartesianLikelihood& operator=( CartesianLikelihood& );
     
   public:
-    Likelihood1D(int function = 0, double mu=0, double sigma=0, int ndf=1,
+    CartesianLikelihood(int function = 0, double mu=0, double sigma=0, int ndf=1,
         std::string filename = "") : lhood(0)// NULL
     { this->configure(function,mu,sigma,ndf,filename); }
 
-    ~Likelihood1D()
+    ~CartesianLikelihood()
     { delete lhood; }
 
     void configure(int function = 0, double mu=0, double sigma=0, int ndf=1,
@@ -42,4 +42,4 @@ class Likelihood1D : public LHood
     virtual double getChi2(double x, double y);
 
 };
-#endif    /* H_Likelihood1D */
+#endif    /* H_CartesianLikelihood */

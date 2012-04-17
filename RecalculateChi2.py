@@ -1,8 +1,10 @@
 #! /usr/bin/env python
-from config import file_dict as fd
-from modules import recalculate as recalc
+
+import sys
 
 from optparse import OptionParser
+from config import file_dict as fd
+from modules import recalculate as recalc
 
 ############################################
 def opts():

@@ -1,7 +1,15 @@
 #! /usr/bin/env python
 from modules import Variables as v
 
-def get_plots( pindex, sindex, nbins = 100 ) : 
+import sys
+sys.path.append( "./modules/" )
+from Variables import *
+
+def get_plots( pindex, sindex, nbins = 100 ) :
+    return standard_plots(pindex, sindex, nbins )
+
+def standard_plots( pindex, sindex, nbins = 100) :
+    # local assignment
     d = standard_variables( pindex, sindex, nbins )
     return standard_1d_histos(d), standard_spaces(d)
 

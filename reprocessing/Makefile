@@ -12,11 +12,11 @@ LHDIR		=	lhoods
 OBJDIR		=	$(LHDIR)/obj
 SRCDIR	    =	$(LHDIR)/src
 OBJS        =	$(OBJDIR)/Contour.o \
-				$(OBJDIR)/ContourLikelihood.o \
-				$(OBJDIR)/LikelihoodFunctions.o \
+				$(OBJDIR)/RadialLikelihood.o \
+				$(OBJDIR)/RadialLikelihoodFunctions.o \
 				$(OBJDIR)/Coords.o \
-				$(OBJDIR)/Likelihood1D.o \
-				$(OBJDIR)/LikelihoodFunctions1D.o
+				$(OBJDIR)/CartesianLikelihood.o \
+				$(OBJDIR)/CartesianLikelihoodFunctions.o
 APIFILE		=	$(LHDIR)/lhood.cc
 APIOBJ		=   $(LHDIR)/lhood.o
 TARGET      =	libLH.so
