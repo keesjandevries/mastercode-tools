@@ -1,7 +1,6 @@
 #! /usr/bin/env python
-
 import ROOT as r
-import Variables as v 
+import Space as s 
 import MCchain as MCC
 from progress_bar import ProgressBar
 from sys import stdout
@@ -16,12 +15,15 @@ def histo_call_count() :
 
 def entry_histo_prefix() :
     return "iHist"
+
 def chi2_histo_prefix() :
     return "cHist"
+
 def histo_name( vl = [], f = entry_histo_prefix ) :
     format_string = "%s"
     for v in vl : format_string += "_%d"
     return format_string % ( tuple([f()] + vl) )
+
 # assume histogram naming as above: PREFIX_d1_d2_d3....
 def get_histogram_dimension_from_name( name, delim = "_" ) :
     x = name.split(delim)
@@ -41,115 +43,65 @@ def save_hlist_to_root_file( hlist, filename, directory = None ) :
         h.Write("",r.TObject.kOverwrite)
     f.Close()
 
-# these two can be combined (1d and 2d init functions) using blot
-def initialize_1d_histo( line ) :
-    xmin, xmax = line.min_val, line.max_val
-    nxbins = int( line.bins )
+def initialize_histo( obj ) :
+    dim = obj.dimension
 
-    xbins = array('d',[0.0] * nxbins)
+    bins = [ array('d',[0.0] * (abins+1)) for abins in obj.nbins ]
+#    print "***"
+#    for index, min_val, max_val, nbins, name, log in zip( obj.indices, 
+#            obj.min_vals, obj.max_vals, obj.nbins, obj.names,
+#            obj.log ) :
+#        print index, min_val, max_val, nbins, name, log
+#    print "***"
 
-    logx = line.log if hasattr(line,"log") else False
+    for i,log in enumerate(obj.log) :
+        if log :
+            logmin = r.TMath.Log10( obj.min_vals[i] )
+            logmax = r.TMath.Log10( obj.max_vals[i] )
+            binwidth = (logmax - logmin) / float(obj.nbins[i])
+            for c, b in enumerate( bins[i] ) :
+                b = r.TMath.Power(10, logmin*c*binwidth)
+        else :
+            bmin = obj.min_vals[i]
+            bmax = obj.max_vals[i]
+            binwidth = float(bmax-bmin) / float(obj.nbins[i])
+            for c in range(len( bins[i] )) :
+                bins[i][c] = bmin + binwidth*c
 
-    if logx :
-        logxmin = r.TMath.Log10(xmin)
-        logxmax = r.TMath.Log10(xmax)
-        xbinwidth = (logxmax - logxmin ) / nxbins
-        for i, xb in enumerate(xbins) :
-            xb = r.TMath.Power(10,logxmin*i*xbinwidth)
+    title_f = ";%s" * dim
+    title = title_f % tuple( obj.names )
 
-    title = ";%s" % ( line.name )
-    hname = histo_name( [line.index], entry_histo_prefix )
-    cname = histo_name( [line.index], chi2_histo_prefix )
 
-    if logx :
-        histo   = r.TH1I( hname, title, nxbins, xbins )
-        c2histo = r.TH1D( cname, title, nxbins, xbins )
-    else :
-        histo   = r.TH1I( hname, title, nxbins, xmin, xmax )
-        c2histo = r.TH1D( cname, title, nxbins, xmin, xmax )
+    hname = histo_name( obj.indices, entry_histo_prefix )
+    cname = histo_name( obj.indices, chi2_histo_prefix )
 
-    # set our chi2 histogram to some ridiculous values
+    args = []
+    [ args.extend( [ nb, b ] ) for nb, b in zip( obj.nbins, bins )  ]
+
+    histo = eval( "r.TH%dI( hname, title, *args )" % dim )
+    c2histo = eval( "r.TH%dD( cname, title, *args )" % dim )
+
     content = r.Long(1e9)
     econtent = -1
-    nbins = histo.GetNbinsX()
-    for i in range(0,nbins+1) :
+    
+    up_bin = [ abin + 1 for abin in obj.nbins ]
+    nbins = reduce(mul, up_bin)
+    for i in range(0,nbins) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
-           c2histo.SetBinContent(i,content)
-           histo.SetBinContent(i,econtent)
+            c2histo.SetBinContent(i,content)
+            histo.SetBinContent(i,econtent)
 
-    return histo, c2histo
+    return histo,c2histo
 
-def initialize_2d_histo ( space ) :
-    xmin, xmax = space.xaxis.min_val, space.xaxis.max_val
-    ymin, ymax = space.yaxis.min_val, space.yaxis.max_val
-    nxbins = int( space.xaxis.bins ) + 1
-    nybins = int( space.yaxis.bins ) + 1
-
-    xbins = array('d',[0.0] * nxbins)
-    ybins = array('d',[0.0] * nxbins)
-
-    logx = space.logx
-    logy = space.logy
-
-    if logx :
-        logxmin = r.TMath.Log10(xmin)
-        logxmax = r.TMath.Log10(xmax)
-        xbinwidth = (logxmax - logxmin ) / nxbins
-        for i, xb in enumerate(xbins) :
-            xb = r.TMath.Power(10,logxmin*i*xbinwidth)
-
-    if logy :
-        logymin = r.TMath.Log10(ymin)
-        logymax = r.TMath.Log10(ymax)
-        ybinwidth = (logymax - logymin ) / nybins
-        for i, yb in enumerate(ybins) :
-            yb = r.TMath.Power(10,logymin*i*ybinwidth)
-
-    title = ";%s;%s" % ( space.xaxis.name, space.yaxis.name )
-
-    hname = histo_name( [space.xaxis.index, space.yaxis.index], entry_histo_prefix )
-    cname = histo_name( [space.xaxis.index, space.yaxis.index], chi2_histo_prefix )
-
-    if logx and logy :
-        histo   = r.TH2I( hname, title, nxbins, xbins, nybins, ybins )
-        c2histo = r.TH2D( cname, title, nxbins, xbins, nybins, ybins )
-    elif logx and not logy :
-        histo   = r.TH2I( hname, title, nxbins, xbins, nybins, ymin, ymax )
-        c2histo = r.TH2D( cname, title, nxbins, xbins, nybins, ymin, ymax )
-    elif logy and not logx :
-        histo   = r.TH2I( hname, title, nxbins, xmin, xmax, nybins, ybins )
-        c2histo = r.TH2D( cname, title, nxbins, xmin, xmax, nybins, ybins )
-    else :
-        histo   = r.TH2I( hname, title, nxbins, xmin, xmax, nybins, ymin, ymax )
-        c2histo = r.TH2D( cname, title, nxbins, xmin, xmax, nybins, ymin, ymax )
-
-    # set our chi2 histogram to some ridiculous values
-    content = r.Long(1e9)
-    econtent = -1
-    nbins = histo.GetNbinsX()*histo.GetNbinsY()
-    for i in range(0,nbins+1) :
-        if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
-           c2histo.SetBinContent(i,content)
-           histo.SetBinContent(i,econtent)
-
-    return histo, c2histo
-
-
-def calculate_entry_histograms( spaces, lines, chain ) :
+def calculate_entry_histograms( plots, chain ) :
     ##assert canvas is not None, "Canvas must be specified in calculate_histograms"
     # setup our 2d histos
     histos = []
     chi2histos = []
-    for s in spaces :
-        entryhisto, chi2histo = initialize_2d_histo( s )
+    for p in plots :
+        entryhisto, chi2histo = initialize_histo( p )
         histos.append(entryhisto)
         chi2histos.append(chi2histo)
-    for l in lines :
-        entryhisto, chi2histo = initialize_1d_histo( l )
-        histos.append(entryhisto)
-        chi2histos.append(chi2histo)
-
-    s_n_l = spaces + lines
 
     nentries = chain.GetEntries()
     prog = ProgressBar(0, nentries+1, 77, mode='fixed', char='#')
@@ -158,7 +110,7 @@ def calculate_entry_histograms( spaces, lines, chain ) :
         print prog,'\r',
         stdout.flush()
         chain.GetEntry(entry) 
-        for h, c, plot in zip( histos, chi2histos, s_n_l ) :
+        for h, c, plot in zip( histos, chi2histos, plots ) :
             indices = plot.get_indices()
             vals = [ chain.chi2vars[ index ] for index in indices ]
             nbins = plot.bins
@@ -169,6 +121,7 @@ def calculate_entry_histograms( spaces, lines, chain ) :
                     c.SetBinContent(ibin, chi2) 
                     h.SetBinContent(ibin, entry)
 
+    print
     return histos
  
 def count_ndof( c, min_contrib, inputs ) :
@@ -240,7 +193,8 @@ def fill_all_data_hists( rfile, rfileopts, hlist, toFill) :
         print user_notify_format % tuple(user_notify)
 
         title = title_format % tuple(title_items)
-        nbins = reduce(mul, axis_nbins)
+        up_bin = [ abin + 1 for abin in axis_nbins ]
+        nbins = reduce(mul, up_bin)
 
         firstbin = h.FindBin( *axis_mins )
         lastbin = h.FindBin( *axis_maxs )
