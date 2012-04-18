@@ -46,7 +46,7 @@ def save_hlist_to_root_file( hlist, filename, directory = None ) :
 def initialize_histo( obj ) :
     dim = obj.dimension
 
-    bins = [ array('d',[0.0] * (bins+1)) for bins in obj.nbins ]
+    bins = [ array('d',[0.0] * (abins+1)) for abins in obj.nbins ]
 #    print "***"
 #    for index, min_val, max_val, nbins, name, log in zip( obj.indices, 
 #            obj.min_vals, obj.max_vals, obj.nbins, obj.names,
@@ -86,7 +86,7 @@ def initialize_histo( obj ) :
     
     up_bin = [ abin + 1 for abin in obj.nbins ]
     nbins = reduce(mul, up_bin)
-    for i in range(0,obj.bins+1) :
+    for i in range(0,nbins) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
             c2histo.SetBinContent(i,content)
             histo.SetBinContent(i,econtent)
