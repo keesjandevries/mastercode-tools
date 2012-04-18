@@ -121,6 +121,7 @@ def calculate_entry_histograms( plots, chain ) :
                     c.SetBinContent(ibin, chi2) 
                     h.SetBinContent(ibin, entry)
 
+    print
     return histos
  
 def count_ndof( c, min_contrib, inputs ) :
