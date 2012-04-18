@@ -23,7 +23,10 @@ def standard_spaces( d ) :
     return l
 
 def standard_1d_histos( d ) :
-    l = [ d["mneu1"].update( { "log" : False } ), ]
+    l = [
+            d["mneu1"].update( { "log" : False } ),
+            d["mh"]
+        ]
     return l
 
 def standard_variables( pindex, sindex, nbins ) :
@@ -35,5 +38,6 @@ def standard_variables( pindex, sindex, nbins ) :
             "h0"    : v.Variable( pindex+20,    85,   140, nbins,                "m_{h^{0}} [GeV/c^{2}]" ),
             "ssi"   : v.Variable( pindex+64, 1e-48, 1e-40, nbins,            "#sigma_{p}^{SI} [cm^{-2}]" ),
             "mneu1" : v.Variable(  sindex+2,    10,  1000, nbins, "m_{#tilde{#chi}^{0}_{1}} [GeV/c^{2}]" ),
+            "mh"    : v.Variable( pindex+18,    85,   140, nbins,                 "m_{h^{0}} [GeV/c^{2}" ),
          }
     return sv
