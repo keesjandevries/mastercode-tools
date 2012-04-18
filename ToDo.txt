@@ -12,5 +12,3 @@
         histo = TH2[I/D]( hname, htitle, *[ *x for x in argument_constructor(TH) ] )
         it would be better to have this level of "complexity" and at least have a clear comment,
         rather than the ridiculous duplication that is going on at the moment
-
-* update DataHistograms.py to fill teh histos for the single vars
