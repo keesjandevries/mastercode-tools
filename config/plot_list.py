@@ -23,7 +23,6 @@ def make_space( l ) :
         for o,a in zip(v,args) :
             a.append(o)
     s = Space( *args )
-    print repr(s)
     return s
 
 def standard_variables( pindex, sindex, nbins ) :
