@@ -22,7 +22,7 @@ def main( argv=None ) :
         plots = pl.get_plots( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
 
         # bit of output
-    #    print_spaces( plots, "Plots to make" )
+        print_spaces( plots, "Plots to make" )
 
         chain = MCC.MCchain(file, files[file])
         complete_histos =  hists.calculate_entry_histograms( plots, chain )
