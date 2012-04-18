@@ -1,14 +1,3 @@
-
 * Debug problems with logx and logy not working 
     [ confirmed in spaces at least ]
-
-* fix variables and spaces being treated differently: too much code complexity/repition
-
-* be dimension agnostic in histogram initialization;
-    [ can do this by either:
-        a) always use nbins, array_of_bins and determine this for each
-        b) create a fuction to construct a list of the arguments, whcih we then splat
-        i.e.
-        histo = TH2[I/D]( hname, htitle, *[ *x for x in argument_constructor(TH) ] )
-        it would be better to have this level of "complexity" and at least have a clear comment,
-        rather than the ridiculous duplication that is going on at the moment
+    [ confirm it still actually happens ]
