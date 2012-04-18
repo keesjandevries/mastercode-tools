@@ -6,7 +6,7 @@ import MCchain as MCC
 from progress_bar import ProgressBar
 from sys import stdout
 from array import array
-from copy import deepcopy
+from operator import mul
 
 def histo_call_count() :
     c = 0
@@ -196,56 +196,73 @@ def fill_bins( toFill, bin, chain, d ) :
                 fill = ( content > curr_content )
         if fill : toFill[mode][-1].SetBinContent(bin,content)
 
-def fill_all_data_hists( rfile, d, hlist, toFill ) :
-    # toFill is a dictionary:  { "mode" : [] } of empty lists
-    chain = MCC.MCchain( rfile, d )
+# attempt to have dimension independant filling
+def fill_all_data_hists( rfile, rfileopts, hlist, toFill) :
+    axes = [ "X", "Y", "Z" ]
+    chain = MCC.MCchain( rfile, rfileopts )
     nentries = chain.GetEntries()
+
     for h in hlist :
-        nbinsx = h.GetNbinsX()
-        xmax = h.GetXaxis().GetXmax()
-        xmin = h.GetXaxis().GetXmin()
-        xbins = h.GetXaxis().GetXbins().GetArray()
-
-        nbinsy = h.GetNbinsY()
-        ymax = h.GetYaxis().GetXmax()
-        ymin = h.GetYaxis().GetXmin()
-        ybins = h.GetYaxis().GetXbins().GetArray()
-
-        # basically our histogram isn't getting fully described
-        # it means we have to get:
-        #   - binning from original histogram
-        #   - can be done with the xbins and ybins arrays above but there's
-        #   a buffer indexing error
-
-        print "\n[ %f, %f ] :: [ %f, %f ]" % ( xmin, xmax, ymin, ymax )
+        h_dim = int(h.ClassName()[2])
+        dim_range = range(h_dim)
         
-        title = "%s;%s;%s" % ( h.GetTitle(), h.GetXaxis().GetTitle(),
-        h.GetYaxis().GetTitle() )
+        axis_nbins = []
+        axis_mins = []
+        axis_maxs = []
+        axis_bins = []
+        axis_titles = []
 
-        nbins = nbinsx * nbinsy
-        firstbin = h.FindBin( xmin, ymin )
-        lastbin = h.FindBin( xmax, ymax )
+        th_arg_list  = []
+
+        user_notify_format = ""
+        user_notify = []
+
+        title_format = "%s"
+        title_items = [ h.GetTitle() ]
+        for axis in dim_range :
+            axis_nbins.append( eval( "h.GetNbins%s()" % axes[axis] ) )
+            axis_mins.append( eval( "h.Get%saxis().GetXmin()" % axes[axis] ) )
+            axis_maxs.append( eval( "h.Get%saxis().GetXmax()" % axes[axis] ) )
+            axis_bins.append( eval( "h.Get%saxis().GetXbins().GetArray()" % axes[axis] ) )
+            axis_titles.append( eval( "h.Get%saxis().GetTitle()" % axes[axis] ) )
+
+            th_arg_list.append( axis_nbins[-1] )
+            th_arg_list.append( axis_mins[-1] )
+            th_arg_list.append( axis_maxs[-1] )
+
+            user_notify_format += ": [ %f, %f ] :"
+            user_notify.append( axis_mins[-1] )
+            user_notify.append( axis_maxs[-1] )
+
+            title_format += ";%s"
+            title_items.append( axis_titles[-1] )
+
+        print user_notify_format % tuple(user_notify)
+
+        title = title_format % tuple(title_items)
+        nbins = reduce(mul, axis_nbins)
+
+        firstbin = h.FindBin( *axis_mins )
+        lastbin = h.FindBin( *axis_maxs )
         for mode in toFill.keys() :
-            toFill[mode].append( r.TH2D( h.GetName() + "_" + mode , title, nbinsx,
-            xmin, xmax, nbinsy, ymin, ymax ) )
+            toFill[mode].append( eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim ) )
             base_val = 1e9
-            if mode == "pval" : 
-               base_val = 0.0 
-            for bin in range( firstbin, lastbin+ 1 ) :
+            if mode == "pval" :
+                base_val = 0.0
+            for bin in range( firstbin, lastbin + 1 ) :
                 toFill[mode][-1].SetBinContent( bin, base_val )
 
-
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
-        for i in range( 0, nbins+1 ) :
+        for i in range( 0, nbins + 1 ) :
             prog.increment_amount()
             print prog,'\r',
             stdout.flush()
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
                 chain.GetEntry(entry)
-                fill_bins( toFill, i, chain, d )
+                fill_bins( toFill, i, chain, rfileopts )
+        print
     perform_zero_offset( toFill["dchi"] )
-
 
 def get_entry_hist_list( rfile, d, plots ) :
     hl = []
@@ -273,8 +290,13 @@ def get_hist_minimum_values( hl ) :
     return mins
 
 def perform_zero_offset( hl ) :
+    axes = ["X", "Y", "Z"]
     for h in hl :
-        nbins = h.GetNbinsX()*h.GetNbinsY()
+        h_dim = int(h.ClassName()[2])
+        axes_nbins = []
+        for axis in range(h_dim) :
+            axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
+        nbins = reduce(mul, axes_nbins)
         min_val = 1e9
         for bin in range(nbins+1) :
             c = h.GetBinContent(bin)
