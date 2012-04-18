@@ -41,6 +41,10 @@ def save_hlist_to_root_file( hlist, filename, directory = None ) :
         h.Write("",r.TObject.kOverwrite)
     f.Close()
 
+def initialize_histo( obj ) :
+    print type(obj)
+    return [],[]
+
 # these two can be combined (1d and 2d init functions) using blot
 def initialize_1d_histo( line ) :
     xmin, xmax = line.min_val, line.max_val
@@ -141,13 +145,15 @@ def calculate_entry_histograms( spaces, lines, chain ) :
     histos = []
     chi2histos = []
     for s in spaces :
-        entryhisto, chi2histo = initialize_2d_histo( s )
+        entryhisto, chi2histo = initialize_histo( s )
         histos.append(entryhisto)
         chi2histos.append(chi2histo)
     for l in lines :
-        entryhisto, chi2histo = initialize_1d_histo( l )
+        entryhisto, chi2histo = initialize_histo( l )
         histos.append(entryhisto)
         chi2histos.append(chi2histo)
+
+    assert False
 
     s_n_l = spaces + lines
 
