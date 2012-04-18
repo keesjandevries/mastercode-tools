@@ -11,27 +11,21 @@ def print_spaces( p, s ) :
     border = "=" * len(s)
     print "%s\n%s\n%s" % (border, s, border )
     for plot in p :
-        if hasattr(plot,"xaxis") :
-            print plot.xaxis, plot.yaxis
-        else :
-            print plot.name
+        print plot.name
     
 
 def main( argv=None ) :
     files = fd.files()
 
-    # some nice formatted output
-
     # add in our file list 
     for file in files.keys() :
-        single_vars, spaces = pl.get_plots( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
+        plots = pl.get_plots( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
 
         # bit of output
-        print_spaces( spaces, "Spaces to make" )
-        print_spaces( single_vars, "1d plots to make" )
+    #    print_spaces( plots, "Plots to make" )
 
         chain = MCC.MCchain(file, files[file])
-        complete_histos =  hists.calculate_entry_histograms( spaces, single_vars, chain )
+        complete_histos =  hists.calculate_entry_histograms( plots, chain )
 
         hists.save_hlist_to_root_file( complete_histos, file, files[file]["EntryDirectory"] )
 
