@@ -82,7 +82,7 @@ def initialize_histo( obj ) :
     c2histo = eval( "r.TH%dD( cname, title, *args )" % dim )
 
     content = r.Long(1e9)
-    econtent = 01
+    econtent = -1
     
     up_bin = [ abin + 1 for abin in obj.nbins ]
     nbins = reduce(mul, up_bin)
