@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from modules.Variables import Space
+from modules.Space import Space
 import sys
 
 def get_plots( pindex, sindex, nbins = 100 ) :
