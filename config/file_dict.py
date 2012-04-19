@@ -2,7 +2,7 @@
 
 def files() :
     d = {
-        "~/Documents/mastercode_data/recalc_out.root" :
+        "/vols/cms03/mastercode/test_files/recalc_out.root" :
             { 
                 "Chi2TreeName"      : "tree",
                 "Chi2BranchName"    : "vars",
@@ -20,7 +20,7 @@ def files() :
 
 def recalc_files() :
     d = {
-        "~/Documents/mastercode_data/cmssm_test.root" :
+        "/vols/cms03/mastercode/test_files/cmssm_test.root" :
             {
                 "Chi2TreeName"      : "tree",
                 "Chi2BranchName"    : "vars",
