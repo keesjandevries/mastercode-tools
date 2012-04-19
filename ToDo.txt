@@ -1,3 +1,12 @@
 * Debug problems with logx and logy not working 
     [ confirmed in spaces at least ]
     [ confirm it still actually happens ]
+
+* chi2 cut
+
+* good point checks
+
+* refactor recalc_dict :
+    d = { output.root : input: [ inputlist ]
+            ...
+        }
