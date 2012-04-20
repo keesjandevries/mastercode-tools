@@ -17,7 +17,9 @@ def opts():
 
 def main( argv=None ) :
 #    options,args = opts()
-    file_dict = fd.recalc_files() :
+    from commands import getoutput
+    domainname = getoutput('hostname -d')
+    file_dict = fd.recalc_files( domainname ) :
     for outputfile, opts in file_dict.iteritems() :
         recalc.go( opts["InputFiles"], outputfile )
 
