@@ -29,7 +29,7 @@ def recalc_files( fileset ) :
                 "Chi2BranchName"     : "vars",
                 "ContribTreeNames"   : [ "contribtree" ],
                 "ContribBranchName"  : "vars" ,
-                "ModelFile "         : "models/tester.model" ,
+                "ModelFile"          : "models/tester.model" ,
 #                "LHoodFile"          : "models/tester.lhood",
 #                "StartEntry"         : 0,
 #                "EndEntry"           : 1,

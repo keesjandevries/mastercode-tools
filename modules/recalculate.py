@@ -49,9 +49,9 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         delta = 0.
         chi2 = 0
 
-        for key in models.keys() :
+        for key in model.keys() :
             chi2_t = model[key].get_chi2( chain.chi2vars[key] )
-            contribvars[ky] = chi2_t
+            contribvars[key] = chi2_t
             chi2 += chi2_t
         for i,lh in enumerate(lhoods.values()) :
             chi2_t = lh.get_chi2( chain.chi2vars )
@@ -86,6 +86,6 @@ def go( options, outputfile ) :
     chain = setup_chain( options )
     #assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
     nentries = chain.GetEntries()
-    start = indict.get("StartEntry", 0)
-    end   = indict.get("EndEntry", nentries)
+    start = options.get("StartEntry", 0)
+    end   = options.get("EndEntry", nentries)
     recalc_to_file( chain, m, l, outputfile, start, end )
