@@ -31,8 +31,8 @@ def recalc_files( fileset ) :
                 "ContribBranchNames" :  [ "vars" ] ,
                 "ModelFiles "        :  [ "models/tester.model" ] ,
 #                "LHoodFiles"         : [ "models/tester.lhood" ],
-#                "StartEntries"       : [ 0 ],
-#                "EndEntries"         : [ 1 ],
+#                "StartEntry"         : 0,
+#                "EndEntry"           : 1,
             }
         }
     return d
