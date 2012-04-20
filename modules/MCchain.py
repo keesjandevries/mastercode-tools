@@ -3,65 +3,62 @@
 import ROOT as r
 from array import array
 
+def check_files( fd ) :
+    nfiles = len(fd["InputFiles"])
+    chi2_states = [None]*nfiles
+    contrib_states = [None]*nfiles
+    for pos in range(nfiles) :
+        chi2_states[pos], contrib_states[pos] = \
+            check_file( fd["InputFile"][pos], fd["Chi2TreeNames"][pos], 
+                        fd["ContribTreeNames"][pos] )
+
+def check_file( filename, chi2treename, contribtreename ) :
+    tf = r.TFile( fd["InputFiles"] )
+
+    chi2tree  = tf.Get(chi2treename)
+    conttree  = tf.Get(contribtreename)
+
+    contrib_state = conttree  is not None
+    chi2_state    = chi2tree  is not None
+
+    return chi2_state,contrib_state
+
+
 class MCchain( object ) :
     def __init__( self, fd ) :
         self.tree_names           = fd["Chi2TreeNames"]
-        self.branch_names         = fd["Chi2BranchNames"]
+        self.branch_name         = fd["Chi2BranchName"]
         self.contrib_names        = fd["ContribTreeNames"] 
-        self.contrib_branch_names = fd["ContribBranchNames"]
-        chi2_states, contrib_states = self.check_files( fd )
+        self.contrib_branch_name = fd["ContribBranchName"]
+        chi2_states, contrib_states = check_files( fd )
         self.init_chains( fd, chi2_states, contrib_states )
         self.setup_branches()
 
-    def check_files( fd ) :
-        nfiles = len(fd["InputFiles"])
-        chi2_states = [None]*nfiles
-        contrib_states = [None]*nfiles
-        for pos in range(nfiles) :
-            chi2_states[pos], contrib_states[pos] = \
-                check_file( fd["InputFile"][pos], fd["Chi2TreeNames"][pos], 
-                            fd["ContribTreeNames"][pos] )
+    def AddFile( self, fname, chi2treename, contribtreename ) :
+        c2s, cbs = check_file( fname, chi2treename, contribtreename )
 
-    def check_file( self, filename, chi2treename, contribtreename ) :
-        tf = r.TFile( fd["InputFiles"] )
-
-        chi2tree  = tf.Get(chi2treename)
-        conttree  = tf.Get(contribtreename)
-
-        contrib_state = conttree  is not None
-        chi2_state    = chi2tree  is not None
-
-        return chi2_state,contrib_state
-
-    def add_file( self, fname ) :
-        c2s, cbs = self.check_file( fname )
-        self.chi2_state    = self.chi2_state    and cbs
-        self.contrib_state = self.contrib_state and c2s
-
-        if self.chi2_state:
-            self.chi2chain.Add(fname)
-        if self.contrib_state :
-            self.contribchain.Add(fname)
+        if c2s and c2b :
+            self.chi2chain.AddFile(fname,-1,chi2treename)
+            self.contribchain.AddFile(fname,-1,contribtreename)
 
         self.nentries = self.chi2chain.GetEntries()
+        return c2s, cbs
 
-    def Add( self, l ) :
-        for f in l :
-            self.add_file(f)
-
-    def init_chains( self, fname) :
-        if self.chi2_state :
-            self.chi2chain = r.TChain(self.tree_name)    
-            self.chi2chain.Add(fname)
-            self.chi2chain.SetCacheSize(0)
-            if self.contrib_state :
-                self.contribchain = r.TChain(self.contrib_name)
-                self.contribchain.Add(fname)
-                self.contribchain.SetCacheSize(0)
+    def init_chains( self, fd, c2states, cbstates ) :
+        for filename, c2name, cbname, c2state, cbstate in zip( fd["InputFiles"],\
+                fd["Chi2TreeNames"], fd["ContribTreeNAmes"], c2sates, cbstates ) :
+            if not hasattr(self,"chi2chain") :
+                self.chi2chain =  r.TChain()
+            if not hasattr(self, "contribchain") :
+                self.contribchian = r.TChain()
+            if c2state: 
+                self.AddFile( filename, c2name, cbname )  
+            self.chi2chain.SetCacheSize(0)    
+            self.contrib2chain.SetCacheSize(0)    
 
     def setup_branches( self ) :
         self.nentries = self.chi2chain.GetEntries()
-        if self.contrib_state :
+        if hasattr(self,"contribchain") :
             self.chi2chain.AddFriend(self.contribchain)
         self.nTotVars = self.chi2chain.GetLeaf(self.branch_name).GetLen()
         self.chi2vars = array('d',[0]*self.nTotVars)
@@ -89,3 +86,6 @@ class MCchain( object ) :
 
     def GetBranchLength( self ) :
         return self.nTotVars
+
+    def GetTreeNumber( self ) :
+        return self.chi2chain.GetTreeNumber()
