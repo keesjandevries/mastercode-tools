@@ -27,9 +27,9 @@ def check_file( filename, chi2treename, contribtreename ) :
 
 class MCchain( object ) :
     def __init__( self, fd ) :
-        self.tree_names           = fd["Chi2TreeName"]
+        self.tree_names          = fd["Chi2TreeName"]
         self.branch_name         = fd["Chi2BranchName"]
-        self.contrib_names        = fd["ContribTreeName"] 
+        self.contrib_names       = fd["ContribTreeName"] 
         self.contrib_branch_name = fd["ContribBranchName"]
         chi2_states, contrib_states = check_files( fd )
         self.chi2chain =  r.TChain()
