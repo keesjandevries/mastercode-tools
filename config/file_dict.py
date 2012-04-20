@@ -19,9 +19,11 @@ def files() :
     return d
 
 def recalc_files() :
+# format of dict is key:value, outputFile:options
     d = {
-        "/vols/cms03/mastercode/test_files/cmssm_test.root" :
+        "/vols/cms03/mastercode/test_files/recalc_out.root" :
             {
+                "InputFiles"        :  [ "/vols/cms03/mastercode/test_files/cmssm_test.root" ],
                 "Chi2TreeName"      : "tree",
                 "Chi2BranchName"    : "vars",
                 "ContribTreeName"   : "contribtree",
