@@ -21,7 +21,7 @@ def main( argv=None ) :
     domainname = getoutput('hostname -d')
     file_dict = fd.recalc_files( domainname )
     for outputfile, opts in file_dict.iteritems() :
-        recalc.go( opts["InputFiles"], outputfile )
+        recalc.go( opts, outputfile )
 
 if __name__ == "__main__":
     main()
