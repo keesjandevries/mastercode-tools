@@ -4,7 +4,9 @@ from config import file_dict as fd
 from modules import histogramProcessing as hfuncs
 
 def main( argv=None ) :
-    files = fd.files()
+    from commands import getoutput 
+    domainname = getoutput('hostname -d')
+    files = fd.files(domainname)
 
     for file in files.keys() :
         plot_vars = pl.get_plots( files[file]["PredictionIndex"], files[file]["SpectrumIndex"] )
