@@ -9,8 +9,8 @@ def check_files( fd ) :
     contrib_states = [None]*nfiles
     for pos in range(nfiles) :
         chi2_states[pos], contrib_states[pos] = \
-            check_file( fd["InputFiles"][pos], fd["Chi2TreeNames"][pos], 
-                        fd["ContribTreeNames"][pos] )
+            check_file( fd["InputFiles"][pos], fd["Chi2TreeName"][pos], 
+                        fd["ContribTreeName"][pos] )
     return chi2_states, contrib_states
 
 def check_file( filename, chi2treename, contribtreename ) :
@@ -27,9 +27,9 @@ def check_file( filename, chi2treename, contribtreename ) :
 
 class MCchain( object ) :
     def __init__( self, fd ) :
-        self.tree_names           = fd["Chi2TreeNames"]
+        self.tree_names           = fd["Chi2TreeName"]
         self.branch_name         = fd["Chi2BranchName"]
-        self.contrib_names        = fd["ContribTreeNames"] 
+        self.contrib_names        = fd["ContribTreeName"] 
         self.contrib_branch_name = fd["ContribBranchName"]
         chi2_states, contrib_states = check_files( fd )
         self.chi2chain =  r.TChain()
@@ -49,7 +49,7 @@ class MCchain( object ) :
 
     def init_chains( self, fd, c2states, cbstates ) :
         for filename, c2name, cbname, c2state, cbstate in zip( fd["InputFiles"],\
-                fd["Chi2TreeNames"], fd["ContribTreeNames"], c2states, cbstates ) :
+                fd["Chi2TreeName"], fd["ContribTreeName"], c2states, cbstates ) :
             if c2state: 
                 self.AddFile( filename, c2name, cbname )  
             self.chi2chain.SetCacheSize(0)    

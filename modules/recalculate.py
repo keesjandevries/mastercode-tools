@@ -13,8 +13,8 @@ __DEBUG=False
 
 def setup_chain( opt_dict ) :
     filenames = opt_dict["InputFiles"]
-    chi2treenames = opt_dict["Chi2TreeNames"]
-    contribtreenames = opt_dict["ContribTreeNames"]
+    chi2treenames = opt_dict["Chi2TreeName"]
+    contribtreenames = opt_dict["ContribTreeName"]
     assert len(filenames) == len(chi2treenames) == len(contribtreenames), "**"
 
     # initialize a chain
