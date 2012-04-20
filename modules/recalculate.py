@@ -11,9 +11,9 @@ from array import array
 # avoid namespace clash
 __DEBUG=False
 
-def setup_chain( fd ) :
-    filenames = sorted(fd.keys())
-    chain = MCC.MCchain(filenames[0],fd[filenames[0]])
+def setup_chain( opt_dict ) :
+    filenames = opt_dict["InputFiles"]
+    chain = MCC.MCchain(opt_dict)
     # check all our fd have the same properties
     comp_dict = fd[filenames[0]]
     for f in filenames :
@@ -81,13 +81,12 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         print "%10e(%10e)" % ( total_delta, (total_delta/(end-begin)) )
         print "\n--------------------------\n"
 
-def go( fd, output ) :
-    indict = fd[sorted(fd.keys())[0]]
-    m = models.get_model_from_file(indict["ModelFile"])
-    l = models.get_lhood_from_file(indict.get("LHoodFile",None))
-    chain = setup_chain( fd )
-    assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
+def go( options, outputfile ) :
+    m = [ models.get_model_from_file(mfile) for mfile in indict["ModelFile"] ]
+    l = [ models.get_lhood_from_file(indict.get("LHoodFile",None)) ]
+    chain = setup_chain( options )
+    #assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
     nentries = chain.GetEntries()
     start = indict.get("StartEntry", 0)
     end   = indict.get("EndEntry", nentries)
-    recalc_to_file( chain, m, l, output, start, end )
+    recalc_to_file( chain, m, l, outputfile, start, end )

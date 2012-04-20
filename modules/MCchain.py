@@ -4,14 +4,34 @@ import ROOT as r
 from array import array
 
 class MCchain( object ) :
-    def __init__( self, fname, d ) :
-        self.tree_name           = d["Chi2TreeName"]
-        self.branch_name         = d["Chi2BranchName"]
-        self.contrib_name        = d["ContribTreeName"] 
-        self.contrib_branch_name = d["ContribBranchName"]
-        self.chi2_state, self.contrib_state =  self.check_file( fname )
-        self.init_chains(fname)
+    def __init__( self, fd ) :
+        self.tree_names           = fd["Chi2TreeNames"]
+        self.branch_names         = fd["Chi2BranchNames"]
+        self.contrib_names        = fd["ContribTreeNames"] 
+        self.contrib_branch_names = fd["ContribBranchNames"]
+        chi2_states, contrib_states = self.check_files( fd )
+        self.init_chains( fd, chi2_states, contrib_states )
         self.setup_branches()
+
+    def check_files( fd ) :
+        nfiles = len(fd["InputFiles"])
+        chi2_states = [None]*nfiles
+        contrib_states = [None]*nfiles
+        for pos in range(nfiles) :
+            chi2_states[pos], contrib_states[pos] = \
+                check_file( fd["InputFile"][pos], fd["Chi2TreeNames"][pos], 
+                            fd["ContribTreeNames"][pos] )
+
+    def check_file( self, filename, chi2treename, contribtreename ) :
+        tf = r.TFile( fd["InputFiles"] )
+
+        chi2tree  = tf.Get(chi2treename)
+        conttree  = tf.Get(contribtreename)
+
+        contrib_state = conttree  is not None
+        chi2_state    = chi2tree  is not None
+
+        return chi2_state,contrib_state
 
     def add_file( self, fname ) :
         c2s, cbs = self.check_file( fname )
@@ -50,16 +70,6 @@ class MCchain( object ) :
             self.contribvars = array('d',[0]*self.nTotVars)
             self.contribchain.SetBranchAddress(self.contrib_branch_name,self.contribvars)
 
-    def check_file( self, fname ) :
-        tf = r.TFile(fname)
-
-        chi2tree  = tf.Get(self.tree_name)
-        conttree  = tf.Get(self.contrib_name)
-
-        contrib_state = conttree  is not None
-        chi2_state    = chi2tree  is not None
-
-        return chi2_state,contrib_state
 
     def GetEntry( self, entry ) :
         read = 0
