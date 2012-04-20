@@ -25,14 +25,14 @@ def recalc_files( fileset ) :
         "%s/recalc_out.root" % base_dir :
             {
                 "InputFiles"        :  [ "%s/cmssm_test.root" % base_dir, ],
-                "Chi2TreeName"      : "tree",
-                "Chi2BranchName"    : "vars",
-                "ContribTreeName"   : "contribtree",
-                "ContribBranchName" : "vars",
-                "ModelFile"         : "models/tester.model",
-#                "LHoodFile"         : "models/tester.lhood",
-#                "StartEntry"        : 0,
-#                "EndEntry"          : 1,
+                "Chi2TreeName"      :  [ "tree" ],
+                "Chi2BranchName"    :  [ "vars" ],
+                "ContribTreeName"   :  [ "contribtree" ],
+                "ContribBranchName" :  [ "vars" ] ,
+                "ModelFile"         :  [ "models/tester.model" ] ,
+#                "LHoodFile"         : [ "models/tester.lhood" ],
+#                "StartEntry"        : [ 0 ],
+#                "EndEntry"          : [ 1 ],
             }
         }
     return d
