@@ -26,9 +26,9 @@ def recalc_files( fileset ) :
             {
                 "InputFiles"         :  [ "%s/cmssm_test.root" % base_dir, ],
                 "Chi2TreeNames"      :  [ "tree" ],
-                "Chi2BranchNames"    :  [ "vars" ],
+                "Chi2BranchName"     :  "vars",
                 "ContribTreeNames"   :  [ "contribtree" ],
-                "ContribBranchNames" :  [ "vars" ] ,
+                "ContribBranchName"  :  "vars" ,
                 "ModelFiles "        :  [ "models/tester.model" ] ,
 #                "LHoodFiles"         : [ "models/tester.lhood" ],
 #                "StartEntry"         : 0,
