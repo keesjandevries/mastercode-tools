@@ -5,8 +5,3 @@
 * chi2 cut
 
 * good point checks
-
-* refactor recalc_dict :
-    d = { output.root : input: [ inputlist ]
-            ...
-        }
