@@ -13,14 +13,12 @@ __DEBUG=False
 
 def setup_chain( opt_dict ) :
     filenames = opt_dict["InputFiles"]
-    chain = MCC.MCchain(opt_dict)
-    # check all our fd have the same properties
-    comp_dict = fd[filenames[0]]
-    for f in filenames :
-        for prop in comp_dict.keys() : assert fd[f][prop] == comp_dict[prop]
-    
-    if len(filenames) > 1 :
-        chain.Add(filenames[1::])
+    chi2treenames = opt_dict["Chi2TreeNames"]
+    contribtreenames = opt_dict["ContribTreeNames"]
+    assert len(filenames) == len(chi2treenames) == len(contribtreenames), "**"
+
+    # initialize a chain
+    chain = MCC.MCchain( opt_dict )
 
     return chain
 
@@ -50,9 +48,10 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         chain.GetEntry(entry)
         delta = 0.
         chi2 = 0
-        for key in model.keys() :
+
+        for key in models.keys() :
             chi2_t = model[key].get_chi2( chain.chi2vars[key] )
-            contribvars[key] = chi2_t
+            contribvars[ky] = chi2_t
             chi2 += chi2_t
         for i,lh in enumerate(lhoods.values()) :
             chi2_t = lh.get_chi2( chain.chi2vars )
@@ -82,8 +81,8 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         print "\n--------------------------\n"
 
 def go( options, outputfile ) :
-    m = [ models.get_model_from_file(mfile) for mfile in indict["ModelFile"] ]
-    l = [ models.get_lhood_from_file(indict.get("LHoodFile",None)) ]
+    m = models.get_model_from_file(options["ModelFile"])
+    l = models.get_lhood_from_file(options.get("LHoodFile",None))
     chain = setup_chain( options )
     #assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
     nentries = chain.GetEntries()
