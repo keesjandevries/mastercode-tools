@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-def files( filset ) :
+def files( fileset ) :
     base_dir = base_directory( fileset )
     d = {
         "%s/recalc_out.root" % base_dir :
