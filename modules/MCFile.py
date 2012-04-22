@@ -1,6 +1,6 @@
 class MCFile( obj ) :
     def __init__( self, d ) :
-        attrlist = [ "Filename", "Chi2TreeName", "Chi2BranchName", 
+        attrlist = [ "FileName", "Chi2TreeName", "Chi2BranchName", 
                      "ContribTreeName", "ContribBranchName", "PredictionIndex",
                      "SpectrumIndex", "Inputs" ]
         for key in attrlist :  
