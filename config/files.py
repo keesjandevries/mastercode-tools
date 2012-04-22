@@ -1,3 +1,6 @@
+###############
+# input files #
+###############
 def cmssm_test_input_file( base_dir ) :
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_dir,
@@ -11,6 +14,9 @@ def cmssm_test_input_file( base_dir ) :
          }
     return fd
 
+################
+# output files #
+################
 def cmssm_test_output_files( base_dir ) :
     fd = {
              "FileName"          : "%s/recalc_out.root" % base_dir
