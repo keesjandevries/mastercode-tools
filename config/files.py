@@ -1,4 +1,5 @@
 from commands import getoutput 
+from modules.MCFile import MCFileCollection
 
 def base_directory() :
     domainname = getoutput('hostname -d')
@@ -12,21 +13,26 @@ def base_directory() :
 # input files #
 ###############
 def cmssm_test_input_file() :
-    fd = {
-             "FileName"          : "%s/cmssm_test.root" % base_directory(),
-             "Chi2TreeName"      : "tree",
+    gd =  {
              "Chi2BranchName"    : "vars",
-             "ContribTreeName"   : "contribtree",
              "ContribBranchName" : "vars" ,
+             "LHoodFile"         : "models/tester.lhood",
+             "ModelFile"         : "models/tester.model",
              "PredictionIndex"   : 10,
              "SpectrumIndex"     : 117,
              "Inputs"            : 10,
          }
-    return fd
+    fd = {
+             "FileName"          : "%s/cmssm_test.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+             "ContribTreeName"   : "contribtree",
+         }
+    mcf = MFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd)
 
-################
-# output files #
-################
+###############
+# histo files #
+###############
 def cmssm_test_output_files() :
     fd = {
              "FileName"          : "%s/recalc_out.root" % base_directory()
@@ -40,4 +46,4 @@ def cmssm_test_output_files() :
              "EntryDirectory"    : "entry_histograms",
              "DataDirectory"     : "data_histograms",
          }
-    return fd
+    return [MCFile(fd)]
