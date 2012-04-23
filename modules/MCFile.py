@@ -31,4 +31,10 @@ class MCFileCollection() :
         self.files = mcfs
         for key,value in collection_options.iteritems() :
             setattr( self, key, value )
+
+        req = [ "Chi2BranchName", "ContribBranchName", "LHoodFile", 
+                "ModelFile", "OutputFile" ]
+        for attr in req :
+            if collection_options.get(attr,None) is None :
+                print "MCFileCollection not given %s" % attr
         print "%d files added to MCFileCollection" % len(self.files)

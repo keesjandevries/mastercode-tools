@@ -17,11 +17,8 @@ def opts():
 
 def main( argv=None ) :
 #    options,args = opts()
-    from commands import getoutput
-    domainname = getoutput('hostname -d')
-    file_dict = fd.recalc_files( domainname )
-    for outputfile, opts in file_dict.iteritems() :
-        recalc.go( opts, outputfile )
+    file_collection = fd.recalc_files()
+    recalc.go( file_collection )
 
 if __name__ == "__main__":
     main()

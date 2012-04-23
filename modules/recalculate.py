@@ -80,12 +80,11 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         print "%10e(%10e)" % ( total_delta, (total_delta/(end-begin)) )
         print "\n--------------------------\n"
 
-def go( options, outputfile ) :
-    m = models.get_model_from_file(options["ModelFile"])
-    l = models.get_lhood_from_file(options.get("LHoodFile",None))
-    chain = setup_chain( options )
-    #assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
+def go( collection )
+    m = models.get_model_from_file(collection.ModelFile)
+    l = models.get_lhood_from_file(collection.LHoodFile)
+    chain = setup_chain( collection )
     nentries = chain.GetEntries()
-    start = options.get("StartEntry", 0)
-    end   = options.get("EndEntry", nentries)
-    recalc_to_file( chain, m, l, outputfile, start, end )
+    start = collection.get("StartEntry", 0)
+    end   = collection.get("EndEntry", nentries)
+    recalc_to_file( chain, m, l, collection.OutputFile, start, end )
