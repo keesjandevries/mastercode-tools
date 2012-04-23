@@ -6,16 +6,16 @@ from modules import histogramProcessing as hfuncs
 def main( argv=None ) :
     files = fd.histo_files()
 
-    for filename, opts  in files.iteritems() :
-        plot_vars = pl.get_plots( opts["PredictionIndex"], opts["SpectrumIndex"] )
+    for mcf in files :
+        plot_vars = pl.get_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
 
-        plot_hists = hfuncs.get_entry_hist_list( filename, opts, plot_vars )
+        plot_hists = hfuncs.get_entry_hist_list( mcf, plot_vars )
 
         hists = { "pval" : [], "chi2" : [], "dchi" : [] }
-        hfuncs.fill_all_data_hists( filename, opts, plot_hists, hists )
+        hfuncs.fill_all_data_hists( mcf, plot_hists, hists )
 
         for hl in hists.values() :
-            hfuncs.save_hlist_to_root_file( hl, filename, opts["DataDirectory"])
+            hfuncs.save_hlist_to_root_file( hl, mcf.FileName, mcf.DataDirectory)
 
 if __name__ == "__main__":
     main()

@@ -132,7 +132,7 @@ def count_ndof( c, min_contrib, inputs ) :
     count -= inputs
     return count
 
-def fill_bins( toFill, bin, chain, d ) : 
+def fill_bins( toFill, bin, chain, mcf ) : 
     for mode in toFill.keys() :
         fill = False
         curr_content = toFill[mode][-1].GetBinContent(bin)
@@ -142,19 +142,16 @@ def fill_bins( toFill, bin, chain, d ) :
             content = chain.chi2vars[0]
             fill = ( content < curr_content )
         if mode == "pval" :
-            ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
+            ndof = count_ndof( chain.contribvars, getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
             chi2 = chain.chi2vars[0]
             content = r.TMath.Prob( chi2, ndof )
             fill = ( content > curr_content )
         if fill : toFill[mode][-1].SetBinContent(bin,content)
 
 # attempt to have dimension independant filling
-def fill_all_data_hists( rfile, rfileopts, hlist, toFill) :
+def fill_all_data_hists( mcf, hlist, toFill) :
     axes = [ "X", "Y", "Z" ]
-    rfileopts.update( InputFiles = [ rfile ] )
-    rfileopts.update( Chi2TreeName = [ rfileopts["Chi2TreeName"] ] )
-    rfileopts.update( ContribTreeName = [ rfileopts["ContribTreeName"] ] )
-    chain = MCC.MCchain( rfileopts )
+    chain = MCC.MCchain( mcf )
     nentries = chain.GetEntries()
 
     for h in hlist :
@@ -216,18 +213,18 @@ def fill_all_data_hists( rfile, rfileopts, hlist, toFill) :
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
                 chain.GetEntry(entry)
-                fill_bins( toFill, i, chain, rfileopts )
+                fill_bins( toFill, i, chain, mcf )
         print
     perform_zero_offset( toFill["dchi"] )
 
-def get_entry_hist_list( rfile, d, plots ) :
+def get_entry_hist_list( mcf, plots ) :
     hl = []
-    entry_hist_dict = d["EntryDirectory"]
+    entry_hist_dict = mcf.EntryDirectory
     hnames = []
     for plot in plots :
         hist_name =  histo_name( plot.get_indices(), entry_histo_prefix )
-        hnames.append( "%s/%s" % ( d["EntryDirectory"], hist_name ) )
-    f = r.TFile.Open( rfile )
+        hnames.append( "%s/%s" % ( entry_hist_dict, hist_name ) )
+    f = r.TFile.Open( mcf.FileName )
     r.gROOT.cd()
     for hn in hnames :
         hl.append( f.Get( hn ).Clone() )
