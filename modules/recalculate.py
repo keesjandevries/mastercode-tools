@@ -11,17 +11,6 @@ from array import array
 # avoid namespace clash
 __DEBUG=False
 
-def setup_chain( opt_dict ) :
-    filenames = opt_dict["InputFiles"]
-    chi2treenames = opt_dict["Chi2TreeName"]
-    contribtreenames = opt_dict["ContribTreeName"]
-    assert len(filenames) == len(chi2treenames) == len(contribtreenames), "**"
-
-    # initialize a chain
-    chain = MCC.MCchain( opt_dict )
-
-    return chain
-
 def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
     nentries = chain.GetEntries()
     total_delta = 0
@@ -80,11 +69,11 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         print "%10e(%10e)" % ( total_delta, (total_delta/(end-begin)) )
         print "\n--------------------------\n"
 
-def go( collection )
+def go( collection ) :
     m = models.get_model_from_file(collection.ModelFile)
-    l = models.get_lhood_from_file(collection.LHoodFile)
-    chain = setup_chain( collection )
+    l = models.get_lhood_from_file( getattr(collection,"LHoodFile", None) )
+    chain = MCC.MCchain( collection )
     nentries = chain.GetEntries()
-    start = collection.get("StartEntry", 0)
-    end   = collection.get("EndEntry", nentries)
+    start = getattr( collection, "StartEntry", 0)
+    end   = getattr( collection, "EndEntry", nentries)
     recalc_to_file( chain, m, l, collection.OutputFile, start, end )
