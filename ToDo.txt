@@ -2,10 +2,6 @@
     [ confirmed in spaces at least ]
     [ confirm it still actually happens ]
 
-* chi2 cut
-
-* good point checks
-
 * KJ: I was thinking that it might be an idea to merge the mastercode-plotting
      and mastercode-tools directories. Especially, since we now use do
     ./EntryHistos.py and ./DataHistos.py for one file at the time, it makes
