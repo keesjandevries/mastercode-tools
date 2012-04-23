@@ -22,8 +22,9 @@ class MCFileCollection() :
 
     def __init__( self, mcfs, collection_options = None ) :
         # multiple files
-        if len( mcfs ) > 1 :
-            for fpos in range(1, len(mcfs) ) :
+        self.files = mcfs
+        if len( mcfs ) > 1 or collection_options is not None :
+            for fpos in range(0, len(mcfs) ) :
                 for prop in [ "Chi2BranchName", "ContribBranchName", 
                               "PredictionIndex", "SpectrumIndex", "Inputs" ] :
                     mcf_attr = getattr(mcfs[fpos],prop,None)
@@ -43,4 +44,3 @@ class MCFileCollection() :
         else :
             for attr in dir(mcfs[0]) : # copy all the attributes over
                 setattr(self, attr, getattr(mcfs[0],attr) )
-        self.files = mcfs
