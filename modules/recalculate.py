@@ -11,16 +11,14 @@ from array import array
 # avoid namespace clash
 __DEBUG=False
 
-def setup_chain( fd ) :
-    filenames = sorted(fd.keys())
-    chain = MCC.MCchain(filenames[0],fd[filenames[0]])
-    # check all our fd have the same properties
-    comp_dict = fd[filenames[0]]
-    for f in filenames :
-        for prop in comp_dict.keys() : assert fd[f][prop] == comp_dict[prop]
-    
-    if len(filenames) > 1 :
-        chain.Add(filenames[1::])
+def setup_chain( opt_dict ) :
+    filenames = opt_dict["InputFiles"]
+    chi2treenames = opt_dict["Chi2TreeName"]
+    contribtreenames = opt_dict["ContribTreeName"]
+    assert len(filenames) == len(chi2treenames) == len(contribtreenames), "**"
+
+    # initialize a chain
+    chain = MCC.MCchain( opt_dict )
 
     return chain
 
@@ -50,6 +48,7 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         chain.GetEntry(entry)
         delta = 0.
         chi2 = 0
+
         for key in model.keys() :
             chi2_t = model[key].get_chi2( chain.chi2vars[key] )
             contribvars[key] = chi2_t
@@ -81,13 +80,12 @@ def recalc_to_file( chain, model, lhoods, outfile, begin = None, end = None ) :
         print "%10e(%10e)" % ( total_delta, (total_delta/(end-begin)) )
         print "\n--------------------------\n"
 
-def go( fd, output ) :
-    indict = fd[sorted(fd.keys())[0]]
-    m = models.get_model_from_file(indict["ModelFile"])
-    l = models.get_lhood_from_file(indict.get("LHoodFile",None))
-    chain = setup_chain( fd )
-    assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
+def go( options, outputfile ) :
+    m = models.get_model_from_file(options["ModelFile"])
+    l = models.get_lhood_from_file(options.get("LHoodFile",None))
+    chain = setup_chain( options )
+    #assert chain.chi2_state, "Unable to retrieve chi2 tree (%s) from all files" % (chain.chi2treename)
     nentries = chain.GetEntries()
-    start = indict.get("StartEntry", 0)
-    end   = indict.get("EndEntry", nentries)
-    recalc_to_file( chain, m, l, output, start, end )
+    start = options.get("StartEntry", 0)
+    end   = options.get("EndEntry", nentries)
+    recalc_to_file( chain, m, l, outputfile, start, end )

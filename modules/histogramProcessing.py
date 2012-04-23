@@ -142,17 +142,19 @@ def fill_bins( toFill, bin, chain, d ) :
             content = chain.chi2vars[0]
             fill = ( content < curr_content )
         if mode == "pval" :
-            if chain.contrib_state :
-                ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
-                chi2 = chain.chi2vars[0]
-                content = r.TMath.Prob( chi2, ndof )
-                fill = ( content > curr_content )
+            ndof = count_ndof( chain.contribvars, d["MinContrib"], d["Inputs"] )
+            chi2 = chain.chi2vars[0]
+            content = r.TMath.Prob( chi2, ndof )
+            fill = ( content > curr_content )
         if fill : toFill[mode][-1].SetBinContent(bin,content)
 
 # attempt to have dimension independant filling
 def fill_all_data_hists( rfile, rfileopts, hlist, toFill) :
     axes = [ "X", "Y", "Z" ]
-    chain = MCC.MCchain( rfile, rfileopts )
+    rfileopts.update( InputFiles = [ rfile ] )
+    rfileopts.update( Chi2TreeName = [ rfileopts["Chi2TreeName"] ] )
+    rfileopts.update( ContribTreeName = [ rfileopts["ContribTreeName"] ] )
+    chain = MCC.MCchain( rfileopts )
     nentries = chain.GetEntries()
 
     for h in hlist :

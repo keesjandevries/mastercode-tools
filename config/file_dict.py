@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 
-def files() :
+def files( fileset ) :
+    base_dir = base_directory( fileset )
     d = {
-        "/vols/cms03/mastercode/test_files/recalc_out.root" :
+        "%s/recalc_out.root" % base_dir :
             { 
                 "Chi2TreeName"      : "tree",
                 "Chi2BranchName"    : "vars",
@@ -18,18 +19,27 @@ def files() :
         }
     return d
 
-def recalc_files() :
+def recalc_files( fileset ) :
+    base_dir = base_directory( fileset )
     d = {
-        "/vols/cms03/mastercode/test_files/cmssm_test.root" :
+        "%s/recalc_out.root" % base_dir :
             {
-                "Chi2TreeName"      : "tree",
+                "InputFiles"        : [ "%s/cmssm_test.root" % base_dir, ],
+                "Chi2TreeName"      : [ "tree" ],
                 "Chi2BranchName"    : "vars",
-                "ContribTreeName"   : "contribtree",
-                "ContribBranchName" : "vars",
-                "ModelFile"         : "models/tester.model",
+                "ContribTreeName"   : [ "contribtree" ],
+                "ContribBranchName" : "vars" ,
+                "ModelFile"         : "models/tester.model" ,
 #                "LHoodFile"         : "models/tester.lhood",
 #                "StartEntry"        : 0,
 #                "EndEntry"          : 1,
             }
         }
     return d
+
+def base_directory( fileset ) :
+    d = {
+            "hep.ph.ic.ac.uk" : "/vols/cms03/mastercode/test_files/",
+            "localdomain" :     "~/Documents/mastercode_data/",
+        }
+    return d[fileset]

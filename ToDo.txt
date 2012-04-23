@@ -6,7 +6,10 @@
 
 * good point checks
 
-* refactor recalc_dict :
-    d = { output.root : input: [ inputlist ]
-            ...
-        }
+* (agian) refactor file_dict: would be more sensible in the current state to do with a MCFile class, and MCFileCollection
+    (e.g. 
+        - MCFile __init__( dict ): 
+            * can iterate over seq(MCFile) for plotting/histo gen
+        - MCFileCollection __init__( seq_mcfile, mode ) :
+            * solely for recalc: i.e. it checks branches are the same etc.
+
