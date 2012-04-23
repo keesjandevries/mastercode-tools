@@ -3,14 +3,13 @@
 import ROOT as r
 from array import array
 
-def check_files( fd ) :
-    nfiles = len(fd["InputFiles"])
+def check_files( collection ) :
+    nfiles = len(collection.files)
     chi2_states = [None]*nfiles
     contrib_states = [None]*nfiles
-    for pos in range(nfiles) :
+    for pos, f in enumerate( collection.files ) :
         chi2_states[pos], contrib_states[pos] = \
-            check_file( fd["InputFiles"][pos], fd["Chi2TreeName"][pos], 
-                        fd["ContribTreeName"][pos] )
+        check_file( f.FileName, f.Chi2TreeName, f.ContribTreeName )
     return chi2_states, contrib_states
 
 def check_file( filename, chi2treename, contribtreename ) :
@@ -26,15 +25,13 @@ def check_file( filename, chi2treename, contribtreename ) :
 
 
 class MCchain( object ) :
-    def __init__( self, fd ) :
-        self.tree_names          = fd["Chi2TreeName"]
-        self.branch_name         = fd["Chi2BranchName"]
-        self.contrib_names       = fd["ContribTreeName"] 
-        self.contrib_branch_name = fd["ContribBranchName"]
-        chi2_states, contrib_states = check_files( fd )
+    def __init__( self, mcfc ) :
+        self.branch_name         = mcfc.Chi2BranchName
+        self.contrib_branch_name = mcfc.ContribBranchName
+        chi2_states, contrib_states = check_files( mcfc )
         self.chi2chain =  r.TChain()
         self.contribchain = r.TChain()
-        self.init_chains( fd, chi2_states, contrib_states )
+        self.init_chains( mcfc, chi2_states, contrib_states )
         self.setup_branches()
 
     def AddFile( self, fname, chi2treename, contribtreename ) :
@@ -47,13 +44,12 @@ class MCchain( object ) :
         self.nentries = self.chi2chain.GetEntries()
         return c2s, cbs
 
-    def init_chains( self, fd, c2states, cbstates ) :
-        for filename, c2name, cbname, c2state, cbstate in zip( fd["InputFiles"],\
-                fd["Chi2TreeName"], fd["ContribTreeName"], c2states, cbstates ) :
-            if c2state: 
-                self.AddFile( filename, c2name, cbname )  
-            self.chi2chain.SetCacheSize(0)    
-            self.contribchain.SetCacheSize(0)    
+    def init_chains( self, collection, c2states, cbstates ) :
+        for pos, f in enumerate(collection.files) :
+            if c2states[pos]:
+                self.AddFile( f.FileName, f.Chi2TreeName, f.ContribTreeName )
+            self.chi2chain.SetCacheSize(0)
+            self.contribchain.SetCacheSize(0)
 
     def setup_branches( self ) :
         self.nentries = self.chi2chain.GetEntries()
