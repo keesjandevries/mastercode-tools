@@ -17,7 +17,7 @@ def cmssm_test_input_files() :
     gd =  {
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
-             "LHoodFile"         : "models/tester.lhood",
+             #"LHoodFile"         : "models/tester.lhood",
              "ModelFile"         : "models/tester.model",
              "PredictionIndex"   : 10,
              "SpectrumIndex"     : 117,
