@@ -1,9 +1,19 @@
 ###############
 # input files #
 ###############
-def cmssm_test_input_file( base_dir ) :
+from commands import getoutput 
+
+def base_directory() :
+    domainname = getoutput('hostname -d')
+    d = {
+            "hep.ph.ic.ac.uk" : "/vols/cms03/mastercode/test_files/",
+            "localdomain" :     "~/Documents/mastercode_data/",
+        }
+    return d[fileset]
+
+def cmssm_test_input_file() :
     fd = {
-             "FileName"          : "%s/cmssm_test.root" % base_dir,
+             "FileName"          : "%s/cmssm_test.root" % base_directory(),
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",
@@ -17,9 +27,9 @@ def cmssm_test_input_file( base_dir ) :
 ################
 # output files #
 ################
-def cmssm_test_output_files( base_dir ) :
+def cmssm_test_output_files() :
     fd = {
-             "FileName"          : "%s/recalc_out.root" % base_dir
+             "FileName"          : "%s/recalc_out.root" % base_directory()
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",

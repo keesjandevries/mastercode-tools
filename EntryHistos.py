@@ -15,9 +15,7 @@ def print_spaces( p, s ) :
     
 
 def main( argv=None ) :
-    from commands import getoutput 
-    domainname = getoutput('hostname -d')
-    files = fd.files(domainname)
+    files = fd.files()
 
     # add in our file list 
     for filename, opts  in files.iteritems() :
