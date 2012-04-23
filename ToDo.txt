@@ -5,3 +5,12 @@
 * chi2 cut
 
 * good point checks
+
+* KJ: I was thinking that it might be an idea to merge the mastercode-plotting
+     and mastercode-tools directories. Especially, since we now use do
+    ./EntryHistos.py and ./DataHistos.py for one file at the time, it makes
+    sense to simply get which plots should be made from config/plot_list.py
+
+* KJ: Another idea is to have an optinal list-of-plots as specification of
+    config/files.py, such that for debuggin purposes we don't need to plot a
+    whole list of standard plots every time.
