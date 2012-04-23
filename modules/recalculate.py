@@ -59,6 +59,41 @@ def good_point( point, mcfc, verbose = 0) :
 
     return good
 
+def spectrum_constraints( point, collection, verbose = 0 ) :
+    ch1, ch2, neu1, neu2, neu3, neu4, er, el, nue, mur, mul, numu, tau1, tau2, \
+        nut, qr, ql, t1, t2, b1, b2, g, h0, H0, A0, Hp = \
+        range(collection.SpectrumIndex, collection.SpectrumIndex+26 )
+
+    penalty=0.0
+
+    values = []
+    values.append( min( [point[ch1], point[ch2]] ) ) # lightest chargino
+    values.append( point[neu1] ) # neutralino
+    values.append( min( [ point[x] for x in [er, el, mur, mul, tau1, tau2] ] ) ) # charged sleptons
+    values.append( min( [ point[x] for x in [nue, numu, nut] ] ) ) # sneutrinos
+    values.append( min( [ point[x] for x in [t1, t2, b1, b2, qr, ql] ] ) ) # squarks
+    limits = [ 103.0, 50.0, 90.0, 90.0, 90.0 ]
+    names = [ "lightest chargino", "charged slepton", "sneutrino", "squark" ]
+
+    for value, limit, name in zip( values, limits, names ) :
+        if value < limit :
+            ipen = (Ceglight-limit*0.95)**2
+            if verbose>2 :
+                print "%s: %f < %f -> adding %f" % ( name, value, limit, ipen )
+            penalty += ipen
+
+    for val, name in zip(values, names) :
+        if point[neu1] > val :
+            ipen = (val - point[neu1])**2
+            if verbose>2 :
+                print "m_%s < m_neu1: adding %f" % ( name, ipen )
+            penalty += ipen
+
+    if verbose>2 and penalty > 0 :
+        print "Total penalty: %f" % penalty
+
+    return penalty
+
 def recalc_to_file( collection ) :
     model  = models.get_model_from_file(collection.ModelFile)
     lhoods = models.get_lhood_from_file( getattr(collection,"LHoodFile", None) )
@@ -102,6 +137,8 @@ def recalc_to_file( collection ) :
                 chi2_t = lh.get_chi2( chain.chi2vars )
                 contribvars[i+1] = chi2_t
                 chi2 += chi2_t
+
+            chi2 += spectrum_constraints( chain.chi2vars, collection )
 
             if chain.chi2vars[0] > getattr(collection, "MinChi2", 0 ) and \
                chain.chi2vars[0] < getattr(collection, "MaxChi2", 1e9 ) :
