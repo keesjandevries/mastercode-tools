@@ -3,6 +3,8 @@
 import ROOT as r
 from array import array
 
+from modules.MCFile import MCFileCollection
+
 def check_files( collection ) :
     nfiles = len(collection.files)
     chi2_states = [None]*nfiles
@@ -26,6 +28,8 @@ def check_file( filename, chi2treename, contribtreename ) :
 
 class MCchain( object ) :
     def __init__( self, mcfc ) :
+        if mcfc.__class__.__name__ == "MCFile" :
+            mcfc = MCFileCollection([mcfc])
         self.branch_name         = mcfc.Chi2BranchName
         self.contrib_branch_name = mcfc.ContribBranchName
         chi2_states, contrib_states = check_files( mcfc )

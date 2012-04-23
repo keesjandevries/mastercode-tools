@@ -15,21 +15,17 @@ def print_spaces( p, s ) :
     
 
 def main( argv=None ) :
-    files = fd.files()
-
-    # add in our file list 
-    for filename, opts  in files.iteritems() :
-        plots = pl.get_plots( opts["PredictionIndex"], opts["SpectrumIndex"] )
+    files = fd.histo_files()
+    for mcf in files :
+        plots = pl.get_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
 
         # bit of output
         print_spaces( plots, "Plots to make" )
-        
-        opts.update( InputFiles = [ filename ], Chi2TreeName = [ opts["Chi2TreeName"] ], 
-                   ContribTreeName = [ opts["ContribTreeName"] ] )
-        chain = MCC.MCchain( opts )
+       
+        chain = MCC.MCchain( mcf )
         complete_histos =  hists.calculate_entry_histograms( plots, chain )
 
-        hists.save_hlist_to_root_file( complete_histos, filename, opts["EntryDirectory"] )
+        hists.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
 
 if __name__ == "__main__":
     main()
