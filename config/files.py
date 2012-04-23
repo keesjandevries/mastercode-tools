@@ -1,6 +1,3 @@
-###############
-# input files #
-###############
 from commands import getoutput 
 
 def base_directory() :
@@ -11,6 +8,9 @@ def base_directory() :
         }
     return d[fileset]
 
+###############
+# input files #
+###############
 def cmssm_test_input_file() :
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_directory(),
