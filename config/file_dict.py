@@ -1,10 +1,10 @@
 #! /usr/bin/env python
 import config.files as files
 
-def files( fileset ) :
-    d = files.cmssm_test_output_file()
+def histo_files() :
+    d = files.cmssm_test_output_files()
     return d
 
-def recalc_files( fileset ) :
-    d = files.cmssm_test_input_file()
-    return [d]
+def recalc_files() :
+    d = files.cmssm_test_input_files()
+    return d

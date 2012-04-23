@@ -1,5 +1,6 @@
 from commands import getoutput 
 from modules.MCFile import MCFileCollection
+from modules.MCFile import MCFile
 
 def base_directory() :
     domainname = getoutput('hostname -d')
@@ -7,12 +8,12 @@ def base_directory() :
             "hep.ph.ic.ac.uk" : "/vols/cms03/mastercode/test_files/",
             "localdomain" :     "~/Documents/mastercode_data/",
         }
-    return d[fileset]
+    return d[domainname]
 
 ###############
 # input files #
 ###############
-def cmssm_test_input_file() :
+def cmssm_test_input_files() :
     gd =  {
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
@@ -27,7 +28,7 @@ def cmssm_test_input_file() :
              "Chi2TreeName"      : "tree",
              "ContribTreeName"   : "contribtree",
          }
-    mcf = MFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd)
 
 ###############
@@ -35,7 +36,7 @@ def cmssm_test_input_file() :
 ###############
 def cmssm_test_output_files() :
     fd = {
-             "FileName"          : "%s/recalc_out.root" % base_directory()
+             "FileName"          : "%s/recalc_out.root" % base_directory(),
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",
