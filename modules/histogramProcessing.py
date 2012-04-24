@@ -222,7 +222,7 @@ def get_entry_hist_list( mcf, plots ) :
     entry_hist_dict = mcf.EntryDirectory
     hnames = []
     for plot in plots :
-        hist_name =  histo_name( plot.get_indices(), entry_histo_prefix )
+        hist_name =  histo_name( plot.short_names, entry_histo_prefix )
         hnames.append( "%s/%s" % ( entry_hist_dict, hist_name ) )
     f = r.TFile.Open( mcf.FileName )
     r.gROOT.cd()
