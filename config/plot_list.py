@@ -7,18 +7,22 @@ def get_plots( pindex, sindex, nbins = 100 ) :
 
 def standard_plots( pindex, sindex, nbins ) :
     v = standard_variables( pindex, sindex, nbins )
-    l = [ 
-            [ v["m0"], v["m12"] ],
-            [ v["m0"], v["tanb"] ],
-            [ v["tanb"], v["m12"] ],
-            [ v["mneu1"] ],
-            [ v["mh"] ],
-        ]
+    plots = [ 
+                ["m0","m12"], 
+                ["m0","tanb"],
+                ["tanb","m12"],
+                ["mneu1"],
+                ["mh"],
+            ]
+    l = []
+    for p in plots :
+        l.append([ v[s]+[s] for s in p])
+
     spaces = map( make_space, l )
     return spaces
 
 def make_space( l ) :
-    args = [ [],[],[],[],[],[] ]
+    args = [ [],[],[],[],[],[], [] ]
     for v in l :
         for o,a in zip(v,args) :
             a.append(o)
