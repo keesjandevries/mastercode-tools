@@ -4,7 +4,25 @@ from ctypes import cdll
 from ctypes import byref
 from ctypes import c_double
 from ctypes import c_int
-lhoodLib = cdll.LoadLibrary('./reprocessing/libs/libLH.so')
+
+def makeLHLib() :
+    import os
+    build_dir = "reprocessing"
+    cwd = os.getcwd() # get current directory
+    try:
+        os.chdir(build_dir)
+        os.system("make")
+    finally:
+        os.chdir(cwd)
+
+
+lhlib_path = './reprocessing/libs/libLH.so'
+try:
+    open(lhlib_path)
+except:
+    makeLHLib()
+finally:
+    lhoodLib = cdll.LoadLibrary('./reprocessing/libs/libLH.so')
 
 contour_base_dir = '../reprocessing/lhoods/contour_lookups/'
 lh1d_base_dir = '../reprocessing/lhoods/1d_lookups/'
