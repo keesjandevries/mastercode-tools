@@ -5,19 +5,23 @@ import sys
 def get_plots( pindex, sindex, nbins = 100 ) :
     return standard_plots(pindex, sindex, nbins )
 
+# this is what you edit
+def plots_to_make() :
+    l = [
+            [ "m0", "m12" ],
+            [ "m0", "tanb" ],
+            [ "tanb", "m12" ],
+            [ "mneu1" ]
+            [ "mh" ]
+        ]
+    return l
+
 def standard_plots( pindex, sindex, nbins ) :
     v = standard_variables( pindex, sindex, nbins )
-    plots = [ 
-                ["m0","m12"], 
-                ["m0","tanb"],
-                ["tanb","m12"],
-                ["mneu1"],
-                ["mh"],
-            ]
+    plots = plots_to_make()
     l = []
     for p in plots :
         l.append([ v[s]+[s] for s in p])
-
     spaces = map( make_space, l )
     return spaces
 
