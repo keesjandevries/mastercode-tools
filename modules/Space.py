@@ -3,13 +3,13 @@ from operator import mul
 
 class Space( object ) :
     def __init__( self, indices = [], min_vals = [], max_vals = [], nbins = [],
-                  names = [], log = [] ) :
+                  names = [], log = [], short_names = [] ) :
         assert len(indices) == len(min_vals) ==  len( max_vals ) == \
             len( nbins ) == len( names ) == len( log ), \
             "Must initialize space with lists of equal length"
 
         self.dimension = len(indices)
-        for o in ["indices", "min_vals", "max_vals", "nbins", "names", "log"] :
+        for o in ["indices", "min_vals", "max_vals", "nbins", "names", "log", "short_names"] :
             exec("self.%s = %s" % ( o, o ) )
 
         self.bins = reduce(mul, nbins)
