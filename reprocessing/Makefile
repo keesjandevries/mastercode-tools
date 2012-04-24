@@ -21,10 +21,20 @@ APIFILE		=	$(LHDIR)/lhood.cc
 APIOBJ		=   $(LHDIR)/lhood.o
 TARGET      =	libLH.so
 
+OUT_DIR		=	$(OBJDIR) $(SRCDIR) libs
+
 .IGNORE: 
-.SILENT: 
+
 .SUFFIXES: .o .cpp
 
+.PHONY: directories
+
+all: directories $(TARGET)
+
+directories: ${OUT_DIR}
+
+${OUT_DIR}:
+		${MKDIR_P} ${OUT_DIR}
 
 $(TARGET): $(APIOBJ) $(OBJS)
 		$(LINKER) $(LINKERFLAGS) libs/$@ $(APIOBJ) $(OBJS) $(ROOTFLAGS)
@@ -45,3 +55,5 @@ distclean:
 again: 
 		$(MAKE) distclean 
 		$(MAKE) $(TARGET)
+
+MKDIR_P = mkdir -p
