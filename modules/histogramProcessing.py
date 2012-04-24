@@ -21,8 +21,8 @@ def chi2_histo_prefix() :
 
 def histo_name( vl = [], f = entry_histo_prefix ) :
     format_string = "%s"
-    for v in vl : format_string += "_%d"
-    return format_string % ( tuple([f()] + vl) )
+    for v in vl : format_string += "_%s"
+    return format_string % ( tuple([f()] + [str(v) for v in vl]) )
 
 # assume histogram naming as above: PREFIX_d1_d2_d3....
 def get_histogram_dimension_from_name( name, delim = "_" ) :
@@ -72,8 +72,8 @@ def initialize_histo( obj ) :
     title = title_f % tuple( obj.names )
 
 
-    hname = histo_name( obj.indices, entry_histo_prefix )
-    cname = histo_name( obj.indices, chi2_histo_prefix )
+    hname = histo_name( obj.short_names, entry_histo_prefix )
+    cname = histo_name( obj.short_names, chi2_histo_prefix )
 
     args = []
     [ args.extend( [ nb, b ] ) for nb, b in zip( obj.nbins, bins )  ]
