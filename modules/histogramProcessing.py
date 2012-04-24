@@ -132,14 +132,30 @@ def count_ndof( c, min_contrib, inputs ) :
     count -= inputs
     return count
 
+def check_chi_mode(mode):
+    if mode == "chi2" or mode == "dchi": 
+        return 0
+
+    # If one specifies dchi_i , then the dX^2 contibution of constraint i is given!    
+    m=mode.split("_")
+    if len(m) == 2 and m[0]=="dchi":
+        i= int(m[1])
+        return i
+
+    else:
+        return -1
+     
+
 def fill_bins( toFill, bin, chain, mcf ) : 
     for mode in toFill.keys() :
         fill = False
         curr_content = toFill[mode][-1].GetBinContent(bin)
         content = 0.
-        if mode == "chi2" or mode == "dchi" :  
+        #if mode == "chi2" or mode == "dchi" :  
+        if check_chi_mode(mode) >= 0:  
             # for dchi offset is done later
-            content = chain.chi2vars[0]
+            ichi= check_chi_mode(mode)
+            content = chain.contribvars[ichi]
             fill = ( content < curr_content )
         if mode == "pval" :
             ndof = count_ndof( chain.contribvars, getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
