@@ -8,11 +8,13 @@ def main( argv=None ) :
 
     for mcf in files :
         plot_vars = pl.standard_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
+        contrib_vars = pl.standard_contribs( mcf.PredictionIndex, mcf.SpectrumIndex )
+
 
         plot_hists = hfuncs.get_entry_hist_list( mcf, plot_vars )
 
-        hists = { "pval" : [], "chi2" : [], "dchi" : [], "contrib" : [] }
-        hfuncs.fill_all_data_hists( mcf, plot_hists, hists )
+        hists = { "pval" : [], "chi2" : [], "dchi" : [], "contrib" : [] )
+        hfuncs.fill_all_data_hists( mcf, plot_hists, contrib_vars, hists )
 
         for hl in hists.values() :
             hfuncs.save_hlist_to_root_file( hl, mcf.FileName, mcf.DataDirectory)

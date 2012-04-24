@@ -9,13 +9,14 @@ def plots_to_make() :
             [ "m0", "m12" ],
             [ "m0", "tanb" ],
             [ "tanb", "m12" ],
-            [ "mneu1" ]
+            [ "mneu1" ],
             [ "mh" ]
         ]
     return l
 
 def contributions_to_make() :
     l = [ "g-2" ]
+    return l
 
 def standard_variables( pindex, sindex, nbins ) :
     sv = {
@@ -46,8 +47,8 @@ def standard_plots( pindex, sindex, nbins = 100 ) :
 
     return spaces
 
-def standard_contribs( pindex, sindex ) :
-    v = standard_variables( pindex, sindex, nbins )
+def standard_contribs( pindex, sindex, ) :
+    v = standard_variables( pindex, sindex, None )
     c = contributions_to_make()
     contribs = []
     for contrib in c :
