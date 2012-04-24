@@ -9,3 +9,9 @@ def histo_files() :
 def recalc_files() :
     d = files.cmssm_test_input_files()
     return d
+
+def point_files() :
+    d = files.cmssm_test_output_files()
+#    d = files.nuhm1_test_output_files()
+    return d
+
