@@ -3,6 +3,8 @@ import config.files as files
 
 def histo_files() :
     d = files.cmssm_test_output_files()
+#    d = files.nuhm1_kees_test_files()
+#    d = files.nuhm1_kees_test3_files()
     return d
 
 def recalc_files() :
