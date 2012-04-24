@@ -11,7 +11,7 @@ def main( argv=None ) :
 
         plot_hists = hfuncs.get_entry_hist_list( mcf, plot_vars )
 
-        hists = { "pval" : [], "chi2" : [], "dchi" : [], "dchi_16" : [] }
+        hists = { "pval" : [], "chi2" : [], "dchi" : [], "contrib" : [] }
         hfuncs.fill_all_data_hists( mcf, plot_hists, hists )
 
         for hl in hists.values() :
