@@ -7,7 +7,7 @@ def main( argv=None ) :
     files = fd.histo_files()
 
     for mcf in files :
-        plot_vars = pl.get_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
+        plot_vars = pl.standard_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
 
         plot_hists = hfuncs.get_entry_hist_list( mcf, plot_vars )
 

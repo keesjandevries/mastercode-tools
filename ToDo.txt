@@ -10,3 +10,10 @@
 * KJ: Another idea is to have an optinal list-of-plots as specification of
     config/files.py, such that for debuggin purposes we don't need to plot a
     whole list of standard plots every time.
+
+
+
+* Ok for our contribs: what we need is the variable to plot and the space.  
+    We are always going to have to plot "chi2" anyway
+
+* So for any space that we plot we wnat to know if we want to see the contributions too
