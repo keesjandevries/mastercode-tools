@@ -165,7 +165,7 @@ def fill_bins( toFill, bin, chain, mcf ) :
         if fill : toFill[mode][-1].SetBinContent(bin,content)
 
 # attempt to have dimension independant filling
-def fill_all_data_hists( mcf, hlist, toFill) :
+def fill_all_data_hists( mcf, hlist, contribs, toFill) :
     axes = [ "X", "Y", "Z" ]
     chain = MCC.MCchain( mcf )
     nentries = chain.GetEntries()
@@ -214,6 +214,7 @@ def fill_all_data_hists( mcf, hlist, toFill) :
         firstbin = h.FindBin( *axis_mins )
         lastbin = h.FindBin( *axis_maxs )
         for mode in toFill.keys() :
+            # here need to add in check on contrib and make one for each contribution
             toFill[mode].append( eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim ) )
             base_val = 1e9
             if mode == "pval" :
