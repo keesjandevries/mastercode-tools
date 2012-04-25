@@ -146,26 +146,30 @@ def check_chi_mode(mode):
         return -1
      
 
-def fill_bins( toFill, bin, chain, mcf ) : 
+def fill_bins( toFill, toFillContrib, contribs, bin, chain, mcf ) : 
     for mode in toFill.keys() :
         fill = False
         curr_content = toFill[mode][-1].GetBinContent(bin)
         content = 0.
-        #if mode == "chi2" or mode == "dchi" :  
-        if check_chi_mode(mode) >= 0:  
+        if mode == "chi2" or mode == "dchi" :  
+        #if check_chi_mode(mode) >= 0:  
             # for dchi offset is done later
-            ichi= check_chi_mode(mode)
-            content = chain.contribvars[ichi]
+            #ichi= check_chi_mode(mode)
+            content = chain.contribvars[0]
             fill = ( content < curr_content )
         if mode == "pval" :
             ndof = count_ndof( chain.contribvars, getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
             chi2 = chain.chi2vars[0]
             content = r.TMath.Prob( chi2, ndof )
             fill = ( content > curr_content )
-        if fill : toFill[mode][-1].SetBinContent(bin,content)
+        if fill : 
+            toFill[mode][-1].SetBinContent(bin,content)
+            if mode == "chi2" : # want to also fill values for the contrib
+                for contrib in contribs :
+                    toFillContrib[contrib.short_name][-1].SetBinContent(bin, chain.contribvars[contrib.index] ) #!!!
 
 # attempt to have dimension independant filling
-def fill_all_data_hists( mcf, hlist, contribs, toFill) :
+def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
     axes = [ "X", "Y", "Z" ]
     chain = MCC.MCchain( mcf )
     nentries = chain.GetEntries()
@@ -221,6 +225,10 @@ def fill_all_data_hists( mcf, hlist, contribs, toFill) :
                 base_val = 0.0
             for bin in range( firstbin, lastbin + 1 ) :
                 toFill[mode][-1].SetBinContent( bin, base_val )
+        for c in contribs : # contribs is a list of Contribution objects
+            toFillContrib[c.short_name].append( eval( 'r.TH%dD( h.GetName() + "_" + c.short_name, title, *th_arg_list )' % h_dim ) )
+            for bin in range( firstbin, lastbin + 1 ) :
+                toFillContrib[c.short_name][-1].SetBinContent( bin, 0.0 )
 
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
         for i in range( 0, nbins + 1 ) :
@@ -230,7 +238,7 @@ def fill_all_data_hists( mcf, hlist, contribs, toFill) :
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
                 chain.GetEntry(entry)
-                fill_bins( toFill, i, chain, mcf )
+                fill_bins( toFill, toFillContrib, contribs, i, chain, mcf )
         print
     perform_zero_offset( toFill["dchi"] )
 
