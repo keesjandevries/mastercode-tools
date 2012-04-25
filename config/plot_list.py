@@ -15,7 +15,7 @@ def plots_to_make() :
     return l
 
 def contributions_to_make() :
-    l = [ "g-2" ]
+    l = [ "g-2", "Oh2" ]
     return l
 
 def standard_variables( pindex, sindex, nbins ) :
@@ -30,6 +30,7 @@ def standard_variables( pindex, sindex, nbins ) :
             "mneu1" : [  sindex+2,     0,  1000, nbins, r"$m_{\tilde{\chi}^{0}_{1}} [GeV/c^{2}]$", False ],
             "mh"    : [ pindex+18,    85,   140, nbins,                 r"$m_{h^{0}} [GeV/c^{2}$", False ],
             "g-2"   : [  pindex+6,     0, 10e-9, nbins,                     r"$\Delta(g-2)_{\mu}", False ],
+            "Oh2"   : [ pindex+19,  0.07,  0.15, nbins,                          r"$\Omega h^{2}", False ],
          }
     return sv
 
