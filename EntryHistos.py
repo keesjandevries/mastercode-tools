@@ -17,7 +17,7 @@ def print_spaces( p, s ) :
 def main( argv=None ) :
     files = fd.histo_files()
     for mcf in files :
-        plots = pl.get_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
+        plots = pl.standard_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
 
         # bit of output
         print_spaces( plots, "Plots to make" )

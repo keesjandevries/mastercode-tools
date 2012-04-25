@@ -30,3 +30,8 @@ class Space( object ) :
 
     def get_bins( self ) :
         return self.bins
+
+class Contribution( object ) :
+    def __init__( self, index, name, short_name ) :
+        for attr in [ "index", "name", "short_name" ] :
+            exec("self.%s = %s" % ( attr, attr ))
