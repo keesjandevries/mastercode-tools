@@ -1,7 +1,8 @@
 from histogramProcessing import entry_histo_name as histn
 
 
-def HistExists(name):
+def HistExists(name,mcf):
+    
     return name
 
 def ParseVar(arg):
