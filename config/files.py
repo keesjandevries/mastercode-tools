@@ -88,3 +88,18 @@ def nuhm1_test_output_files() :
              "DataDirectory"     : "data_histograms",
          }
     return [MCFile(fd)]
+
+def nuhm1_MCMh_MC7() :
+    fd = {
+             "FileName"          : "/vols/cms04/kjd110/test-sam-py-plotting/test_MCMh_nuhm1.root" ,
+             "Chi2TreeName"      : "tree",
+             "Chi2BranchName"    : "vars",
+             "ContribTreeName"   : "contribtree",
+             "ContribBranchName" : "vars",
+             "PredictionIndex"   : 12,
+             "SpectrumIndex"     : 119,
+             "Inputs"            : 12,
+             "EntryDirectory"    : "entry_histograms",
+             "DataDirectory"     : "data_histograms",
+         }
+    return [MCFile(fd)]
