@@ -34,6 +34,26 @@ def cmssm_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd)
 
+def nuhm1_MCMh_MC7() :
+    gd =  {
+             "Chi2BranchName"    : "vars",
+             "ContribBranchName" : "vars" ,
+             "LHoodFile"         : "models/nuhm1-MCMh-MC7.lhood",
+             "ModelFile"         : "models/nuhm1-MCMh-MC7.model",
+             "PredictionIndex"   : 12,
+             "SpectrumIndex"     : 119,
+             "Inputs"            : 12,
+             "OutputFile"        : "/vols/cms04/kjd110/test-sam-py-plotting/test_MCMh_nuhm1.root" ,
+             "StartIndex"        : 0,
+             "EndIndex"          : 2,
+         }
+    fd = {
+             "FileName"          : "/vols/cms04/kjd110/MC75/new-nuhm1-MC75-source.root" ,
+             "Chi2TreeName"      : "tree",
+             "ContribTreeName"   : "contribtree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd)
 ###############
 # histo files #
 ###############
