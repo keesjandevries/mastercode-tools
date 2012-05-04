@@ -34,7 +34,7 @@ def cmssm_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd)
 
-def nuhm1_MCMh_MC7() :
+def nuhm1_MCMh_MC7_for_recalc() :
     gd =  {
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
