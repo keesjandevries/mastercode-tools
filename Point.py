@@ -17,7 +17,9 @@ def main( argv=None ) :
     # get the 
     vars=pt.GetVars(argv[1:])
 
+
     for mcf in files :
+        print "Searching for ", vars, " in " , mcf.FileName
         n=pt.GetEntry(vars,mcf)
         pt.PrintInfo(n,mcf)
 

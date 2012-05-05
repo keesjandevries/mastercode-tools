@@ -1,9 +1,17 @@
+#! /usr/bin/env python
+import ROOT as r
+
 from histogramProcessing import entry_histo_name as histn
 
-
 def HistExists(name,mcf):
-    
-    return name
+    f=r.TFile.Open(mcf.FileName)
+    hp=f.Get(name)
+    if hp :
+        f.Close()
+        return name
+    else :
+        f.Close()
+        return 0
 
 def ParseVar(arg):
     s=arg.split("=")
@@ -12,29 +20,44 @@ def ParseVar(arg):
     return var, val
 
 def search_hist_name(vars,mcf):
-    vl=[]
     name="_"
-    for k in vars.keys():
-        vl.append(k)
+    vl = vars.keys()
     if len(vl)==1:
         name=histn(vl,mcf)
-        return HistExists(name)
+        return HistExists(name,mcf), vl
 
     if len(vl)==2:
         name=histn(vl,mcf)
-        if HistExists(name):
-            return name
+        if HistExists(name,mcf):
+            return name, vl
         else:
-            vlreverse=[vl[1],vl[0]]
-            name=histn(vlreverse,mcf)
-            return HistExists(name)
+            vl.reverse()
+            name=histn(vl,mcf)
+            return HistExists(name,mcf), vl
 
     else:
+        print "The given coordinate(s) could not be found in a histogram "
         return 0
 
 
-def GetEntryFromHisto(name,mcf):
-    return 1000
+def GetEntryFromHisto(vars,order,name,mcf):
+    f=r.TFile.Open(mcf.FileName)
+    hist=f.Get(name).Clone()
+
+    if len(order)==1:
+        var=order[0]
+        bin=hist.FindBin(vars[var])
+        n=hist.GetBinContent(bin)
+
+    if len(order)==2:
+        var1=order[0]
+        var2=order[1]
+        bin=hist.FindBin(vars[var1],vars[var2])
+        n=int(hist.GetBinContent(bin))
+        
+    f.Close()
+
+    return n
 
 def GetVars(argv):
     # will output something like  {"m0" : 500, "m12" : 1000}
@@ -45,13 +68,16 @@ def GetVars(argv):
     return vars
                         
 def GetEntry(vars,mcf):
-    name=search_hist_name(vars,mcf)
-    print name
+    name,order=search_hist_name(vars,mcf)
+
     if name:
-        n=GetEntryFromHisto(name,mcf)
-    return 1000
+        print "Coordinates found in ", name
+        n=GetEntryFromHisto(vars,order,name,mcf)
+        return n   
+    else :
+        return -1
 
 def PrintInfo(n,mcf):
-    print  n, mcf.FileName
+    print "Found entry number: ", n
 
 
