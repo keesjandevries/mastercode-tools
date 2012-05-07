@@ -53,12 +53,12 @@ def nuhm1_MCMh_MC7_for_recalc() :
              "PredictionIndex"   : 12,
              "SpectrumIndex"     : 119,
              "Inputs"            : 12,
-             "OutputFile"        : "/vols/cms04/kjd110/test-sam-py-plotting/test_MCMh_nuhm1.root" ,
+             "OutputFile"        : "%s/test_MCMh_nuhm1.root" % base_directory(),
              "StartIndex"        : 0,
              "EndIndex"          : 2,
          }
     fd = {
-             "FileName"          : "/vols/cms04/kjd110/MC75/new-nuhm1-MC75-source.root" ,
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
              "Chi2TreeName"      : "tree",
              "ContribTreeName"   : "contribtree",
          }
@@ -86,7 +86,7 @@ def cmssm_test_output_files() :
 
 def nuhm1_test_output_files() :
     fd = {
-             "FileName"          : "/vols/cms04/kjd110/test-sam-py-plotting/sam-test-file3.root" ,
+             "FileName"          : "%s/sam-test-file3.root" % base_directory() ,
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",
@@ -101,7 +101,7 @@ def nuhm1_test_output_files() :
 
 def nuhm1_MCMh_MC7() :
     fd = {
-             "FileName"          : "/vols/cms04/kjd110/test-sam-py-plotting/test_MCMh_nuhm1.root" ,
+             "FileName"          : "%s/test_MCMh_nuhm1.root" % base_directory() ,
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",
