@@ -1,14 +1,24 @@
+import getpass
+import socket
+
 from commands import getoutput 
 from modules.MCFile import MCFileCollection
 from modules.MCFile import MCFile
 
 def base_directory() :
-    domainname = getoutput('hostname -d')
+    user = getpass.getuser()
+    fqdn = socket.getfqdn()
+
     d = {
-            "hep.ph.ic.ac.uk" : "/vols/cms03/mastercode/test_files/",
-            "localdomain" :     "~/Documents/01_mastercode_data/",
+            "localhost.localdomain" :  {
+                    "hyper"  : "~/Documents/01_mastercode_data/",
+                },
+            tuple( ["lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ] ) : {
+                    "sr505"  : "/vols/cms03/mastercode/test_files/",
+                    "kjd110" : "/vols/cms04/kjd110/test-sam-py-plotting/",
+                },
         }
-    return d[domainname]
+    return d[fqdn][user]
 
 ###############
 # input files #
