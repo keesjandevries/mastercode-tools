@@ -2,7 +2,7 @@
 import ROOT as r
 
 from modules import MCchain as MCC
-from modules import Point as pt
+from modules import point as pt
 #from modules import histogramProcessing as hists
 
 from config import file_dict as fd
