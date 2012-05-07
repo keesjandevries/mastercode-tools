@@ -6,7 +6,7 @@ def base_directory() :
     domainname = getoutput('hostname -d')
     d = {
             "hep.ph.ic.ac.uk" : "/vols/cms03/mastercode/test_files/",
-            "localdomain" :     "~/Documents/mastercode_data/",
+            "localdomain" :     "~/Documents/01_mastercode_data/",
         }
     return d[domainname]
 
