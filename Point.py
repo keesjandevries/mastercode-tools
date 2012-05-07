@@ -15,13 +15,13 @@ def main( argv=None ) :
     from sys import argv
     files = fd.point_files()
     # get the 
-    vars=pt.GetVars(argv[1:])
+    vars=pt.getVars(argv[1:])
 
 
     for mcf in files :
         print "Searching for ", vars, " in " , mcf.FileName
-        n=pt.GetEntry(vars,mcf)
-        pt.PrintInfo(n,mcf)
+        n=pt.getEntry(vars,mcf)
+        pt.printInfo(n,mcf)
 
 
 if __name__ == "__main__":
