@@ -24,7 +24,7 @@ def histo_name( vl = [], f = entry_histo_prefix ) :
     for v in vl : format_string += "_%s"
     return format_string % ( tuple([f()] + [str(v) for v in vl]) )
 
-def entry_histo_name(vl,mcf):
+def entry_histo_full_path(vl,mcf):
     entry_hist_dict = mcf.EntryDirectory
     hist_name =  histo_name(vl)
     full_name =  "%s/%s" % ( entry_hist_dict, hist_name ) 
