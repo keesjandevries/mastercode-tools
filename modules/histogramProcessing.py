@@ -24,6 +24,13 @@ def histo_name( vl = [], f = entry_histo_prefix ) :
     for v in vl : format_string += "_%s"
     return format_string % ( tuple([f()] + [str(v) for v in vl]) )
 
+def entry_histo_full_path(vl,mcf):
+    entry_hist_dict = mcf.EntryDirectory
+    hist_name =  histo_name(vl)
+    full_name =  "%s/%s" % ( entry_hist_dict, hist_name ) 
+    return full_name
+
+
 # assume histogram naming as above: PREFIX_d1_d2_d3....
 def get_histogram_dimension_from_name( name, delim = "_" ) :
     x = name.split(delim)

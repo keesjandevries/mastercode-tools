@@ -1,14 +1,24 @@
+import getpass
+import socket
+
 from commands import getoutput 
 from modules.MCFile import MCFileCollection
 from modules.MCFile import MCFile
 
 def base_directory() :
-    domainname = getoutput('hostname -d')
+    user = getpass.getuser()
+    fqdn = socket.getfqdn()
+
     d = {
-            "hep.ph.ic.ac.uk" : "/vols/cms03/mastercode/test_files/",
-            "localdomain" :     "~/Documents/mastercode_data/",
+            "localhost.localdomain" :  {
+                    "hyper"  : "~/Documents/01_mastercode_data/",
+                },
+            tuple( ["lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ] ) : {
+                    "sr505"  : "/vols/cms03/mastercode/test_files/",
+                    "kjd110" : "/vols/cms04/kjd110/test-sam-py-plotting/",
+                },
         }
-    return d[domainname]
+    return d[fqdn][user]
 
 ###############
 # input files #
@@ -34,6 +44,26 @@ def cmssm_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd)
 
+def nuhm1_MCMh_MC7_for_recalc() :
+    gd =  {
+             "Chi2BranchName"    : "vars",
+             "ContribBranchName" : "vars" ,
+             "LHoodFile"         : "models/nuhm1-MCMh-MC7.lhood",
+             "ModelFile"         : "models/nuhm1-MCMh-MC7.model",
+             "PredictionIndex"   : 12,
+             "SpectrumIndex"     : 119,
+             "Inputs"            : 12,
+             "OutputFile"        : "%s/test_MCMh_nuhm1.root" % base_directory(),
+             "StartIndex"        : 0,
+             "EndIndex"          : 2,
+         }
+    fd = {
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
+             "Chi2TreeName"      : "tree",
+             "ContribTreeName"   : "contribtree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd)
 ###############
 # histo files #
 ###############
@@ -56,7 +86,22 @@ def cmssm_test_output_files() :
 
 def nuhm1_test_output_files() :
     fd = {
-             "FileName"          : "/vols/cms04/kjd110/test-sam-py-plotting/sam-test-file3.root" ,
+             "FileName"          : "%s/sam-test-file3.root" % base_directory() ,
+             "Chi2TreeName"      : "tree",
+             "Chi2BranchName"    : "vars",
+             "ContribTreeName"   : "contribtree",
+             "ContribBranchName" : "vars",
+             "PredictionIndex"   : 12,
+             "SpectrumIndex"     : 119,
+             "Inputs"            : 12,
+             "EntryDirectory"    : "entry_histograms",
+             "DataDirectory"     : "data_histograms",
+         }
+    return [MCFile(fd)]
+
+def nuhm1_MCMh_MC7() :
+    fd = {
+             "FileName"          : "%s/test_MCMh_nuhm1.root" % base_directory() ,
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",
