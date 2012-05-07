@@ -13,8 +13,8 @@ def recalc_files() :
     return d
 
 def point_files() :
-    d = files.nuhm1_MCMh_MC7()
-#    d = files.cmssm_test_output_files()
+    d = files.cmssm_test_output_files()
 #    d = files.nuhm1_test_output_files()
+#    d = files.nuhm1_MCMh_MC7()
     return d
 
