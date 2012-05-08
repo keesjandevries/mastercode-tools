@@ -77,7 +77,7 @@ def printAfterBurnerCoordinates(chain, mcf, n):
     N=mcf.Inputs
 
     print "Command for AfterBurner.exe is:  "
-    print "../bin/AfterBurner.exe 1i " ,
+    print "../bin/AfterBurner.exe 1 " ,
     for i in range(1,N+1):
         print chain.chi2vars[i], " ",  
 
