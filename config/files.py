@@ -9,15 +9,18 @@ def base_directory() :
     user = getpass.getuser()
     fqdn = socket.getfqdn()
 
+    imperial_users = { "sr505"  : "/vols/cms03/mastercode/test_files/",
+                       "kjd110" : "/vols/cms04/kjd110/test-sam-py-plotting/",
+                     }
+    imperial_hosts = ["lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ]
+
     d = {
             "localhost.localdomain" :  {
                     "hyper"  : "~/Documents/01_mastercode_data/",
                 },
-            tuple( ["lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ] ) : {
-                    "sr505"  : "/vols/cms03/mastercode/test_files/",
-                    "kjd110" : "/vols/cms04/kjd110/test-sam-py-plotting/",
-                },
         }
+
+    d.update( dict.fromkeys(imperial_hosts, imperial_users) )
     return d[fqdn][user]
 
 ###############
