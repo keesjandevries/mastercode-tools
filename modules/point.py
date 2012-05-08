@@ -3,6 +3,7 @@ import ROOT as r
 from itertools import permutations
 
 from histogramProcessing import entry_histo_full_path as histn
+import MCchain as MCC
 
 def getVars(argv) :
     # will output something like  {"m0" : 500, "m12" : 1000}
@@ -71,7 +72,18 @@ def searchHistName(vars,mcf) :
         assert False, "The given coordinate(s) could not be found in a histogram "
     return name, p
 
-def printInfo(n,mcf) :
-    print "Found entry number: ", n
+def printAfterBurnerCoordinates(chain, mcf, n):
+    chain.GetEntry(n)
+    N=mcf.Inputs
 
+    print "Command for AfterBurner.exe is:  "
+    print "../bin/AfterBurner.exe 1i " ,
+    for i in range(1,N+1):
+        print chain.chi2vars[i], " ",  
+
+
+def printInfo(n,mcf) :
+    chain = MCC.MCchain( mcf )
+    print "Found entry number: ", n
+    printAfterBurnerCoordinates(chain, mcf, n)
 
