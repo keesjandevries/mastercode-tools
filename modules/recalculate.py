@@ -119,7 +119,8 @@ def recalc_to_file( collection ) :
     contribtree.Branch("vars",contribvars,varsOutName)
     
     # want to save best fit point entry number: create new tree and branch
-    bft=r.TTree("BFpoint", "Entry ")
+    bfname = getattr( collection, "BestFitEntryName", "BestFitEntry"  ) 
+    bft=r.TTree(bfname, "Entry")
     bfn=array('i',[0])
     bft.Branch('EntryNo',bfn,'EntryNo/I')
     
@@ -169,7 +170,7 @@ def recalc_to_file( collection ) :
 
     #Saving best fit Entry number
     bft.GetEntry(0)
-    bfn[0]=minEntry
+    bfn[0]=minEntry-begin
     bft.Fill()
 
     bft.AutoSave()
