@@ -37,8 +37,10 @@ def cmssm_test_input_files() :
              "SpectrumIndex"     : 117,
              "Inputs"            : 10,
              "OutputFile"        : "%s/recalc_out.root" % base_directory(),
-             "StartEntry"        : 1,
-             "EndEntry"          : 2,
+#            "MinChi2"           : 1,
+             "MaxChi2"           : 25,
+#             "StartEntry"        : 1,
+             "EndEntry"          : 4000,
          }
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_directory(),
