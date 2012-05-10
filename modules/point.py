@@ -73,14 +73,21 @@ def searchHistName(vars,mcf) :
     return name, p
 
 def printAfterBurnerCoordinates(chain, mcf, n):
+    print"\nCommand for AfterBurner.exe is: \n "
+    print getAfterBurnerCoordinates(chain, mcf, n)
+    print "\n"
+
+def getAfterBurnerCoordinates(chain, mcf, n):
+
     chain.GetEntry(n)
     N=mcf.Inputs
 
-    print "Command for AfterBurner.exe is:  "
-    print "../bin/AfterBurner.exe 1 " ,
+    command= "../bin/AfterBurner.exe 1 " 
     for i in range(1,N+1):
-        print chain.chi2vars[i], " ",  
+        command+= str(chain.chi2vars[i])
+        command+= " "
 
+    return command
 
 def printInfo(n,mcf) :
     chain = MCC.MCchain( mcf )
