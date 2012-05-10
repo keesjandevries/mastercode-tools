@@ -117,9 +117,19 @@ def recalc_to_file( collection ) :
     varsOutName = "vars[%d]/D" % ( chain.nTotVars )
     contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
+    
+    # want to save best fit point entry number: create new tree and branch
+    bft=r.TTree("BFpoint", "Entry ")
+    bfn=array('i',[0])
+    bft.Branch('EntryNo',bfn,'EntryNo/I')
+    
+    # and the minChi minEntry
+    minChi=1e9
+    minEntry=-1
 
     prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
     for entry in range(begin,end) :
+
         prog.increment_amount()
         print prog,'\r',
         stdout.flush()
@@ -152,9 +162,20 @@ def recalc_to_file( collection ) :
                 contribvars[0] = chi2
                 chi2tree.Fill()
                 contribtree.Fill()
+                #dealing with minChi
+                if chi2 < minChi:
+                    minChi=chi2
+                    minEntry=entry
 
+    #Saving best fit Entry number
+    bft.GetEntry(0)
+    bfn[0]=minEntry
+    bft.Fill()
+
+    bft.AutoSave()
     chi2tree.AutoSave()
     contribtree.AutoSave()
+
 
     out.Close()
 
