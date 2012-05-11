@@ -5,6 +5,8 @@ from itertools import permutations
 from histogramProcessing import entry_histo_full_path as histn
 import MCchain as MCC
 
+AB_binary = "../bin/Afterburner.exe"
+
 def getVars(argv) :
     # will output something like  {"m0" : 500, "m12" : 1000}
     vars={}
@@ -73,14 +75,18 @@ def searchHistName(vars,mcf) :
     return name, p
 
 def printAfterBurnerCoordinates(chain, mcf, n):
+    print"\nCommand for AfterBurner.exe is: \n "
+    print getAfterBurnerCommand(chain, mcf, n)
+    print "\n"
+
+def getAfterBurnerCommand( chain, mfc, n) : 
+    input_coords = getInputCoordinates( chain, mfc, n )
+    input_strings = [ str(input) for input in input_coords ]
+    return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
+    
+def getInputCoordinates( chain, mfc, n ) :
     chain.GetEntry(n)
-    N=mcf.Inputs
-
-    print "Command for AfterBurner.exe is:  "
-    print "../bin/AfterBurner.exe 1 " ,
-    for i in range(1,N+1):
-        print chain.chi2vars[i], " ",  
-
+    return [ chain.chi2vars[input] for input in range(1,mfc.Inputs+1) ]
 
 def printInfo(n,mcf) :
     chain = MCC.MCchain( mcf )
