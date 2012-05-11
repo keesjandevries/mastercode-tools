@@ -14,6 +14,6 @@ All files that you should need to edit are in `config/`
 
 Executables
 -----------
-`EntryHistos.py` fill and save histograms that contain the entry numbers corresponding to the best points in each of the spaces specified in `plot_list.py`
-`DataHistos.py` create histograms containing the &Chi;^2/ p(&Chi;^2,ndof) / &Delta;&Chi;^2 / Contribution data
-`Point.py` finds the best point in entry histogram given inputs e.g. `./Point.py "m0=500" "m12=1000"`
+- `EntryHistos.py` fill and save histograms that contain the entry numbers corresponding to the best points in each of the spaces specified in `plot_list.py`
+- `DataHistos.py` create histograms containing the &Chi;^2/ p(&Chi;^2,ndof) / &Delta;&Chi;^2 / Contribution data
+- `Point.py` finds the best point in entry histogram given inputs e.g. `./Point.py "m0=500" "m12=1000"`
