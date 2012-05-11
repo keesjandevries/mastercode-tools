@@ -7,9 +7,9 @@ Configuration
 
 All files that you should need to edit are in `config/`
 
-    + `files.py`:  here we define  input files, and their attributes, to be used in both recalculations and histogram generation
-    + `file_dict.py`: define which set of files in `files.py` we use in the program
-    + `plot_list.py`: define which histograms to make (for both best fit and contribution analyses), also define the standard variable names and indices
+    +`files.py`:  here we define  input files, and their attributes, to be used in both recalculations and histogram generation
+    +`file_dict.py`: define which set of files in `files.py` we use in the program
+    +`plot_list.py`: define which histograms to make (for both best fit and contribution analyses), also define the standard variable names and indices
 
 Executables
 -----------
