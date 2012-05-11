@@ -117,9 +117,21 @@ def recalc_to_file( collection ) :
     varsOutName = "vars[%d]/D" % ( chain.nTotVars )
     contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
+    
+    # want to save best fit point entry number: create new tree and branch
+    bfname = getattr( collection, "BestFitEntryName", "BestFitEntry"  ) 
+    bft=r.TTree(bfname, "Entry")
+    bfn=array('i',[0])
+    bft.Branch('EntryNo',bfn,'EntryNo/I')
+    
+    # and the minChi minEntry
+    minChi=1e9
+    minEntry=-1
+    count=-1 # becuase the first entry has number 0
 
     prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
     for entry in range(begin,end) :
+
         prog.increment_amount()
         print prog,'\r',
         stdout.flush()
@@ -140,8 +152,8 @@ def recalc_to_file( collection ) :
 
             chi2 += spectrum_constraints( chain.chi2vars, collection )
 
-            if chain.chi2vars[0] > getattr(collection, "MinChi2", 0 ) and \
-               chain.chi2vars[0] < getattr(collection, "MaxChi2", 1e9 ) :
+            if chi2 > getattr(collection, "MinChi2", 0 ) and \
+               chi2 < getattr(collection, "MaxChi2", 1e9 ) :
                 # This was inserted to check on if there was a significant
                 # calculation error ( average deltachi2 per entry: 1e-15 )
                 if __DEBUG :
@@ -152,9 +164,21 @@ def recalc_to_file( collection ) :
                 contribvars[0] = chi2
                 chi2tree.Fill()
                 contribtree.Fill()
+                count+=1
+                #dealing with minChi
+                if chi2 < minChi:
+                    minChi=chi2
+                    minEntry=count
 
+    #Saving best fit Entry number
+    bft.GetEntry(0)
+    bfn[0]=minEntry
+    bft.Fill()
+
+    bft.AutoSave()
     chi2tree.AutoSave()
     contribtree.AutoSave()
+
 
     out.Close()
 

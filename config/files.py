@@ -30,14 +30,17 @@ def cmssm_test_input_files() :
     gd =  {
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
+             "BestFitEntryName"  : "BestFitEntry",
              #"LHoodFile"         : "models/tester.lhood",
              "ModelFile"         : "models/tester.model",
              "PredictionIndex"   : 10,
              "SpectrumIndex"     : 117,
              "Inputs"            : 10,
              "OutputFile"        : "%s/recalc_out.root" % base_directory(),
-             #"StartIndex"        : 1,
-             #"EndIndex"          : 2,
+#            "MinChi2"           : 1,
+             "MaxChi2"           : 25,
+#             "StartEntry"        : 1,
+             "EndEntry"          : 4000,
          }
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_directory(),
