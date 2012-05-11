@@ -11,6 +11,7 @@ All files that you should need to edit are in `config/`
     - `file_dict.py`: define which set of files in `files.py` we use in the program
     - `plot_list.py`: define which histograms to make (for both best fit and contribution analyses), also define the standard variable names and indices
 
+
 Executables
 -----------
     `EntryHistos.py` fill and save histograms that contain the entry numbers corresponding to the best points in each of the spaces specified in `plot_list.py`
