@@ -2,21 +2,9 @@
     [ confirmed in spaces at least ]
     [ confirm it still actually happens ]
 
-* KJ: I was thinking that it might be an idea to merge the mastercode-plotting
-     and mastercode-tools directories. Especially, since we now use do
-    ./EntryHistos.py and ./DataHistos.py for one file at the time, it makes
-    sense to simply get which plots should be made from config/plot_list.py
+* KJ: Recalculation: should move to short names for the constraints, to unify
+    the constraints for CMSSM/NUHM1, and for future use!
 
-* KJ: Another idea is to have an optional list-of-plots as specification of
-    config/files.py, such that for debuggin purposes we don't need to plot a
-    whole list of standard plots every time.
-
-* KJ: Point-tools. I think we should also start working on analylis tools. I was
-    thinking about the following. Immagine, we want to know more about a point
-    in the m0-m12 plane. It is now very simple to find the corresponding entry
-    number. Once we have the entry-number, it is easy to get the full list of
-    predicions and the X^2 breakdown. We also need the 10 or 12 coordinates
-    that go into the afterburner, such that we can produce slha-files:) 
-    But an extention could be that once specifies however many parameters, and
-    a range in which they can lie. We then search the point with the minimum
-    X^2 contribution and give the same info as listed above. 
+* KJ: Point-tools. Print all (relevant) predictions/ X^2 breakdown; if a plane
+    does not exist, make the missing plane; 
+    
