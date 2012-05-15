@@ -146,7 +146,7 @@ def nuhm1_MCMh_MC7() :
 
 def nuhm1_MC8_ATLAS_test() :
     fd = {
-             "FileName"          : "s/test_ATLAS_nuhm2.root" % base_directory() ,
+             "FileName"          : "%s/test_ATLAS_nuhm2.root" % base_directory() ,
              "Chi2TreeName"      : "tree",
              "Chi2BranchName"    : "vars",
              "ContribTreeName"   : "contribtree",
