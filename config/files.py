@@ -56,14 +56,15 @@ def nuhm1_MC8_ATLAS_test_recalc():
     gd =  {
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
-             "LHoodFile"         : "models/test-ATLAS.lhood",
+             "LHoodFile"         : "models/test-nuhm1-ATLAS.lhood",
+#             "LHoodFile"         : "models/nuhm1-MCMh-MC7.lhood",
              "ModelFile"         : "models/nuhm1-MCMh-MC7.model",
              "PredictionIndex"   : 12,
              "SpectrumIndex"     : 119,
              "Inputs"            : 12,
              "OutputFile"        : "%s/test_ATLAS_nuhm2.root" % base_directory(),
 #             "StartEntry"        : 0,
-#             "EndEntry"          : 2,
+             "EndEntry"          : 2,
          }
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
