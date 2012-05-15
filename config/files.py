@@ -32,6 +32,7 @@ def cmssm_test_input_files() :
              "ContribBranchName" : "vars" ,
              "BestFitEntryName"  : "BestFitEntry",
              #"LHoodFile"         : "models/tester.lhood",
+             "LHoodFile"         : "models/test-ATLAS.lhood",
              "ModelFile"         : "models/tester.model",
              "PredictionIndex"   : 10,
              "SpectrumIndex"     : 117,
@@ -50,6 +51,28 @@ def cmssm_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd)
 
+
+def nuhm1_MC8_ATLAS_test_recalc():
+    gd =  {
+             "Chi2BranchName"    : "vars",
+             "ContribBranchName" : "vars" ,
+             "LHoodFile"         : "models/test-ATLAS.lhood",
+             "ModelFile"         : "models/nuhm1-MCMh-MC7.model",
+             "PredictionIndex"   : 12,
+             "SpectrumIndex"     : 119,
+             "Inputs"            : 12,
+             "OutputFile"        : "%s/test_ATLAS_nuhm2.root" % base_directory(),
+#             "StartEntry"        : 0,
+#             "EndEntry"          : 2,
+         }
+    fd = {
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
+             "Chi2TreeName"      : "tree",
+             "ContribTreeName"   : "contribtree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd)
+
 def nuhm1_MCMh_MC7_for_recalc() :
     gd =  {
              "Chi2BranchName"    : "vars",
@@ -60,8 +83,8 @@ def nuhm1_MCMh_MC7_for_recalc() :
              "SpectrumIndex"     : 119,
              "Inputs"            : 12,
              "OutputFile"        : "%s/test_MCMh_nuhm1.root" % base_directory(),
-             "StartIndex"        : 0,
-             "EndIndex"          : 2,
+             "StartEntry"        : 0,
+             "EndEntry"          : 2,
          }
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
@@ -105,7 +128,23 @@ def nuhm1_test_output_files() :
          }
     return [MCFile(fd)]
 
+
 def nuhm1_MCMh_MC7() :
+    fd = {
+             "FileName"          : "%s/test_MCMh_nuhm1.root" % base_directory() ,
+             "Chi2TreeName"      : "tree",
+             "Chi2BranchName"    : "vars",
+             "ContribTreeName"   : "contribtree",
+             "ContribBranchName" : "vars",
+             "PredictionIndex"   : 12,
+             "SpectrumIndex"     : 119,
+             "Inputs"            : 12,
+             "EntryDirectory"    : "entry_histograms",
+             "DataDirectory"     : "data_histograms",
+         }
+    return [MCFile(fd)]
+
+def nuhm1_MC8_ATLAS_test() :
     fd = {
              "FileName"          : "%s/test_MCMh_nuhm1.root" % base_directory() ,
              "Chi2TreeName"      : "tree",
