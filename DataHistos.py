@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 from config import plots as pl
-from config import file_dict as fd
+from config import files as fd
 from modules import histogramProcessing as hfuncs
 
 def main( argv=None ) :

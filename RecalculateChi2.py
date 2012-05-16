@@ -3,7 +3,7 @@
 import sys
 
 from optparse import OptionParser
-from config import file_dict as fd
+from config import files as fd
 from modules import recalculate as recalc
 
 ############################################
