@@ -11,7 +11,7 @@ from config import file_dict as fd
 
 ############################################
 def opts():
-    parser = OptionParser("usage: %prog [options]")
+    parser = OptionParser("usage: %prog [options] [args]")
     parser.add_option( "-b", "--bestfitpoint", action="store_true", dest="bf_mode"  ,
                        default= False , help="print info of best fit point" )
     parser.add_option( "-c", "--coordinates", action="store_true", dest="coor_mode",
@@ -24,21 +24,22 @@ def opts():
 
 def main( argv=None ) :
     # retrieve file
-    mcf = fd.point_files()[0]
+    files = fd.point_files()
 
     #Get options
     options, args = opts()  
+    
+    for mcf in files:
+        if options.coor_mode :
+            print "\nSearch for coordinates", args, " in " , mcf.FileName
+            vars=pt.getVars(args)
+            n=pt.getCoorEntry(vars,mcf)
+            pt.printInfo(n,mcf)
 
-    if options.coor_mode :
-        vars=pt.getVars(args)
-        print "Searching for coordinates", vars, " in " , mcf.FileName
-        n=pt.getCoorEntry(vars,mcf)
-        pt.printInfo(n,mcf)
-
-    if options.bf_mode :
-        n=pt.getBfEntry(mcf)
-        print "Best Fit point in ", mcf.FileName, " is " , n
-        pt.printInfo(n,mcf)
+        if options.bf_mode :
+            print "\nSearch for best it point in ", mcf.FileName
+            n=pt.getBfEntry(mcf)
+            pt.printInfo(n,mcf)
 
 
 if __name__ == "__main__":
