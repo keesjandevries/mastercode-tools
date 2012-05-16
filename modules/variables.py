@@ -3,7 +3,7 @@ from modules.MCVariable import Variable as Var
 
 GeVc2="[GeV/c^{2}]"
 GeV  ="[GeV]"
-GeV  ="[MeV]"
+MeV  ="[MeV]"
 
 def mc_variables() :
     b=base_variables()
