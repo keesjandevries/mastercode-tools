@@ -88,6 +88,9 @@ def getInputCoordinates( chain, mfc, n ) :
     chain.GetEntry(n)
     return [ chain.chi2vars[input] for input in range(1,mfc.Inputs+1) ]
 
+def getBfEntry(mcf):
+    return 1000
+
 def printInfo(n,mcf) :
     chain = MCC.MCchain( mcf )
     print "Found entry number: ", n
