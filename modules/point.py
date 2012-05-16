@@ -21,7 +21,7 @@ def parseVar(arg) :
     val=float(s[1])
     return var, val
 
-def getEntry(vars,mcf) :
+def getCoorEntry(vars,mcf) :
     name,order=searchHistName(vars,mcf)
 
     if name:
