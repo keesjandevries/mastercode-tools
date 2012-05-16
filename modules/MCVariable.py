@@ -4,10 +4,10 @@ from math import fabs
 from copy import deepcopy
 
 zvalue_functions = { # there might be a better way of doing this... not really sure yet
-    None    : lambda o, x : 0
-    "GAUSS" : lambda o, x : fabs(o.limit_value - x)/o.error
-    "UL"    : lambda o, x : fabs(x - o.limit_value)/o.error if x > o.limit_value else 0.
-    "LL"    : lambda o, x : fabs(o.limit_value - x)/o.error if x < o.limit_value else 0.
+    None    : lambda o, x : 0,
+    "GAUSS" : lambda o, x : fabs(o.limit_value - x)/o.error,
+    "UL"    : lambda o, x : fabs(x - o.limit_value)/o.error if x > o.limit_value else 0.,
+    "LL"    : lambda o, x : fabs(o.limit_value - x)/o.error if x < o.limit_value else 0.,
 }
 
 class Variable() :
@@ -20,7 +20,7 @@ class Variable() :
 
             self.errors = errors
             sq_errors = [ error**2 for error in errors ]
-            self.error sqrt( sum(sq_errors) )
+            self.error = sqrt( sum(sq_errors) )
 
         for attr in [ "short_name", "long_name", "constraint_type", "limit_value" ] :
             setattr( "self.%s" % attr, eval(attr) )
