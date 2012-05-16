@@ -36,7 +36,7 @@ class Variable(object) :
         return r_f % ( self.short_name, self.constraint_type, self.limit_value, getattr(self,"error",0.) )
 
     def getZValue(self, value) :
-        return zvalue_function[self.constraint_type]( self, value )
+        return zvalue_functions[self.constraint_type]( self, value )
 
     def getChi2(self, value) :
         return self.getZValue(value)**2
