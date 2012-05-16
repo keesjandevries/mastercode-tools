@@ -11,7 +11,7 @@ def print_spaces( p, s ) :
     border = "=" * len(s)
     print "%s\n%s\n%s" % (border, s, border )
     for plot in p :
-        print plot.name
+        print plot
     
 
 def main( argv=None ) :
