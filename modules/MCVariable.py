@@ -23,7 +23,7 @@ class Variable() :
             self.error = sqrt( sum(sq_errors) )
 
         for attr in [ "short_name", "long_name", "constraint_type", "limit_value" ] :
-            setattr( "self.%s" % attr, eval(attr) )
+            setattr( self, attr, eval(attr) )
 
     def getZValue(self, value) :
         return zvalue_function[self.constraint_type]( self, value )
