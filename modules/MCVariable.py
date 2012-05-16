@@ -39,7 +39,7 @@ class MCVariable(Variable) :
 
         self = deepcopy(var) #hopefully provides us with the right functionality
         for attr in [ "offset_relative_to", "index_offset" ] :
-            setattr( "self.%s" % attr, eval(attr) )
+            setattr( self, attr, eval(attr) )
 
     def getIndex(self,mcf) :
         offset = getattr( mcf, self.offset_relative_to, None ) if offset_relative_to is not None else 0
