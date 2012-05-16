@@ -16,11 +16,11 @@ def get_plots(mcf) :
     spaces = [ MCSpace( mcf, MCV, opts ) for (MCV, opts) in d.iteritems() ]
     return spaces
 
-def get_contribs( pindex, sindex, ) :
-    v = standard_variables( pindex, sindex, None )
-    c = plots.contributions_to_make()
+def get_contribs( mcf ) :
+    v = mc_variables()
+    c = pc.contributions_to_make()
     contribs = []
     for contrib in c :
         opts = v[contrib]
-        contribs.append( Contribution( opts[0], opts[-2], contrib ) )
+        contribs.append( MCContribution( mcf, v[contrib] ) )
     return contribs
