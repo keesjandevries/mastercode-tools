@@ -10,7 +10,7 @@ def mc_variables() :
     m={
             # inputs
             "m0"           : MCV( b["m0"],            index_offset=1 ),
-            "m12"          : MCV( b["m0"],            index_offset=2 ),
+            "m12"          : MCV( b["m12"],           index_offset=2 ),
             "A0"           : MCV( b["A0"],            index_offset=3 ),
             "tanb"         : MCV( b["tanb"],          index_offset=4 ),
             "mtop"         : MCV( b["mtop"],          index_offset=6 ),
@@ -82,7 +82,7 @@ def mc_variables() :
 def base_variables() :
     return {
         "m0"           : Var( "m0",            r"$m_{0} %s$"%GeVc2 ),
-        "m12"          : Var( "m0",            r"$m_{0} %s$"%GeVc2 ),
+        "m12"          : Var( "m12",           r"$m_{1/2} %s$"%GeVc2 ),
         "A0"           : Var( "A0",            r"$A_{0} %s$"%GeV ),
         "tanb"         : Var( "tanb",          r"$\tan(\beta)$" ),
         "mtop"         : Var( "mtop",          r"$m_{t} %s$"%GeVc2,                    "GAUSS", 173.2,    [0.9]  ),
