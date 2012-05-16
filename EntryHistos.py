@@ -17,7 +17,7 @@ def print_spaces( p, s ) :
 def main( argv=None ) :
     mcfile_list = files.histo_files()
     for mcf in mcfile_list :
-        spaces = plots.get_plots()
+        spaces = plots.get_plots(mcf)
 
         # bit of output
         print_spaces( spaces, "Plots to make" )
