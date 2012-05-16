@@ -4,8 +4,8 @@ import ROOT as r
 from modules import MCChain as MCC
 from modules import histogramProcessing as hists
 
-from config import files as fd
-from config import plots as pl
+from config import files
+from modules import plots
 
 def print_spaces( p, s ) :
     border = "=" * len(s)
@@ -15,15 +15,15 @@ def print_spaces( p, s ) :
     
 
 def main( argv=None ) :
-    files = fd.histo_files()
-    for mcf in files :
-        plots = pl.standard_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
+    mcfile_list = files.histo_files()
+    for mcf in mcfile_list :
+        spaces = plots.get_plots()
 
         # bit of output
-        print_spaces( plots, "Plots to make" )
+        print_spaces( spaces, "Plots to make" )
        
         chain = MCC.MCChain( mcf )
-        complete_histos =  hists.calculate_entry_histograms( plots, chain )
+        complete_histos =  hists.calculate_entry_histograms( spaces, chain )
 
         hists.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
 
