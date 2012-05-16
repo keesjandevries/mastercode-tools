@@ -1,13 +1,13 @@
 from modules.MCVariable import MCVariable as MCV
 from modules.MCVariable import Variable as Var
 
-GeVc2 = "[GeV/c^{2}]"
-GeV   = "[GeV]"
-GeV   = "[MeV]"
+GeVc2="[GeV/c^{2}]"
+GeV  ="[GeV]"
+GeV  ="[MeV]"
 
 def mc_variables() :
-    b = base_variables()
-    m = {
+    b=base_variables()
+    m={
             # inputs
             "m0"           : MCV( b["m0"],            index_offset=1 ),
             "m12"          : MCV( b["m0"],            index_offset=2 ),
@@ -27,7 +27,7 @@ def mc_variables() :
             "Delta(g-2)"   : MCV( b["Delta(g-2)"],    index_offset=6,  offset_relative_to="PredictionIndex" ),
             "MW"           : MCV( b["MW"],            index_offset=7,  offset_relative_to="PredictionIndex" ),
             "sintheta_eff" : MCV( b["sintheta_eff"],  index_offset=8,  offset_relative_to="PredictionIndex" ),
-            "GZ"           : MCV( b["GZ"],            index_offset=9,  offset_relative_to="PredictionIndex" ),
+            "Gamma_Z"      : MCV( b["Gamma_Z"],       index_offset=9,  offset_relative_to="PredictionIndex" ),
             "Rl"           : MCV( b["Rl"],            index_offset=10, offset_relative_to="PredictionIndex" ),
             "Rb"           : MCV( b["Rb"],            index_offset=11, offset_relative_to="PredictionIndex" ),
             "Rc"           : MCV( b["Rc"],            index_offset=12, offset_relative_to="PredictionIndex" ),
