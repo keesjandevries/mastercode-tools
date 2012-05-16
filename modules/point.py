@@ -91,15 +91,17 @@ def getInputCoordinates( chain, mfc, n ) :
 def getBfEntry(mcf):
     f=r.TFile(mcf.FileName)
     bfName=getattr(mcf,"BestFitEntryName","BestFitEntry" )
-    t=f.Get(bfName).Clone()
-    if not t:
-        print mcf.FileName, " does not contain a tree with the best fit point "
-        f.Close()
-        return -1
+    #check wheterh best fit point is in the file
+    try:
+        t=f.Get(bfName).Clone()
+    except ReferenceError:
+        assert False,   "\n\n%s does not contain a tree with the best fit point \n\n " % mcf.FileName
+    
     for entry in t:
         n=entry.EntryNo
-        f.Close()
-        return n
+
+    f.Close()
+    return n
 
 def printChi2(chain, n):
     chain.GetEntry(n)
