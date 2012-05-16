@@ -209,7 +209,7 @@ def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
             th_arg_list.append( axis_mins[-1] )
             th_arg_list.append( axis_maxs[-1] )
 
-            user_notify_format += ": [ %f, %f ] :"
+            user_notify_format += ": [ %.2e, %.2e ] :"
             user_notify.append( axis_mins[-1] )
             user_notify.append( axis_maxs[-1] )
 
