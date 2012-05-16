@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-import config.files as files
+import modules.files as files
 
 def histo_files() :
 #    d = files.cmssm_test_output_files()
