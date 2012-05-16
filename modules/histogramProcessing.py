@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import ROOT as r
-import Space as s 
-import MCchain as MCC
+import MCSpace as s
+import MCChain as MCC
 from progress_bar import ProgressBar
 from sys import stdout
 from array import array
@@ -178,7 +178,7 @@ def fill_bins( toFill, toFillContrib, contribs, bin, chain, mcf ) :
 # attempt to have dimension independant filling
 def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
     axes = [ "X", "Y", "Z" ]
-    chain = MCC.MCchain( mcf )
+    chain = MCC.MCChain( mcf )
     nentries = chain.GetEntries()
 
     for h in hlist :
@@ -209,7 +209,7 @@ def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
             th_arg_list.append( axis_mins[-1] )
             th_arg_list.append( axis_maxs[-1] )
 
-            user_notify_format += ": [ %f, %f ] :"
+            user_notify_format += ": [ %.2e, %.2e ] :"
             user_notify.append( axis_mins[-1] )
             user_notify.append( axis_maxs[-1] )
 

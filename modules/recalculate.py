@@ -2,7 +2,7 @@
 import models
 
 import ROOT as r
-import MCchain as MCC
+import MCChain as MCC
 
 from progress_bar import ProgressBar
 from sys import stdout
@@ -95,11 +95,12 @@ def spectrum_constraints( point, collection, verbose = 0 ) :
     return penalty
 
 def recalc_to_file( collection ) :
-    model  = models.get_model_from_file(collection.ModelFile)
-    lhoods = models.get_lhood_from_file( getattr(collection,"LHoodFile", None) )
+    model  = models.get_model_from_file(collection)
+    lhoods = models.get_lhood_from_file(collection)
     outfile = collection.OutputFile
+    print "Output file is %s" % outfile
 
-    chain = MCC.MCchain( collection )
+    chain = MCC.MCChain( collection )
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)
@@ -141,12 +142,13 @@ def recalc_to_file( collection ) :
             delta = 0.
             chi2 = 0
 
-            for key in model.keys() :
-                chi2_t = model[key].get_chi2( chain.chi2vars[key] )
-                contribvars[key] = chi2_t
+            for MCV in model :
+                v_index = MCV.getIndex(collection)
+                chi2_t = MCV.getChi2( chain.chi2vars[v_index] )
+                contribvars[v_index] = chi2_t
                 chi2 += chi2_t
             for i,lh in enumerate(lhoods.values()) :
-                chi2_t = lh.get_chi2( chain.chi2vars )
+                chi2_t = lh.getChi2( chain.chi2vars )
                 contribvars[i+1] = chi2_t
                 chi2 += chi2_t
 

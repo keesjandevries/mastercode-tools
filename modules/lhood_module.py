@@ -58,3 +58,18 @@ class Likelihood1D( object ) :
         c2_c = c_double()
         lhoodLib.getChi2( self.obj, byref(x_c), byref(y_c), byref(c2_c))
         return c2_c.value
+
+class LHood( object ) :
+    def __init__( self, var_pos, lh ) :
+        self.var_pos = var_pos # i.e. [1,2] for m0,m12
+        lh_type = lh[0]
+        self.name = lh[2]
+        if lh_type == "CONT" :
+            self.LH = lhm.ContourLikelihood( *lh[1] )
+        if lh_type == "LH1D" :
+            self.LH = lhm.Likelihood1D( *lh[1] )
+
+    def getChi2( self, vals ) :
+        args = [ vals[x] for x in self.var_pos ]
+        chi2 = self.LH.getChi2( *args  )
+        return chi2

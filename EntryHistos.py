@@ -1,29 +1,29 @@
 #! /usr/bin/env python
 import ROOT as r
 
-from modules import MCchain as MCC
+from modules import MCChain as MCC
 from modules import histogramProcessing as hists
 
-from config import file_dict as fd
-from config import plot_list as pl
+from config import files
+from modules import plots
 
 def print_spaces( p, s ) :
     border = "=" * len(s)
     print "%s\n%s\n%s" % (border, s, border )
     for plot in p :
-        print plot.name
+        print plot
     
 
 def main( argv=None ) :
-    files = fd.histo_files()
-    for mcf in files :
-        plots = pl.standard_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
+    mcfile_list = files.histo_files()
+    for mcf in mcfile_list :
+        spaces = plots.get_plots(mcf)
 
         # bit of output
-        print_spaces( plots, "Plots to make" )
+        print_spaces( spaces, "Plots to make" )
        
-        chain = MCC.MCchain( mcf )
-        complete_histos =  hists.calculate_entry_histograms( plots, chain )
+        chain = MCC.MCChain( mcf )
+        complete_histos =  hists.calculate_entry_histograms( spaces, chain )
 
         hists.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
 

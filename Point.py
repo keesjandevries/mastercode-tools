@@ -1,15 +1,11 @@
 #! /usr/bin/env python
 import ROOT as r
 
-from modules import MCchain as MCC
+from modules import MCChain as MCC
 from modules import point as pt
 #from modules import histogramProcessing as hists
 
-from config import file_dict as fd
-#from config import plot_list as pl
-
-
-    
+from config import files as fd
 
 def main( argv=None ) :
     from sys import argv
