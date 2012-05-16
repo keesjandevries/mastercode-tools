@@ -64,7 +64,7 @@ def nuhm1_MC8_ATLAS_test_recalc():
              "Inputs"            : 12,
              "OutputFile"        : "%s/test_ATLAS_nuhm2.root" % base_directory(),
 #             "StartEntry"        : 0,
-             "EndEntry"          : 2,
+#             "EndEntry"          : 4,
          }
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
