@@ -1,6 +1,10 @@
 ToDo
 ====
 
+Current Development
+-------------------
+Need ot be able to convert to `Space` class to preserve functionality (after removing ability to do make_space)
+
 Problems
 --------
 * Debug problems with logx and logy not working 
