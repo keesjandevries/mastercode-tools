@@ -1,9 +1,9 @@
 mtop
 MZ
-DeltaAlphaHad
+DAlpha_had
 R(b->sg)
-R(Delta_ms)
-BR(Bs->mumu)
+R(D_ms)
+Bsmumu
 R(B->taunu)
 R(B->Xsll)
 R(K->lnu)
@@ -20,7 +20,7 @@ Ab16
 Ac17
 Al(SLD)
 m_h^0
-Omegah^2
+Oh^2
 Al(P_tau)
 Al_fb
 sigma_had^0
