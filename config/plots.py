@@ -8,7 +8,7 @@ def plots_to_make() :
             ("neu1", "sigma_pp^SI")  : { "ranges" : [ (0,1000), (1-48,1e-40) ], "nbins" : [100,100] },
             # splines
             ("stau_1",)   : { "ranges" : [ (0,2500) ],  "nbins" : [100] },
-            ("mgluino",)  : { "ranges" : [ (0,5000) ],  "nbins" : [100] },
+            ("gluino",)   : { "ranges" : [ (0,5000) ],  "nbins" : [100] },
             ("squark_r",) : { "ranges" : [ (0,3000) ],  "nbins" : [100] },
             ("Bsmumu",)   : { "ranges" : [ (0,10e-9) ], "nbins" : [100] },
         }
