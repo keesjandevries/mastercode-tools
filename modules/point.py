@@ -71,7 +71,7 @@ def searchHistName(vars,mcf) :
             name = histn(p, mcf)
             hExist = histExists( name, mcf )
     except StopIteration  :
-        assert False, "The given coordinate(s) could not be found in a histogram "
+        assert False, "The given coordinate(s) could not be found in a histogram. Please make a corresponding EntryHist. "
     return name, p
 
 def printAfterBurnerCoordinates(chain, mcf, n):
@@ -89,10 +89,27 @@ def getInputCoordinates( chain, mfc, n ) :
     return [ chain.chi2vars[input] for input in range(1,mfc.Inputs+1) ]
 
 def getBfEntry(mcf):
-    return 1000
+    f=r.TFile(mcf.FileName)
+    bfName=getattr(mcf,"BestFitEntryName","BestFitEntry" )
+    t=f.Get(bfName).Clone()
+    if not t:
+        print mcf.FileName, " does not contain a tree with the best fit point "
+        f.Close()
+        return -1
+    for entry in t:
+        n=entry.EntryNo
+        f.Close()
+        return n
 
+def printChi2(chain, n):
+    chain.GetEntry(n)
+    print "\nTotal X^2 = ", chain.chi2vars[0] , " \n"
+
+def printN(n):
+    print "\nFound entry number: ", n , "\n"
+    
 def printInfo(n,mcf) :
     chain = MCC.MCchain( mcf )
-    print "Found entry number: ", n
+    printN(n)
+    printChi2(chain, n)
     printAfterBurnerCoordinates(chain, mcf, n)
-
