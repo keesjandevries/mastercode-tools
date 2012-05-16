@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 import ROOT as r
-import Space as s 
+import MCSpace as s
 import MCChain as MCC
 from progress_bar import ProgressBar
 from sys import stdout
