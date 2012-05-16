@@ -17,6 +17,7 @@ def recalc_files() :
 def point_files() :
 #    d = files.cmssm_test_output_files()
 #    d = files.nuhm1_test_output_files()
-    d = files.nuhm1_MCMh_MC7()
+#    d = files.nuhm1_MCMh_MC7()
+    d = files.nuhm1_MC8_ATLAS_test()
     return d
 
