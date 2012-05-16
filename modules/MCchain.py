@@ -26,7 +26,7 @@ def check_file( filename, chi2treename, contribtreename ) :
     return chi2_state,contrib_state
 
 
-class MCchain( object ) :
+class MCChain( object ) :
     def __init__( self, mcfc ) :
         if mcfc.__class__.__name__ == "MCFile" :
             mcfc = MCFileCollection([mcfc])

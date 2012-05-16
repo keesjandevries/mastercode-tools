@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import ROOT as r
 
-from modules import MCchain as MCC
+from modules import MCChain as MCC
 from modules import histogramProcessing as hists
 
 from config import file_dict as fd
@@ -22,7 +22,7 @@ def main( argv=None ) :
         # bit of output
         print_spaces( plots, "Plots to make" )
        
-        chain = MCC.MCchain( mcf )
+        chain = MCC.MCChain( mcf )
         complete_histos =  hists.calculate_entry_histograms( plots, chain )
 
         hists.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )

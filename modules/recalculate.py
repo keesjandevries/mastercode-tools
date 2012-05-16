@@ -2,7 +2,7 @@
 import models
 
 import ROOT as r
-import MCchain as MCC
+import MCChain as MCC
 
 from progress_bar import ProgressBar
 from sys import stdout
@@ -99,7 +99,7 @@ def recalc_to_file( collection ) :
     lhoods = models.get_lhood_from_file( getattr(collection,"LHoodFile", None) )
     outfile = collection.OutputFile
 
-    chain = MCC.MCchain( collection )
+    chain = MCC.MCChain( collection )
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)
