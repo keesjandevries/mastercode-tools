@@ -41,6 +41,8 @@ class MCFileCollection() :
                 if collection_options.get(attr,None) is None :
                     print "MCFileCollection not given %s" % attr
             print "%d files added to MCFileCollection" % len(self.files)
+            for i,f in enumerate(self.files) :
+                print "\t%2d)\t%s" % (i+1, f.FileName)
         else :
             for attr in dir(mcfs[0]) : # copy all the attributes over
                 setattr(self, attr, getattr(mcfs[0],attr) )
