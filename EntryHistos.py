@@ -5,7 +5,7 @@ from modules import MCChain as MCC
 from modules import histogramProcessing as hists
 
 from config import file_dict as fd
-from config import plot_list as pl
+from config import plots as pl
 
 def print_spaces( p, s ) :
     border = "=" * len(s)

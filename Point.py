@@ -6,10 +6,6 @@ from modules import point as pt
 #from modules import histogramProcessing as hists
 
 from config import file_dict as fd
-#from config import plot_list as pl
-
-
-    
 
 def main( argv=None ) :
     from sys import argv

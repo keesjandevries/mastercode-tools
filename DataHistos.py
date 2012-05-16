@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from config import plot_list as pl
+from config import plots as pl
 from config import file_dict as fd
 from modules import histogramProcessing as hfuncs
 
