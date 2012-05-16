@@ -22,12 +22,13 @@ def get_lhood_from_file( mcf ) :
 
 def get_model_from_file( mcf ) :
     d = v.mc_variables()
-    out = {}
+    out = []
     filename = getattr( mcf, "ModelFile" ) # fail cos this doesn't make any sense
     with open(filename, 'rb') as f:
         for line in f :
-            if c_name in d :
-                out[ d[c_name].getIndex( mcf ) ] = d[c_name]
+            constraint = line[:-1]
+            if constraint in d :
+                out.append(d[constraint])
             else :
-                print ">", c_name, "< not in model"
+                print ">", constraint, "< not in variable list (check modules/variables.py)"
     return out
