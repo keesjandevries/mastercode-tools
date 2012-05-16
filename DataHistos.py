@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from config import plots as pl
+from modules import plots
 from config import files as fd
 from modules import histogramProcessing as hfuncs
 
@@ -7,9 +7,8 @@ def main( argv=None ) :
     files = fd.histo_files()
 
     for mcf in files :
-        plot_vars = pl.standard_plots( mcf.PredictionIndex, mcf.SpectrumIndex )
-        contrib_vars = pl.standard_contribs( mcf.PredictionIndex, mcf.SpectrumIndex )
-
+        plot_vars = plots.get_plots( mcf )
+        contrib_vars = plots.get_contribs( mcf )
 
         plot_hists = hfuncs.get_entry_hist_list( mcf, plot_vars )
 
