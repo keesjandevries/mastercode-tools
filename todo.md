@@ -11,6 +11,8 @@ Problems
     [ confirmed in spaces at least ]
     [ confirm it still actually happens ]
 
+* Better (or at all) error reporting!!!!
+
 CleanUp
 -------
 * KJ: Recalculation: should move to short names for the constraints, to unify
@@ -22,4 +24,3 @@ Functionality
     does not exist, make the missing plane; 
 
 * SR: start storing separate "lhood_contrib" tree that hold our contributions per entry from the custom lhoods
-    
