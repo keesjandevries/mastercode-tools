@@ -32,14 +32,13 @@ class Variable() :
         return self.getZValue(value)**2
 
 class MCVariable(Variable) :
-    def __init__( self, var, offset_relative_to = None, index_offset = 0,
-                  plot_range = (None,None) ) :
+    def __init__( self, var, offset_relative_to = None, index_offset = 0 ) :
 
         assert offset_relative_to in [ "SpectrumIndex", "PredictionIndex", None ], \
             "Unkown offset for Variable position"
 
         self = deepcopy(var) #hopefully provides us with the right functionality
-        for attr in [ "offset_relative_to", "index_offset", "plot_range" ] :
+        for attr in [ "offset_relative_to", "index_offset" ] :
             setattr( "self.%s" % attr, eval(attr) )
 
     def getIndex(self,mcf) :
