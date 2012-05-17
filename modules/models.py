@@ -9,7 +9,8 @@ from math import sqrt
 def get_lhood_from_file( mcf ) :
     d = ld.get_lhood_dict()
     out = {}
-    if getattr( mcf, "LHoodFile", None ) is not None :
+    filename=getattr( mcf, "LHoodFile", None )
+    if filename is not None :
         with open(filename, 'rb') as f:
             for line in f :
                 l = line.split()
