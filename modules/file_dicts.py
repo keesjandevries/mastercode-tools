@@ -54,14 +54,14 @@ def nuhm1_MCMh_MC7_for_recalc() :
     gd =  {
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
-             "LHoodFile"         : "models/nuhm1-MCMh-MC7.lhood",
-             "ModelFile"         : "models/nuhm1-MCMh-MC7.model",
+#             "LHoodFile"         : "models/tester.lhood" ,
+             "ModelFile"         : "models/tester.model" ,
              "PredictionIndex"   : 12,
              "SpectrumIndex"     : 119,
              "Inputs"            : 12,
              "OutputFile"        : "%s/test_MCMh_nuhm1.root" % base_directory(),
-             "StartIndex"        : 0,
-             "EndIndex"          : 2,
+             "StartEntry"        : 0,
+             "EndEntry"          : 2,
          }
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
