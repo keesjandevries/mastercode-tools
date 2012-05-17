@@ -65,9 +65,9 @@ class LHood( object ) :
         lh_type = lh[0]
         self.name = lh[2]
         if lh_type == "CONT" :
-            self.LH = lhm.ContourLikelihood( *lh[1] )
+            self.LH = ContourLikelihood( *lh[1] )
         if lh_type == "LH1D" :
-            self.LH = lhm.Likelihood1D( *lh[1] )
+            self.LH = Likelihood1D( *lh[1] )
 
     def getChi2( self, vals ) :
         args = [ vals[x] for x in self.var_pos ]

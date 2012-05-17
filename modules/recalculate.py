@@ -77,7 +77,7 @@ def spectrum_constraints( point, collection, verbose = 0 ) :
 
     for value, limit, name in zip( values, limits, names ) :
         if value < limit :
-            ipen = (value   -limit*0.95)**2
+            ipen = (value   -limit*1.05)**2
             if verbose>2 :
                 print "%s: %f < %f -> adding %f" % ( name, value, limit, ipen )
             penalty += ipen
