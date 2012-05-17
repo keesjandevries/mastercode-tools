@@ -28,9 +28,9 @@ contour_base_dir = '../reprocessing/lhoods/contour_lookups/'
 lh1d_base_dir = '../reprocessing/lhoods/1d_lookups/'
 
 # should update to have getChi2 inherited from base LHood
-# can abstract the constructor as well and have a function as a member of the class (i.e. LH1D just sets. self.lhood = ContourLikelihood_new
+# can abstract the constructor as well and have a function as a member of the class (i.e. LH1D just sets. self.lhood = RadialLikelihood_new
 
-class ContourLikelihood( object ):
+class RadialLikelihood( object ):
     def __init__(self, filename="", chi2 = 5.99, chi2_inf = 0.0) :
         chi2_c     = c_double( chi2 )
         chi2_inf_c = c_double( chi2_inf )
@@ -43,7 +43,7 @@ class ContourLikelihood( object ):
         lhoodLib.getChi2( self.obj, byref(x_c), byref(y_c), byref(c2_c))
         return c2_c.value
 
-class Likelihood1D( object ) :
+class CartesianLikelihood( object ) :
     def __init__(self, filename="", function = 6, mu = 0., sigma = 0., ndof = 1 ) :
         function_c = c_int( function )
         mu_c = c_double( mu )
@@ -60,14 +60,14 @@ class Likelihood1D( object ) :
         return c2_c.value
 
 class LHood( object ) :
-    def __init__( self, var_pos, lh ) :
+    def __init__( self, var_pos, lhd ) :
         self.var_pos = var_pos # i.e. [1,2] for m0,m12
-        lh_type = lh[0]
-        self.name = lh[2]
-        if lh_type == "CONT" :
-            self.LH = ContourLikelihood( *lh[1] )
-        if lh_type == "LH1D" :
-            self.LH = Likelihood1D( *lh[1] )
+        lh_type = lhd["lhtype"]
+        self.name = lhd["name"]
+        if lh_type == "Radial" :
+            self.LH = RadialLikelihood( *lh[1] )
+        if lh_type == "Cartesian" :
+            self.LH = CartesianLikelihood( *lh[1] )
 
     def getChi2( self, vals ) :
         args = [ vals[x] for x in self.var_pos ]
