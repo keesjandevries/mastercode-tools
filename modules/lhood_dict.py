@@ -21,7 +21,7 @@ def get_lhood_dict() :
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc7/bs_cms_lhcb_s_sb.dat" ],
                                   "name"   : "BR(B_{s}#rightarrow#mu^{+}#mu^{-}) LHCb+CMS",
-                                  "vars"   : [ "Bsmm" ],
+                                  "vars"   : [ "Bsmumu" ],
                               },
           "Xenon2011"     :   {
                                   "lhtype" : "Cartesian",
