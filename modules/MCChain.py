@@ -36,10 +36,12 @@ class MCChain( object ) :
         if mcfc.__class__.__name__ == "MCFile" :
             mcfc = MCFileCollection([mcfc])
         if not hasattr(self, "treeFiles") : setattr( self, "treeFiles", [] )
+        initializeChains()
 
     def initializeChains( self ) :
-        for tFile in self.treeFile :
-            if tFile.state
+        for tFile in self.treeFiles :
+            if tFile.state :
+                for tData in tFile.treeData :
 
 class MCRecalcChain( object, MCChain ) :
     def __init__(self, mcfc) :
