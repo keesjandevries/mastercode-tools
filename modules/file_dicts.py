@@ -31,7 +31,7 @@ def cmssm_test_input_files() :
              "Chi2BranchName"    : "vars",
              "ContribBranchName" : "vars" ,
              "BestFitEntryName"  : "BestFitEntry",
-             "LHoodFile"         : "models/tester.lhood",
+#             "LHoodFile"         : "models/tester.lhood",
              "ModelFile"         : "models/tester.model",
              "PredictionIndex"   : 10,
              "SpectrumIndex"     : 117,
