@@ -39,9 +39,16 @@ class MCChain( object ) :
         initializeChains()
 
     def initializeChains( self ) :
+        self.chains = {}
         for tFile in self.treeFiles :
             if tFile.state :
                 for tData in tFile.treeData :
+                    if self.chains.get( tData.content, None ) is None :
+                        self.chains[ tData.content ] = r.TChain()
+                    self.chains[ tData.content ].Add( tFile.fileName, -1, tData.treeName )
+        for chain in self.chains.values :
+            chain.SetCacheSize(0)
+        self.nentries = chain.values()[-1].GetEntries()
 
 class MCRecalcChain( object, MCChain ) :
     def __init__(self, mcfc) :
@@ -80,25 +87,6 @@ class MCChain( object ) :
         self.init_chains( mcfc, chi2_states, contrib_states, lhood_states )
         self.setup_branches()
 
-    def initializeChains( self, collection, c2states, cbstates, lhstates ) :
-        for pos, f in enumerate(collection.files) :
-            if c2states[pos]:
-                self.AddFile( f.FileName, f.Chi2TreeName, f.ContribTreeName, f.LHoodTreeName )
-            self.chi2chain.SetCacheSize(0)
-            self.contribchain.SetCacheSize(0)
-            self.lhoodchain.SetCacheSize(0)
-
-    def AddFile( self, fname, chi2treename, contribtreename ) :
-        c2s, cbs, lhs = check_file( fname, chi2treename, contribtreename )
-
-        if c2s and cbs and lhs :
-            print " --> Adding file %s" % fname
-            self.chi2chain.AddFile(fname,-1,chi2treename)
-            self.contribchain.AddFile(fname,-1,contribtreename)
-            self.lhoodchain.AddFile(fname,-1,lhoodtreename)
-
-        self.nentries = self.chi2chain.GetEntries()
-        return c2s, cbs, lhs
 
     def init_chains( self, collection, c2states, cbstates, lhstates ) :
         for pos, f in enumerate(collection.files) :
