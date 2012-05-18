@@ -12,6 +12,7 @@ Problems
     [ confirm it still actually happens ]
 
 * Better (or at all) error reporting!!!!
+* Need to add in "SMInputIndex" / "NuisanceParametersIndex" options to the MCFiles so we can get positions for DeltaAlphaHad etc. automatically.
 
 CleanUp
 -------
