@@ -2,7 +2,8 @@ class MCFile() :
 
     def __init__( self, d, warn = True ) :
         attrlist = [ "FileName", "Chi2TreeName", "Chi2BranchName", 
-                     "ContribTreeName", "ContribBranchName",  ]
+                     "ContribTreeName", "ContribBranchName",
+                     "LHoodTreeName", "LHoodBranchName" ]
         # set import attributes, print warnign if not present
         for key in attrlist :  
             val = d.get(key,None)
@@ -26,7 +27,8 @@ class MCFileCollection() :
         if len( mcfs ) > 1 or collection_options is not None :
             for fpos in range(0, len(mcfs) ) :
                 for prop in [ "Chi2BranchName", "ContribBranchName", 
-                              "PredictionIndex", "SpectrumIndex", "Inputs" ] :
+                              "PredictionIndex", "SpectrumIndex", "Inputs",
+                              "LHoodTreeName" ] :
                     mcf_attr = getattr(mcfs[fpos],prop,None)
                     if mcf_attr is not None and mcf_attr != collection_options[prop] :
                         print "%s in %s overriden by collection" % ( prop, mcfs[fpos].filename )
@@ -35,7 +37,7 @@ class MCFileCollection() :
             for key,value in collection_options.iteritems() :
                 setattr( self, key, value )
 
-            req = [ "Chi2BranchName", "ContribBranchName", "LHoodFile", 
+            req = [ "Chi2BranchName", "ContribBranchName", "LHoodBranchName", "LHoodFile", 
                     "ModelFile", "OutputFile" ]
             for attr in req :
                 if collection_options.get(attr,None) is None :
