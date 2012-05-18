@@ -7,17 +7,19 @@ import variables as v
 from math import sqrt
 
 def get_lhood_from_file( mcf ) :
-    d = ld.get_lhood_dict()
+    lhs = ld.get_lhood_dict()
+    mcvars=v.mc_variables()
     out = {}
-    if getattr( mcf, "LHoodFile", None ) is not None :
+    filename=getattr( mcf, "LHoodFile", None )
+    if filename is not None :
         with open(filename, 'rb') as f:
             for line in f :
-                l = line.split()
-                name = l[0]
-                variables = l[1:]
-                var_ints = [ int(x) for x in variables ]
-                if name in d :
-                    out[name] = lhm.LHood( var_ints, d[name] )
+                name = line[:-1]
+                if name in lhs :
+                    var_ints = [ mcvars[varname].getIndex(mcf) for varname in lhs[name]["vars"]  ]
+                    out[name] = lhm.LHood( var_ints, lhs[name] )
+                else :
+                    print "Unknown Likelihood: %s, ignoring!" % name
     return out
 
 def get_model_from_file( mcf ) :
