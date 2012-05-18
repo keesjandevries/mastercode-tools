@@ -65,9 +65,9 @@ class LHood( object ) :
         lh_type = lhd["lhtype"]
         self.name = lhd["name"]
         if lh_type == "Radial" :
-            self.LH = RadialLikelihood( *lhd["c_vars"] )
+            self.LH = RadialLikelihood( *lhd["c_args"] )
         if lh_type == "Cartesian" :
-            self.LH = CartesianLikelihood( *lhd["c_vars"] )
+            self.LH = CartesianLikelihood( *lhd["c_args"] )
 
     def getChi2( self, vals ) :
         args = [ vals[x] for x in self.var_pos ]
