@@ -2,31 +2,66 @@
 
 import ROOT as r
 from array import array
+from collections import defaultdict
 
 from modules.MCFile import MCFileCollection
 
-def check_files( collection ) :
-    nfiles = len(collection.files)
-    chi2_states = [None]*nfiles
-    contrib_states = [None]*nfiles
-    lhood_states = [None]*nfiles
-    for pos, f in enumerate( collection.files ) :
-        chi2_states[pos], contrib_states[pos], lhood_states[pos] = \
-        check_file( f.FileName, f.Chi2TreeName, f.ContribTreeName, f.LHoodTreeName )
-    return chi2_states, contrib_states
+#-- Tree Classes
+#---------------
 
-def check_file( filename, chi2treename, contribtreename, lhoodtreename ) :
-    tf = r.TFile( filename )
+class treeData( object ) :
+    def __init__(self, content, treeName, branchName) :
+        self.content  = content
+        self.treeName = treeName
+        self.branchName = branchName
 
-    chi2tree    = tf.Get(chi2treename)
-    conttree    = tf.Get(contribtreename)
-    lhood_state = tf.Get(lhoodtreename)
+class treeFile( object ) :
+    def __init__(self, fileName, tData = [] )
+        self.fileName = fileName
+        self.treeData = tData
+        self.state = checkState()
 
-    contrib_state = conttree  is not None
-    chi2_state    = chi2tree  is not None
-    lhood_state   = lhoodtree is not None
+    def checkState( self ) :
+        tf = r.TFile( self.fileName )
+        state = True
+        for tData in self.treeData :
+            if tf.Get(tData.treeName) is None : state = False
+        return state
 
-    return chi2_state,contrib_state
+#-- Chain Classes
+#----------------
+
+class MCChain( object ) :
+    def __init__(self, mcfc) :
+        if mcfc.__class__.__name__ == "MCFile" :
+            mcfc = MCFileCollection([mcfc])
+        if not hasattr(self, "treeFiles") : setattr( self, "treeFiles", [] )
+
+    def initializeChains( self ) :
+        for tFile in self.treeFile :
+            if tFile.state
+
+class MCRecalcChain( object, MCChain ) :
+    def __init__(self, mcfc) :
+        self.treeFiles = [
+            treeFile( mcf.FileName, [treeData("predictions", mcf.Chi2TreeName, mcf.Chi2BranchName)] ) for mcf in mcfc.files
+        ]
+        super(MCRecalcChain,self).__init__(mcfc)
+
+class MCAnalysisChain( object, MCChain ) :
+    def __init__(self, mcf) : #no need for a collection here
+        tData = [ 
+            treeData( "predictions", mcf.Chi2TreeName,    mcf.Chi2BranchName    ),
+            treeData( "contributions", mcf.ContribTreeName, mcf.ContribBranchName ),
+            treeData( "lhoods", mcf.LHoodTreeName,   mcf.LHoodBranchName   ),
+        ]
+
+        self.treeFiles = [
+            treeFile( mcf.FileName, tData )
+        ]
+
+        super(MCRecalcChain,self).__init__(mcf)
+
 
 
 class MCChain( object ) :
@@ -42,6 +77,14 @@ class MCChain( object ) :
         self.lhoodchain   = r.TChain()
         self.init_chains( mcfc, chi2_states, contrib_states, lhood_states )
         self.setup_branches()
+
+    def initializeChains( self, collection, c2states, cbstates, lhstates ) :
+        for pos, f in enumerate(collection.files) :
+            if c2states[pos]:
+                self.AddFile( f.FileName, f.Chi2TreeName, f.ContribTreeName, f.LHoodTreeName )
+            self.chi2chain.SetCacheSize(0)
+            self.contribchain.SetCacheSize(0)
+            self.lhoodchain.SetCacheSize(0)
 
     def AddFile( self, fname, chi2treename, contribtreename ) :
         c2s, cbs, lhs = check_file( fname, chi2treename, contribtreename )
