@@ -36,24 +36,24 @@ class MCChain( object ) :
         if mcfc.__class__.__name__ == "MCFile" :
             mcfc = MCFileCollection([mcfc])
         if not hasattr(self, "treeFiles") : setattr( self, "treeFiles", [] )
-        initializeChains()
-        setupBranches()
+        self.initializeChains()
+        self.setupBranches()
 
     def initializeChains( self ) :
         self.chains = {}
-        self.brachNames = {}
+        self.branchNames = {}
         for tFile in self.treeFiles :
             if tFile.state :
                 for tData in tFile.treeData :
                     if self.chains.get( tData.content, None ) is None :
                         self.chains[ tData.content ] = r.TChain()
                         self.branchNames[ tData.content ] = tData.branchName
-                    self.chains[ tData.content ].Add( tFile.fileName, -1, tData.treeName )
-        for chain in self.chains.values :
+                    self.chains[ tData.content ].AddFile( tFile.fileName, -1, tData.treeName )
+        for chain in self.chains.values() :
             chain.SetCacheSize(0)
         ## we dont use this
         #self.nentries = self.chain.values()[-1].GetEntries()
-        self.contentKeys = sorted(self.chain.keys())
+        self.contentKeys = sorted(self.chains.keys())
         self.baseKey = self.contentKeys[0]
 
     def setupBranches( self ) :
