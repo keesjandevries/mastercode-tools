@@ -33,7 +33,15 @@ def cmssm_test_input_files() :
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_directory(),
              "Chi2TreeName"      : "tree",
-             "ContribTreeName"   : "contribtree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_test_input_files() :
+    gd = nuhm1_test_file_histo_dict()
+    fd = {
+             "FileName"          : "%s/nuhm1_large_test.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
@@ -66,6 +74,31 @@ def cmssm_test_file_histo_dict() :
      }
 def cmssm_test_file_histo() :
     return [MCFile( cmssm_test_file_histo_dict() )]
+
+def nuhm1_test_file_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_recalc_out.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12,
+#        "LHoodFile"         : "models/tester.lhood" ,
+        "ModelFile"         : "models/tester.model" ,
+        "Inputs"            : 10,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def nuhm1_test_file_histo() :
+    return [MCFile( nuhm1_test_file_histo_dict() )]
 
 #def nuhm1_MCMh_MC7_for_recalc() :
 #    # output / global options
