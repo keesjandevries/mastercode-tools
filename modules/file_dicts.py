@@ -36,7 +36,7 @@ def cmssm_test_input_files() :
              "ContribTreeName"   : "contribtree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf ], gd)
+    return MCFileCollection( [ mcf ], gd, warn = False)
 
 
 ###############
