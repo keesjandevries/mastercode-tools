@@ -38,7 +38,7 @@ class MCFileCollection() :
                 setattr( self, key, value )
 
             req = [ "Chi2BranchName", "ContribBranchName", "LHoodBranchName", "LHoodFile", 
-                    "ModelFile", "OutputFile" ]
+                    "ModelFile", "FileName" ]
             for attr in req :
                 if collection_options.get(attr,None) is None :
                     print "MCFileCollection not given %s" % attr

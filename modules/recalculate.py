@@ -97,7 +97,7 @@ def spectrum_constraints( point, collection, verbose = 0 ) :
 def recalc_to_file( collection ) :
     model  = models.get_model_from_file(collection)
     lhoods = models.get_lhood_from_file(collection)
-    outfile = collection.OutputFile
+    outfile = collection.FileName
     print "Output file is %s" % outfile
 
     chain = MCRecalcChain( collection )
