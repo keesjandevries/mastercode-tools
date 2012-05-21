@@ -57,29 +57,31 @@ class MCChain( object ) :
         self.baseKey = self.contentKeys[0]
 
     def setupBranches( self ) :
+        self.nTotVars = {}
+        self.treeVars = {}
         for contentKey in self.contentKeys :
             if contentKey is not self.baseKey :
-                self.chains[self.baseChainKey].AddFriend( self.chains[contentKey] )
+                self.chains[self.baseKey].AddFriend( self.chains[contentKey] )
             self.nTotVars[contentKey] = self.chains[contentKey].GetLeaf( self.branchNames[contentKey] ).GetLen()
-            self.treeVars[contentKey] = array('d', [0].self.nTotVars[contentKey])
+            self.treeVars[contentKey] = array('d', [0]*self.nTotVars[contentKey])
             self.chains[contentKey].SetBranchAddress( self.branchNames[contentKey], self.treeVars[contentKey] )
 
     # ROOT access functions
     def GetEntry( self, entry ) :
         read = 0
-        read = self.chains[self.baseChainKey].GetEntry(entry)
+        read = self.chains[self.baseKey].GetEntry(entry)
         return read
 
     def GetEntries( self ) :
         n_entries = -1
-        n_entries = self.chains[self.baseChainKey].GetEntries()
+        n_entries = self.chains[self.baseKey].GetEntries()
         return n_entries
 
     def GetBranchLength( self ) :
         return self.nTotVars
 
     def GetTreeNumber( self ) :
-        return self.chains[self.baseChainKey].GetTreeNumber()
+        return self.chains[self.baseKey].GetTreeNumber()
 
 
 class MCRecalcChain( MCChain, object ) :
