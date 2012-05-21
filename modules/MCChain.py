@@ -19,14 +19,14 @@ class treeFile( object ) :
     def __init__(self, fileName, tData = None ) :
         self.fileName = fileName
         self.treeData = tData
-        self.state = checkState()
+        self.state = checkState(fileName, tData)
 
-    def checkState( self ) :
-        tf = r.TFile( self.fileName )
-        state = True
-        for tData in self.treeData :
-            if tf.Get(tData.treeName) is None : state = False
-        return state
+def checkState( filename, dataToCheck ) :
+    tf = r.TFile( filename )
+    state = True
+    for tData in dataToCheck :
+        if tf.Get(tData.treeName) is None : state = False
+    return state
 
 #-- Chain Classes
 #----------------
@@ -84,12 +84,10 @@ class MCChain( object ) :
 
 class MCRecalcChain( MCChain, object ) :
     def __init__(self, mcfc) :
-        self.branchNames["predictions"] = mcfc.files[0].Chi2BranchName
         for mcf in mcfc.files[1:] :
-            assert mcf.Chi2BranchName == self.branchName, "Can only reprocess trees with the same branch name"
-
+            assert mcf.Chi2BranchName == mcfc.files[0].Chi2BranchName, "Can only reprocess trees with the same branch name"
         self.treeFiles = [
-            treeFile( mcf.FileName, [treeData("predictions", mcf.Chi2TreeName, self.branchName)] ) for mcf in mcfc.files
+            treeFile( mcf.FileName, [treeData("predictions", mcf.Chi2TreeName, mcf.Chi2BranchName )]) for mcf in mcfc.files
         ]
         super(MCRecalcChain,self).__init__(mcfc)
 
