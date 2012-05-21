@@ -49,6 +49,8 @@ def cmssm_test_file_histo_dict() :
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
         "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
         "BestFitEntryName"  : "BestFitEntry",
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
