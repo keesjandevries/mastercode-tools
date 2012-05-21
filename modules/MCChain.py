@@ -52,6 +52,10 @@ class MCChain( object ) :
 
 class MCRecalcChain( object, MCChain ) :
     def __init__(self, mcfc) :
+        base_branch_name = mcfc.files[0].Chi2BranchName
+        for mcf in mcfc.files[1:] :
+            assert mcf.Chi2BranchName == base_branch_name, "Can only reprocess trees with the same branch name"
+
         self.treeFiles = [
             treeFile( mcf.FileName, [treeData("predictions", mcf.Chi2TreeName, mcf.Chi2BranchName)] ) for mcf in mcfc.files
         ]
