@@ -26,8 +26,8 @@ def base_directory() :
 def cmssm_test_input_files() :
     # output / global options
     gd = cmssm_test_file_histo_dict() 
-    gd["StartEntry"] = 1 
-    gd["EndEntry"]   = 4000 
+#    gd["StartEntry"] = 1
+#    gd["EndEntry"]   = 4000
     
     # input files: 1 dict per file
     fd = {
