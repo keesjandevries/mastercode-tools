@@ -103,4 +103,4 @@ class MCAnalysisChain( MCChain, object ) :
         self.treeFiles = [
             treeFile( mcf.FileName, tData )
         ]
-        super(MCRecalcChain,self).__init__(mcf)
+        super(MCAnalysisChain,self).__init__(mcf)
