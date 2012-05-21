@@ -55,7 +55,7 @@ def cmssm_test_file_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10,
-        "LHoodFile"         : "models/tester.lhood" ,
+#        "LHoodFile"         : "models/tester.lhood" ,
         "ModelFile"         : "models/tester.model" ,
         "Inputs"            : 10,
         "EntryDirectory"    : "entry_histograms",
