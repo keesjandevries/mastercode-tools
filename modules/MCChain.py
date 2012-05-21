@@ -16,7 +16,7 @@ class treeData( object ) :
         self.branchName = branchName
 
 class treeFile( object ) :
-    def __init__(self, fileName, tData = None )
+    def __init__(self, fileName, tData = None ) :
         self.fileName = fileName
         self.treeData = tData
         self.state = checkState()
@@ -82,7 +82,7 @@ class MCChain( object ) :
         return self.chains[self.baseChainKey].GetTreeNumber()
 
 
-class MCRecalcChain( object, MCChain ) :
+class MCRecalcChain( MCChain, object ) :
     def __init__(self, mcfc) :
         self.branchNames["predictions"] = mcfc.files[0].Chi2BranchName
         for mcf in mcfc.files[1:] :
@@ -93,7 +93,7 @@ class MCRecalcChain( object, MCChain ) :
         ]
         super(MCRecalcChain,self).__init__(mcfc)
 
-class MCAnalysisChain( object, MCChain ) :
+class MCAnalysisChain( MCChain, object ) :
     def __init__(self, mcf) : #no need for a collection here
         tData = [ 
             treeData( "predictions", mcf.Chi2TreeName,    mcf.Chi2BranchName    ),
