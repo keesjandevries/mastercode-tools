@@ -5,16 +5,17 @@ import lhood_module as lhm
 import variables as v
 
 from math import sqrt
+from collections import OrderedDict
 
 def get_lhood_from_file( mcf ) :
     lhs = ld.get_lhood_dict()
     mcvars=v.mc_variables()
-    out = {}
+    out = OrderedDict()
     filename=getattr( mcf, "LHoodFile", None )
     if filename is not None :
         with open(filename, 'rb') as f:
             for line in f :
-                name = line[:-1]
+                name = line[:-1] #cut EOL
                 if name in lhs :
                     var_ints = [ mcvars[varname].getIndex(mcf) for varname in lhs[name]["vars"]  ]
                     out[name] = lhm.LHood( var_ints, lhs[name] )
