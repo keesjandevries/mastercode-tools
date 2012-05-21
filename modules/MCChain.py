@@ -16,7 +16,7 @@ class treeData( object ) :
         self.branchName = branchName
 
 class treeFile( object ) :
-    def __init__(self, fileName, tData = [] )
+    def __init__(self, fileName, tData = None )
         self.fileName = fileName
         self.treeData = tData
         self.state = checkState()
@@ -37,27 +37,59 @@ class MCChain( object ) :
             mcfc = MCFileCollection([mcfc])
         if not hasattr(self, "treeFiles") : setattr( self, "treeFiles", [] )
         initializeChains()
+        setupBranches()
 
     def initializeChains( self ) :
         self.chains = {}
+        self.brachNames = {}
         for tFile in self.treeFiles :
             if tFile.state :
                 for tData in tFile.treeData :
                     if self.chains.get( tData.content, None ) is None :
                         self.chains[ tData.content ] = r.TChain()
+                        self.branchNames[ tData.content ] = tData.branchName
                     self.chains[ tData.content ].Add( tFile.fileName, -1, tData.treeName )
         for chain in self.chains.values :
             chain.SetCacheSize(0)
-        self.nentries = chain.values()[-1].GetEntries()
+        ## we dont use this
+        #self.nentries = self.chain.values()[-1].GetEntries()
+        self.contentKeys = sorted(self.chain.keys())
+        self.baseKey = self.contentKeys[0]
+
+    def setupBranches( self ) :
+        for contentKey in self.contentKeys :
+            if contentKey is not self.baseKey :
+                self.chains[self.baseChainKey].AddFriend( self.chains[contentKey] )
+            self.nTotVars[contentKey] = self.chains[contentKey].GetLeaf( self.branchNames[contentKey] ).GetLen()
+            self.treeVars[contentKey] = array('d', [0].self.nTotVars[contentKey])
+            self.chains[contentKey].SetBranchAddress( self.branchNames[contentKey], self.treeVars[contentKey] )
+
+    # ROOT access functions
+    def GetEntry( self, entry ) :
+        read = 0
+        read = self.chains[self.baseChainKey].GetEntry(entry)
+        return read
+
+    def GetEntries( self ) :
+        n_entries = -1
+        n_entries = self.chains[self.baseChainKey].GetEntries()
+        return n_entries
+
+    def GetBranchLength( self ) :
+        return self.nTotVars
+
+    def GetTreeNumber( self ) :
+        return self.chains[self.baseChainKey].GetTreeNumber()
+
 
 class MCRecalcChain( object, MCChain ) :
     def __init__(self, mcfc) :
-        base_branch_name = mcfc.files[0].Chi2BranchName
+        self.branchNames["predictions"] = mcfc.files[0].Chi2BranchName
         for mcf in mcfc.files[1:] :
-            assert mcf.Chi2BranchName == base_branch_name, "Can only reprocess trees with the same branch name"
+            assert mcf.Chi2BranchName == self.branchName, "Can only reprocess trees with the same branch name"
 
         self.treeFiles = [
-            treeFile( mcf.FileName, [treeData("predictions", mcf.Chi2TreeName, mcf.Chi2BranchName)] ) for mcf in mcfc.files
+            treeFile( mcf.FileName, [treeData("predictions", mcf.Chi2TreeName, self.branchName)] ) for mcf in mcfc.files
         ]
         super(MCRecalcChain,self).__init__(mcfc)
 
@@ -68,63 +100,7 @@ class MCAnalysisChain( object, MCChain ) :
             treeData( "contributions", mcf.ContribTreeName, mcf.ContribBranchName ),
             treeData( "lhoods", mcf.LHoodTreeName,   mcf.LHoodBranchName   ),
         ]
-
         self.treeFiles = [
             treeFile( mcf.FileName, tData )
         ]
-
         super(MCRecalcChain,self).__init__(mcf)
-
-
-
-class MCChain( object ) :
-    def __init__( self, mcfc ) :
-        if mcfc.__class__.__name__ == "MCFile" :
-            mcfc = MCFileCollection([mcfc])
-        self.branch_name         = mcfc.Chi2BranchName
-        self.contrib_branch_name = mcfc.ContribBranchName
-        self.lhood_branch_name   = mcfc.LHoodBranchName
-        chi2_states, contrib_states, lhood_states = check_files( mcfc )
-        self.chi2chain    = r.TChain()
-        self.contribchain = r.TChain()
-        self.lhoodchain   = r.TChain()
-        self.init_chains( mcfc, chi2_states, contrib_states, lhood_states )
-        self.setup_branches()
-
-
-    def init_chains( self, collection, c2states, cbstates, lhstates ) :
-        for pos, f in enumerate(collection.files) :
-            if c2states[pos]:
-                self.AddFile( f.FileName, f.Chi2TreeName, f.ContribTreeName, f.LHoodTreeName )
-            self.chi2chain.SetCacheSize(0)
-            self.contribchain.SetCacheSize(0)
-            self.lhoodchain.SetCacheSize(0)
-
-    def setup_branches( self ) :
-        self.nentries = self.chi2chain.GetEntries()
-        self.chi2chain.AddFriend(self.contribchain)
-        self.chi2chain.AddFriend(self.lhoodchain)
-        self.nTotVars = self.chi2chain.GetLeaf(self.branch_name).GetLen()
-        self.chi2vars = array('d',[0]*self.nTotVars)
-        self.chi2chain.SetBranchAddress(self.branch_name,self.chi2vars)
-        self.contribvars = array('d',[0]*self.nTotVars)
-        self.contribchain.SetBranchAddress(self.contrib_branch_name,self.contribvars)
-        self.lhoodvars = array('d',[0]*self.nTotVars)
-        self.lhoodchain.SetBranchAddress(self.lhood_branch_name,self.lhoodvars)
-
-
-    def GetEntry( self, entry ) :
-        read = 0
-        read = self.chi2chain.GetEntry(entry)
-        return read
-
-    def GetEntries( self ) :
-        n_entries = -1
-        n_entries = self.chi2chain.GetEntries()
-        return n_entries
-
-    def GetBranchLength( self ) :
-        return self.nTotVars
-
-    def GetTreeNumber( self ) :
-        return self.chi2chain.GetTreeNumber()
