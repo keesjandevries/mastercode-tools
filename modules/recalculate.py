@@ -147,31 +147,31 @@ def recalc_to_file( collection ) :
         stdout.flush()
 
         chain.GetEntry(entry)
-        if good_point( chain.chi2vars, collection ) :
+        if good_point( chain.treeVars["predictions"], collection ) :
             delta = 0.
             chi2 = 0
 
             for MCV in model :
                 v_index = MCV.getIndex(collection)
-                chi2_t = MCV.getChi2( chain.chi2vars[v_index] )
+                chi2_t = MCV.getChi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
                 chi2 += chi2_t
             for i,lh in enumerate(lhoods.values()) :
-                chi2_t = lh.getChi2( chain.chi2vars )
+                chi2_t = lh.getChi2( chain.treeVars["predictions"] )
                 lhoodvars[i] = chi2_t
                 chi2 += chi2_t
 
-            chi2 += spectrum_constraints( chain.chi2vars, collection )
+            chi2 += spectrum_constraints( chain.treeVars["predictions"], collection )
 
             if chi2 > getattr(collection, "MinChi2", 0 ) and \
                chi2 < getattr(collection, "MaxChi2", 1e9 ) :
                 # This was inserted to check on if there was a significant
                 # calculation error ( average deltachi2 per entry: 1e-15 )
                 if __DEBUG :
-                    delta_chi2_val = chi2_t - chain.contribvars[key]
+                    delta_chi2_val = chi2_t - chain.treeVars["contributions"][key]
                     delta = delta + delta_chi2_val
                     total_delta = total_delta + abs(delta)
-                chain.chi2vars[0] = chi2
+                chain.treeVars["predictions"][0] = chi2
                 contribvars[0] = chi2
                 chi2tree.Fill()
                 contribtree.Fill()
