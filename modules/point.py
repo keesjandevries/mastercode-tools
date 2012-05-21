@@ -3,7 +3,7 @@ import ROOT as r
 from itertools import permutations
 
 from histogramProcessing import entry_histo_full_path as histn
-import MCChain as MCC
+from modules.MCChain import MCAnalysisChain
 
 AB_binary = "../bin/Afterburner.exe"
 
@@ -111,7 +111,7 @@ def printN(n):
     print "\nFound entry number: ", n , "\n"
     
 def printInfo(n,mcf) :
-    chain = MCC.MCChain( mcf )
+    chain = MCAnalysisChain( mcf )
     printN(n)
     printChi2(chain, n)
     printAfterBurnerCoordinates(chain, mcf, n)

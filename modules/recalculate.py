@@ -2,7 +2,7 @@
 import models
 
 import ROOT as r
-import MCChain as MCC
+from modules.MCChain import MCRecalcChain
 
 from progress_bar import ProgressBar
 from sys import stdout
@@ -100,7 +100,7 @@ def recalc_to_file( collection ) :
     outfile = collection.OutputFile
     print "Output file is %s" % outfile
 
-    chain = MCC.MCChain( collection )
+    chain = MCRecalcChain( collection )
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)

@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 import ROOT as r
 
-from modules import MCChain as MCC
-from modules import histogramProcessing as hists
+from modules.MCChain import MCAnalysisChain
+from modules import histogramProcessing
 
 from config import files
 from modules import plots
@@ -22,10 +22,10 @@ def main( argv=None ) :
         # bit of output
         print_spaces( spaces, "Plots to make" )
        
-        chain = MCC.MCChain( mcf )
-        complete_histos =  hists.calculate_entry_histograms( spaces, chain )
+        chain = MCAnalysisChain( mcf )
+        complete_histos =  histogramProcessing.calculate_entry_histograms( spaces, chain )
 
-        hists.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
+        histogramProcessing.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
 
 if __name__ == "__main__":
     main()

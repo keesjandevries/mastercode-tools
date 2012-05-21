@@ -3,9 +3,7 @@ import ROOT as r
 
 from optparse import OptionParser
 
-from modules import MCChain as MCC
 from modules import point as pt
-
 from config import files as fd
 
 ############################################
