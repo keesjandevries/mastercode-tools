@@ -62,6 +62,7 @@ def cmssm_test_file_histo_dict() :
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
      }
 def cmssm_test_file_histo() :
     return [MCFile( cmssm_test_file_histo_dict() )]
