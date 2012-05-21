@@ -46,7 +46,7 @@ def save_hdict_to_root_file( hdict, filename, directory = None ) :
         if not f.cd( directory ) :
             f.mkdir( directory ).cd()
             f.cd( directory )
-    print "Saving %s to %s..." % (h.GetTitle(), filename),
+    print "Saving to %s..." % filename,
     for h in hdict.values() :
         h.Write("",r.TObject.kOverwrite)
     f.Close()
