@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import ROOT as r
 import MCSpace as s
-import MCChain as MCC
+from modules.MCChain import MCAnalysisChain
 from progress_bar import ProgressBar
 from sys import stdout
 from array import array
@@ -119,11 +119,11 @@ def calculate_entry_histograms( plots, chain ) :
         chain.GetEntry(entry) 
         for h, c, plot in zip( histos, chi2histos, plots ) :
             indices = plot.get_indices()
-            vals = [ chain.chi2vars[ index ] for index in indices ]
+            vals = [ chain.treeVars["predictions"][ index ] for index in indices ]
             nbins = plot.bins
             ibin = h.FindBin(*vals)
             if ibin != 0 and ibin < nbins+1 :
-                chi2 = chain.chi2vars[0]
+                chi2 = chain.treeVars["predictions"][0]
                 if chi2 < c.GetBinContent(ibin) :
                     c.SetBinContent(ibin, chi2) 
                     h.SetBinContent(ibin, entry)
@@ -162,23 +162,23 @@ def fill_bins( toFill, toFillContrib, contribs, bin, chain, mcf ) :
         #if check_chi_mode(mode) >= 0:  
             # for dchi offset is done later
             #ichi= check_chi_mode(mode)
-            content = chain.contribvars[0]
+            content = chain.treeVars["contributions"][0]
             fill = ( content < curr_content )
         if mode == "pval" :
-            ndof = count_ndof( chain.contribvars, getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
-            chi2 = chain.chi2vars[0]
+            ndof = count_ndof( chain.treeVars["contributions"], getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
+            chi2 = chain.treeVars["predictions"][0]
             content = r.TMath.Prob( chi2, ndof )
             fill = ( content > curr_content )
         if fill : 
             toFill[mode][-1].SetBinContent(bin,content)
             if mode == "chi2" : # want to also fill values for the contrib
                 for contrib in contribs :
-                    toFillContrib[contrib.short_name][-1].SetBinContent(bin, chain.contribvars[contrib.index] ) #!!!
+                    toFillContrib[contrib.short_name][-1].SetBinContent(bin, chain.treeVars["contributions"][contrib.index] ) #!!!
 
 # attempt to have dimension independant filling
 def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
     axes = [ "X", "Y", "Z" ]
-    chain = MCC.MCChain( mcf )
+    chain = MCAnalysisChain( mcf )
     nentries = chain.GetEntries()
 
     for h in hlist :

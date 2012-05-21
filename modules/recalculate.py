@@ -2,7 +2,7 @@
 import models
 
 import ROOT as r
-import MCChain as MCC
+from modules.MCChain import MCRecalcChain
 
 from progress_bar import ProgressBar
 from sys import stdout
@@ -97,10 +97,10 @@ def spectrum_constraints( point, collection, verbose = 0 ) :
 def recalc_to_file( collection ) :
     model  = models.get_model_from_file(collection)
     lhoods = models.get_lhood_from_file(collection)
-    outfile = collection.OutputFile
+    outfile = collection.FileName
     print "Output file is %s" % outfile
 
-    chain = MCC.MCChain( collection )
+    chain = MCRecalcChain( collection )
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)
@@ -110,14 +110,23 @@ def recalc_to_file( collection ) :
 
     # create trees in scope of outfile
     out = r.TFile(outfile,"recreate")
-    chi2tree = chain.chi2chain.CloneTree(0)
+    chi2tree = chain.chains["predictions"].CloneTree(0)
 
     # might need to do address of on contirbvars
-    contribvars = array('d',[0.0]*chain.nTotVars)
-    contribtree = r.TTree( "contribtree", "chi2 contributions")
-    varsOutName = "vars[%d]/D" % ( chain.nTotVars )
+    nTotVars = chain.nTotVars["predictions"]
+    contribvars = array('d',[0.0]*nTotVars)
+    contribtree = r.TTree( 'contribtree', 'chi2 contributions')
+    varsOutName = "vars[%d]/D" % ( nTotVars )
     contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
+
+    # same with lhood
+    nLHoods = len(lhoods.keys())
+    lhoodvars = array('d',[0.0]*nLHoods)
+    lhoodtree = r.TTree( 'lhoodtree', 'lhood contributions')
+    varsOutName = "vars[%d]/D" % ( nLHoods )
+    lhoodtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
+    lhoodtree.Branch("vars",lhoodvars,varsOutName)
     
     # want to save best fit point entry number: create new tree and branch
     bfname = getattr( collection, "BestFitEntryName", "BestFitEntry"  ) 
@@ -138,34 +147,35 @@ def recalc_to_file( collection ) :
         stdout.flush()
 
         chain.GetEntry(entry)
-        if good_point( chain.chi2vars, collection ) :
+        if good_point( chain.treeVars["predictions"], collection ) :
             delta = 0.
             chi2 = 0
 
             for MCV in model :
                 v_index = MCV.getIndex(collection)
-                chi2_t = MCV.getChi2( chain.chi2vars[v_index] )
+                chi2_t = MCV.getChi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
                 chi2 += chi2_t
             for i,lh in enumerate(lhoods.values()) :
-                chi2_t = lh.getChi2( chain.chi2vars )
-                contribvars[i+1] = chi2_t
+                chi2_t = lh.getChi2( chain.treeVars["predictions"] )
+                lhoodvars[i] = chi2_t
                 chi2 += chi2_t
 
-            chi2 += spectrum_constraints( chain.chi2vars, collection )
+            chi2 += spectrum_constraints( chain.treeVars["predictions"], collection )
 
             if chi2 > getattr(collection, "MinChi2", 0 ) and \
                chi2 < getattr(collection, "MaxChi2", 1e9 ) :
                 # This was inserted to check on if there was a significant
                 # calculation error ( average deltachi2 per entry: 1e-15 )
                 if __DEBUG :
-                    delta_chi2_val = chi2_t - chain.contribvars[key]
+                    delta_chi2_val = chi2_t - chain.treeVars["contributions"][key]
                     delta = delta + delta_chi2_val
                     total_delta = total_delta + abs(delta)
-                chain.chi2vars[0] = chi2
+                chain.treeVars["predictions"][0] = chi2
                 contribvars[0] = chi2
                 chi2tree.Fill()
                 contribtree.Fill()
+                lhoodtree.Fill()
                 count+=1
                 #dealing with minChi
                 if chi2 < minChi:
@@ -180,7 +190,7 @@ def recalc_to_file( collection ) :
     bft.AutoSave()
     chi2tree.AutoSave()
     contribtree.AutoSave()
-
+    lhoodtree.AutoSave()
 
     out.Close()
 

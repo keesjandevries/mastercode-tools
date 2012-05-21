@@ -23,99 +23,135 @@ def base_directory() :
     d.update( dict.fromkeys(imperial_hosts, imperial_users) )
     return d[fqdn][user]
 
-###############
-# input files #
-###############
 def cmssm_test_input_files() :
-    gd =  {
-             "Chi2BranchName"    : "vars",
-             "ContribBranchName" : "vars" ,
-             "BestFitEntryName"  : "BestFitEntry",
-#             "LHoodFile"         : "models/tester.lhood",
-             "ModelFile"         : "models/tester.model",
-             "PredictionIndex"   : 10,
-             "SpectrumIndex"     : 117,
-             "Inputs"            : 10,
-             "OutputFile"        : "%s/recalc_out.root" % base_directory(),
-#             "MinChi2"           : 1,
-#             "MaxChi2"           : 25,
-#             "StartEntry"        : 1,
-#             "EndEntry"          : 4000,
-         }
+    # output / global options
+    gd = cmssm_test_file_histo_dict() 
+#    gd["StartEntry"] = 1
+#    gd["EndEntry"]   = 4000
+    
+    # input files: 1 dict per file
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_directory(),
              "Chi2TreeName"      : "tree",
-             "ContribTreeName"   : "contribtree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf ], gd)
+    return MCFileCollection( [ mcf ], gd, warn = False)
 
-def nuhm1_MCMh_MC7_for_recalc() :
-    gd =  {
-             "Chi2BranchName"    : "vars",
-             "ContribBranchName" : "vars" ,
-#             "LHoodFile"         : "models/tester.lhood" ,
-             "ModelFile"         : "models/tester.model" ,
-             "PredictionIndex"   : 12,
-             "SpectrumIndex"     : 119,
-             "Inputs"            : 12,
-             "OutputFile"        : "%s/test_MCMh_nuhm1.root" % base_directory(),
-             "StartEntry"        : 0,
-#             "EndEntry"          : 2,
-         }
+def nuhm1_test_input_files() :
+    gd = nuhm1_test_file_histo_dict()
     fd = {
-             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
+             "FileName"          : "%s/nuhm1_large_test.root" % base_directory(),
              "Chi2TreeName"      : "tree",
-             "ContribTreeName"   : "contribtree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf ], gd)
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+
 ###############
 # histo files #
 ###############
-def cmssm_test_output_files() :
-    fd = {
-             "FileName"          : "%s/recalc_out.root" % base_directory(),
-             "Chi2TreeName"      : "tree",
-             "Chi2BranchName"    : "vars",
-             "ContribTreeName"   : "contribtree",
-             "ContribBranchName" : "vars",
-             "PredictionIndex"   : 10,
-             "SpectrumIndex"     : 117,
-             "Inputs"            : 10,
-             "EntryDirectory"    : "entry_histograms",
-             "DataDirectory"     : "data_histograms",
-         }
-    return [MCFile(fd)]
+def cmssm_test_file_histo_dict() :
+    return {
+        "FileName"          : "%s/recalc_out.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 10,
+#        "LHoodFile"         : "models/tester.lhood" ,
+        "ModelFile"         : "models/tester.model" ,
+        "Inputs"            : 10,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def cmssm_test_file_histo() :
+    return [MCFile( cmssm_test_file_histo_dict() )]
 
+def nuhm1_test_file_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_recalc_out.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12,
+#        "LHoodFile"         : "models/tester.lhood" ,
+        "ModelFile"         : "models/tester.model" ,
+        "Inputs"            : 10,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def nuhm1_test_file_histo() :
+    return [MCFile( nuhm1_test_file_histo_dict() )]
 
+#def nuhm1_MCMh_MC7_for_recalc() :
+#    # output / global options
+#    gd =  {
+#             "Chi2BranchName"    : "vars",
+#             "ContribBranchName" : "vars" ,
+#             "LHoodFile"         : "models/tester.lhood" ,
+#             "ModelFile"         : "models/tester.model" ,
+#             "PredictionIndex"   : 12,
+#             "SpectrumIndex"     : 119,
+#             "Inputs"            : 12,
+#             "OutputFile"        : "%s/test_MCMh_nuhm1.root" % base_directory(),
+#             "StartEntry"        : 0,
+#             "EndEntry"          : 2,
+#         }
+#    #gd["StartEntry"] = 0
+#    #gd["EndEntry"] = 2
+#    fd = {
+#             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory() ,
+#             "Chi2TreeName"      : "tree",
+#             "ContribTreeName"   : "contribtree",
+#         }
+#    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    return MCFileCollection( [ mcf ], gd)
 
-def nuhm1_test_output_files() :
-    fd = {
-             "FileName"          : "%s/sam-test-file3.root" % base_directory() ,
-             "Chi2TreeName"      : "tree",
-             "Chi2BranchName"    : "vars",
-             "ContribTreeName"   : "contribtree",
-             "ContribBranchName" : "vars",
-             "PredictionIndex"   : 12,
-             "SpectrumIndex"     : 119,
-             "Inputs"            : 12,
-             "EntryDirectory"    : "entry_histograms",
-             "DataDirectory"     : "data_histograms",
-         }
-    return [MCFile(fd)]
-
-def nuhm1_MCMh_MC7() :
-    fd = {
-             "FileName"          : "%s/test_MCMh_nuhm1.root" % base_directory() ,
-             "Chi2TreeName"      : "tree",
-             "Chi2BranchName"    : "vars",
-             "ContribTreeName"   : "contribtree",
-             "ContribBranchName" : "vars",
-             "PredictionIndex"   : 12,
-             "SpectrumIndex"     : 119,
-             "Inputs"            : 12,
-             "EntryDirectory"    : "entry_histograms",
-             "DataDirectory"     : "data_histograms",
-         }
-    return [MCFile(fd)]
+#def nuhm1_test_file_histo_dict() :
+#    return {
+#        "FileName"          : "%s/sam-test-file3.root" % base_directory() ,
+#        "Chi2TreeName"      : "tree",
+#        "Chi2BranchName"    : "vars",
+#        "ContribTreeName"   : "contribtree",
+#        "ContribBranchName" : "vars",
+#        "PredictionIndex"   : 12,
+#        "SpectrumIndex"     : 119,
+#        "Inputs"            : 12,
+#        "EntryDirectory"    : "entry_histograms",
+#        "DataDirectory"     : "data_histograms",
+#    }
+#def nuhm1_test_file_histo() :
+#    return [MCFile( nuhm1_test_file_histo_dict() )]
+#
+#def nuhm1_MCMh_MC7_dict() :
+#    return {
+#        "FileName"          : "%s/test_MCMh_nuhm1.root" % base_directory() ,
+#        "Chi2TreeName"      : "tree",
+#        "Chi2BranchName"    : "vars",
+#        "ContribTreeName"   : "contribtree",
+#        "ContribBranchName" : "vars",
+#        "PredictionIndex"   : 12,
+#        "SpectrumIndex"     : 119,
+#        "Inputs"            : 12,
+#        "EntryDirectory"    : "entry_histograms",
+#        "DataDirectory"     : "data_histograms",
+#    }
+#def nuhm1_test_file_histo() :
+#    return [MCFile( nuhm1_MCMh_MC7_dict() )]

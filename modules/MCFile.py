@@ -2,7 +2,8 @@ class MCFile() :
 
     def __init__( self, d, warn = True ) :
         attrlist = [ "FileName", "Chi2TreeName", "Chi2BranchName", 
-                     "ContribTreeName", "ContribBranchName",  ]
+                     "ContribTreeName", "ContribBranchName",
+                     "LHoodTreeName", "LHoodBranchName" ]
         # set import attributes, print warnign if not present
         for key in attrlist :  
             val = d.get(key,None)
@@ -20,23 +21,27 @@ class MCFile() :
     properties required for recalculation  '''
 class MCFileCollection() :
 
-    def __init__( self, mcfs, collection_options = None ) :
+    def __init__( self, mcfs, collection_options = None, warn = True ) :
         # multiple files
         self.files = mcfs
         if len( mcfs ) > 1 or collection_options is not None :
             for fpos in range(0, len(mcfs) ) :
                 for prop in [ "Chi2BranchName", "ContribBranchName", 
-                              "PredictionIndex", "SpectrumIndex", "Inputs" ] :
+                              "PredictionIndex", "SpectrumIndex", "Inputs",
+                              "LHoodTreeName" ] :
                     mcf_attr = getattr(mcfs[fpos],prop,None)
                     if mcf_attr is not None and mcf_attr != collection_options[prop] :
-                        print "%s in %s overriden by collection" % ( prop, mcfs[fpos].filename )
-                        print "\t%s --> %s" % ( mcfs[fpos].prop, collection_options[prop] )
+                        if warn : print "%s in %s overriden by collection" % ( prop, mcfs[fpos].FileName )
+                        if warn : print "\t%s --> %s" % ( mcfs[fpos].prop, collection_options[prop] )
+                    if mcf_attr is None :
+                        setattr(mcfs[fpos],prop, collection_options.get(prop,None))
+                        if warn : print "%s in %s copied from collection" % ( prop, mcfs[fpos].FileName )
 
             for key,value in collection_options.iteritems() :
                 setattr( self, key, value )
 
-            req = [ "Chi2BranchName", "ContribBranchName", "LHoodFile", 
-                    "ModelFile", "OutputFile" ]
+            req = [ "Chi2BranchName", "ContribBranchName", "LHoodBranchName", "LHoodFile", 
+                    "ModelFile", "FileName" ]
             for attr in req :
                 if collection_options.get(attr,None) is None :
                     print "MCFileCollection not given %s" % attr

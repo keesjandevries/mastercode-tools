@@ -3,7 +3,7 @@ ToDo
 
 Current Development
 -------------------
-Need ot be able to convert to `Space` class to preserve functionality (after removing ability to do make_space)
+* Need ot be able to convert to `Space` class to preserve functionality (after removing ability to do make_space)
 
 Problems
 --------
@@ -16,8 +16,8 @@ Problems
 
 CleanUp
 -------
-* KJ: Recalculation: should move to short names for the constraints, to unify
-    the constraints for CMSSM/NUHM1, and for future use!
+* ~~KJ: Recalculation: should move to short names for the constraints, to unify
+    the constraints for CMSSM/NUHM1, and for future use!~~
 
 Functionality
 -------------
