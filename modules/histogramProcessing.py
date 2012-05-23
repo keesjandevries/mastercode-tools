@@ -39,6 +39,19 @@ def get_histogram_dimension_from_name( name, delim = "_" ) :
 def get_histogram_dimension( h ):
     return int( h.Class()[2] )
 
+def save_hdict_to_root_file( hdict, filename, directory = None ) :
+    f = r.TFile( filename, "UPDATE" )
+    f.cd()
+    if directory is not None :
+        if not f.cd( directory ) :
+            f.mkdir( directory ).cd()
+            f.cd( directory )
+    print "Saving to %s..." % filename,
+    for h in hdict.values() :
+        h.Write("",r.TObject.kOverwrite)
+    f.Close()
+    print "Done"
+
 def save_hlist_to_root_file( hlist, filename, directory = None ) :
     f = r.TFile( filename, "UPDATE" )
     f.cd()
@@ -153,10 +166,10 @@ def check_chi_mode(mode):
         return -1
      
 
-def fill_bins( toFill, toFillContrib, contribs, bin, chain, mcf ) : 
-    for mode in toFill.keys() :
+def fill_bins( histo_cont, contrib_cont, contribs, bin, chain, mcf ) : 
+    for mode in histo_cont.keys() :
         fill = False
-        curr_content = toFill[mode][-1].GetBinContent(bin)
+        curr_content = histo_cont[mode].GetBinContent(bin)
         content = 0.
         if mode == "chi2" or mode == "dchi" :  
         #if check_chi_mode(mode) >= 0:  
@@ -170,18 +183,21 @@ def fill_bins( toFill, toFillContrib, contribs, bin, chain, mcf ) :
             content = r.TMath.Prob( chi2, ndof )
             fill = ( content > curr_content )
         if fill : 
-            toFill[mode][-1].SetBinContent(bin,content)
+            histo_cont[mode].SetBinContent(bin,content)
             if mode == "chi2" : # want to also fill values for the contrib
                 for contrib in contribs :
-                    toFillContrib[contrib.short_name][-1].SetBinContent(bin, chain.treeVars["contributions"][contrib.index] ) #!!!
+                    contib_cont[contrib.short_name].SetBinContent(bin, chain.treeVars["contributions"][contrib.index] ) #!!!
 
-# attempt to have dimension independant filling
-def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
+#def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
+def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
     axes = [ "X", "Y", "Z" ]
     chain = MCAnalysisChain( mcf )
     nentries = chain.GetEntries()
 
     for h in hlist :
+        histo_cont = {}
+        contrib_cont = {}
+
         h_dim = int(h.ClassName()[2])
         dim_range = range(h_dim)
         
@@ -224,18 +240,18 @@ def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
 
         firstbin = h.FindBin( *axis_mins )
         lastbin = h.FindBin( *axis_maxs )
-        for mode in toFill.keys() :
+        for mode in modes :
             # here need to add in check on contrib and make one for each contribution
-            toFill[mode].append( eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim ) )
+            histo_cont[mode] = eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim )
             base_val = 1e9
             if mode == "pval" :
                 base_val = 0.0
             for bin in range( firstbin, lastbin + 1 ) :
-                toFill[mode][-1].SetBinContent( bin, base_val )
+                histo_cont[mode].SetBinContent( bin, base_val )
         for c in contribs : # contribs is a list of Contribution objects
-            toFillContrib[c.short_name].append( eval( 'r.TH%dD( h.GetName() + "_" + c.short_name, title, *th_arg_list )' % h_dim ) )
+            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_" + c.short_name, title, *th_arg_list )' % h_dim )
             for bin in range( firstbin, lastbin + 1 ) :
-                toFillContrib[c.short_name][-1].SetBinContent( bin, 0.0 )
+                contib_cont[c.short_name].SetBinContent( bin, 0.0 )
 
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
         for i in range( 0, nbins + 1 ) :
@@ -245,9 +261,11 @@ def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
                 chain.GetEntry(entry)
-                fill_bins( toFill, toFillContrib, contribs, i, chain, mcf )
+                fill_bins( histo_cont, contrib_cont, contribs, i, chain, mcf )
+        perform_zero_offset( histo_cont["dchi"] )
         print
-    perform_zero_offset( toFill["dchi"] )
+        save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
+        save_hdict_to_root_file( contrib_cont, mcf.FileName, mcf.DataDirectory)
 
 def get_entry_hist_list( mcf, plots ) :
     hl = []
@@ -274,18 +292,17 @@ def get_hist_minimum_values( hl ) :
         mins.append(min_val)
     return mins
 
-def perform_zero_offset( hl ) :
+def perform_zero_offset( h ) :
     axes = ["X", "Y", "Z"]
-    for h in hl :
-        h_dim = int(h.ClassName()[2])
-        axes_nbins = []
-        for axis in range(h_dim) :
-            axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
-        nbins = reduce(mul, axes_nbins)
-        min_val = 1e9
-        for bin in range(nbins+1) :
-            c = h.GetBinContent(bin)
-            if c < min_val and c > 0 : min_val = c
-        for bin in range(nbins+1) :
-            content = h.GetBinContent(bin)
-            h.SetBinContent( bin, content - min_val )
+    h_dim = int(h.ClassName()[2])
+    axes_nbins = []
+    for axis in range(h_dim) :
+        axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
+    nbins = reduce(mul, axes_nbins)
+    min_val = 1e9
+    for bin in range(nbins+1) :
+        c = h.GetBinContent(bin)
+        if c < min_val and c > 0 : min_val = c
+    for bin in range(nbins+1) :
+        content = h.GetBinContent(bin)
+        h.SetBinContent( bin, content - min_val )

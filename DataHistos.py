@@ -12,17 +12,8 @@ def main( argv=None ) :
 
         plot_hists = hfuncs.get_entry_hist_list( mcf, plot_vars )
 
-        hists = { "pval" : [], "chi2" : [], "dchi" : [] }
-
-        chists = { }
-        for c in contrib_vars : chists[c.short_name] = [] #initialize
-
-        hfuncs.fill_all_data_hists( mcf, plot_hists, contrib_vars, hists, chists )
-
-        for hl in hists.values() :
-            hfuncs.save_hlist_to_root_file( hl, mcf.FileName, mcf.DataDirectory)
-        for cl in chists.values() :
-            hfuncs.save_hlist_to_root_file( cl, mcf.FileName, mcf.DataDirectory)
+        plot_modes = [ "pval", "chi2", "dchi" ]
+        hfuncs.fill_and_save_data_hists( mcf, plot_modes, plot_hists, contrib_vars )
 
 if __name__ == "__main__":
     main()
