@@ -101,7 +101,7 @@ def base_variables() :
         "Gamma_Z"      : Var( "Gamma_Z",       r"$\Gamma_{Z} %s"%MeV,                  "GAUSS", 2495.2,   [2.3, 1.0] ),
         "Rl"           : Var( "Rl",            r"$R_{\ell}$",                          "GAUSS", 20.767,   [0.025] ),
         "Rb"           : Var( "Rb",            r"$R_{b}$",                             "GAUSS", 0.21629,  [0.00066] ),
-        "Rc"           : Var( "Rc",            r"$R_{c}$",                             "GAUSS", 0.1721,   [0.00066] ),
+        "Rc"           : Var( "Rc",            r"$R_{c}$",                             "GAUSS", 0.1721,   [0.00300] ),
         "Afb(b)"       : Var( "Afb(b)",        r"$A_{fb}(b)$",                         "GAUSS", 0.0992,   [0.0016] ),
         "Afb(c)"       : Var( "Afb(c)",        r"$A_{fb}(c)$",                         "GAUSS", 0.0707,   [0.0035] ),
         "Ab16"         : Var( "Ab16",          r"$A_{b}$",                             "GAUSS", 0.923,    [0.020] ),
