@@ -46,10 +46,12 @@ def nuhm1_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def nuhm1_MCMh_MC7() :
-    gd = nuhm1_MCMH_MC7_histo_dict()
+def nuhm1_MCMh_MC7_input() :
+    gd = nuhm1_MCMh_MC7_histo_dict()
+    gd["StartEntry"] = 1
+    gd["EndEntry"]   = 308289
     fd = {
-             "FileName"          : "%s/nuhm1_large_test.root" % base_directory(),
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
@@ -104,9 +106,9 @@ def nuhm1_test_file_histo_dict() :
         "MinContrib"        : 0,
      }
 
-def nuhm1_MCMH_MC7_histo_dict() :
+def nuhm1_MCMh_MC7_histo_dict() :
     return {
-        "FileName"          : "%s/nuhm1_recalc_out.root" % base_directory(),
+        "FileName"          : "%s/nuhm1_MCMH_MC7.root" % base_directory(),
         "Chi2TreeName"      : "tree",
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
@@ -116,8 +118,8 @@ def nuhm1_MCMH_MC7_histo_dict() :
         "BestFitEntryName"  : "BestFitEntry",
         "PredictionIndex"   : 12,
         "SpectrumIndex"     : 119,
-        "Inputs"            : 10, # FIXME: check this number is right!!!
-#        "LHoodFile"         : "models/tester.lhood" ,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/tester.lhood" ,
         "ModelFile"         : "models/tester.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
@@ -125,5 +127,5 @@ def nuhm1_MCMH_MC7_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def nuhm1_test_file_histo() :
-    return [MCFile( nuhm1_test_file_histo_dict() )]
+def nuhm1_MCMh_MC7_histo() :
+    return [MCFile(nuhm1_MCMh_MC7_histo_dict() )]
