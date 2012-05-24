@@ -17,6 +17,18 @@ def get_lhood_dict() :
                                   "name"   :"CMS #alpha_{T} 1.6fb^{-1}",
                                   "vars"   : [ "m0", "m12" ],
                               },
+          "BsmumuMC8lhcb" :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/lhcb_only.dat" ],
+                                  "name"   : "BR(B_{s}#rightarrow#mu^{+}#mu^{-}) LHCb MC8 Diego ",
+                                  "vars"   : [ "Bsmumu" ],
+                              },
+          "BsmumuMC8comb" :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/atlas_cms_lhcb_cdf.dat" ],
+                                  "name"   : "BR(B_{s}#rightarrow#mu^{+}#mu^{-}) LHCb+CMS+ATLAS+CDF",
+                                  "vars"   : [ "Bsmumu" ],
+                              },
           "BsmumuLHCbCMS" :   {
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc7/bs_cms_lhcb_s_sb.dat" ],

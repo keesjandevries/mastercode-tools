@@ -46,6 +46,17 @@ def nuhm1_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
+def nuhm1_Bsmm2012_input() :
+    gd = nuhm1_Bsmm2012_histo_dict()
+    gd["StartEntry"] = 208280 
+    gd["EndEntry"]   = 208295 
+    fd = {
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
 def nuhm1_MCMh_MC7_input() :
     gd = nuhm1_MCMh_MC7_histo_dict()
     gd["StartEntry"] = 1
@@ -105,6 +116,30 @@ def nuhm1_test_file_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
+
+def nuhm1_Bsmm2012_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_Bsmm2012.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/Bsmm-All.lhood" ,
+        "ModelFile"         : "models/tester.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def nuhm1_Bsmm2012_histo() :
+    return [MCFile(nuhm1_Bsmm2012_histo_dict() )]
 
 def nuhm1_MCMh_MC7_histo_dict() :
     return {
