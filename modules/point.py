@@ -86,7 +86,7 @@ def getAfterBurnerCommand( chain, mfc, n) :
     
 def getInputCoordinates( chain, mfc, n ) :
     chain.GetEntry(n)
-    return [ chain.chi2vars[input] for input in range(1,mfc.Inputs+1) ]
+    return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
 
 def getBfEntry(mcf):
     f=r.TFile(mcf.FileName)
@@ -105,7 +105,7 @@ def getBfEntry(mcf):
 
 def printChi2(chain, n):
     chain.GetEntry(n)
-    print "\nTotal X^2 = ", chain.chi2vars[0] , " \n"
+    print "\nTotal X^2 = ", chain.treeVars["predictions"][ 0 ]   , " \n"
 
 def printN(n):
     print "\nFound entry number: ", n , "\n"
