@@ -17,6 +17,18 @@ def get_lhood_dict() :
                                   "name"   :"CMS #alpha_{T} 1.6fb^{-1}",
                                   "vars"   : [ "m0", "m12" ],
                               },
+          "BsmumuMC8lhcb" :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/lhcb_only.dat" ],
+                                  "name"   : "BR(B_{s}#rightarrow#mu^{+}#mu^{-}) LHCb MC8 Diego ",
+                                  "vars"   : [ "Bsmumu" ],
+                              },
+          "BsmumuMC8comb" :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/atlas_cms_lhcb_cdf.dat" ],
+                                  "name"   : "BR(B_{s}#rightarrow#mu^{+}#mu^{-}) LHCb+CMS+ATLAS+CDF",
+                                  "vars"   : [ "Bsmumu" ],
+                              },
           "BsmumuLHCbCMS" :   {
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc7/bs_cms_lhcb_s_sb.dat" ],
@@ -28,6 +40,12 @@ def get_lhood_dict() :
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc6/xenon_contour.csv", 1, 1.2, 3.2, 1 ],
                                   "name"   :"Xenon 2011",
                                   "vars"   : [ "neu1", "sigma_pp^SI" ],
+                              },
+          "MAtanb5fb"     :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/CMS-5fb-MA-tanb.csv", 9 ],
+                                  "name"   : "CMS H/A \rightarrow\tau\tau 4.6fb^{-1}",
+                                  "vars"   : [ "mA0", "tanb" ],
                               },
           "HA->tt2011"    :   {
                                   "lhtype" : "Cartesian",
