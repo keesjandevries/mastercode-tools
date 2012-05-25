@@ -59,8 +59,8 @@ def nuhm1_Bsmm2012_input() :
 
 def nuhm1_MCMh_MC7_input() :
     gd = nuhm1_MCMh_MC7_histo_dict()
-    gd["StartEntry"] = 1
-    gd["EndEntry"]   = 308289
+    gd["StartEntry"] = 208288
+    gd["EndEntry"]   = 208290
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
@@ -154,8 +154,8 @@ def nuhm1_MCMh_MC7_histo_dict() :
         "PredictionIndex"   : 12,
         "SpectrumIndex"     : 119,
         "Inputs"            : 12, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/tester.lhood" ,
-        "ModelFile"         : "models/tester.model" ,
+        "LHoodFile"         : "models/MC7.lhood" ,
+        "ModelFile"         : "models/MC7.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
