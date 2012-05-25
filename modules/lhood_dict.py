@@ -41,6 +41,12 @@ def get_lhood_dict() :
                                   "name"   :"Xenon 2011",
                                   "vars"   : [ "neu1", "sigma_pp^SI" ],
                               },
+          "MAtanb5fb"     :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/CMS-5fb-MA-tanb.csv", 9 ],
+                                  "name"   : "CMS H/A \rightarrow\tau\tau 4.6fb^{-1}",
+                                  "vars"   : [ "mA0", "tanb" ],
+                              },
           "HA->tt2011"    :   {
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc7/Htt-CMS-1.6fb.csv", 9 ],
