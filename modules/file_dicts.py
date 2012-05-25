@@ -48,8 +48,8 @@ def nuhm1_test_input_files() :
 
 def nuhm1_Bsmm2012_input() :
     gd = nuhm1_Bsmm2012_histo_dict()
-    gd["StartEntry"] = 208280 
-    gd["EndEntry"]   = 208295 
+#    gd["StartEntry"] = 208280 
+#    gd["EndEntry"]   = 208295 
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
