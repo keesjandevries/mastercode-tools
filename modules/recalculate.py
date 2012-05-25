@@ -3,6 +3,7 @@ import models
 
 import ROOT as r
 from modules.MCChain import MCRecalcChain
+import variables as v
 
 from progress_bar import ProgressBar
 from sys import stdout
@@ -151,9 +152,13 @@ def recalc_to_file( collection ) :
             delta = 0.
             chi2 = 0
 
-            for MCV in model :
+            for constraint in model :
+                sn=constraint.short_name
+
+                MCV=v.mc_variables()[sn]
                 v_index = MCV.getIndex(collection)
-                chi2_t = MCV.getChi2( chain.treeVars["predictions"][v_index] )
+                
+                chi2_t = constraint.getChi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
                 chi2 += chi2_t
             for i,lh in enumerate(lhoods.values()) :
