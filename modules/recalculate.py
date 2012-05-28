@@ -101,6 +101,9 @@ def recalc_to_file( collection ) :
     outfile = collection.FileName
     print "Output file is %s" % outfile
 
+    # initialise the MC-variables
+    MCVdict=v.mc_variables()
+
     chain = MCRecalcChain( collection )
     nentries = chain.GetEntries()
 
@@ -155,7 +158,7 @@ def recalc_to_file( collection ) :
             for constraint in model :
                 sn=constraint.short_name
 
-                MCV=v.mc_variables()[sn]
+                MCV=MCVdict[sn]
                 v_index = MCV.getIndex(collection)
                 
                 chi2_t = constraint.getChi2( chain.treeVars["predictions"][v_index] )
