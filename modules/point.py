@@ -75,9 +75,8 @@ def searchHistName(vars,mcf) :
     return name, p
 
 def printAfterBurnerCoordinates(chain, mcf, n):
-    print"\nCommand for AfterBurner.exe is: \n "
-    print getAfterBurnerCommand(chain, mcf, n)
-    print "\n"
+    print"Command for AfterBurner.exe is: "
+    print "\t%s" % getAfterBurnerCommand(chain, mcf, n)
 
 def getAfterBurnerCommand( chain, mfc, n) : 
     input_coords = getInputCoordinates( chain, mfc, n )
@@ -95,7 +94,7 @@ def getBfEntry(mcf):
     try:
         t=f.Get(bfName).Clone()
     except ReferenceError:
-        assert False,   "\n\n%s does not contain a tree with the best fit point \n\n " % mcf.FileName
+        assert False,   "%s does not contain a tree with the best fit point" % mcf.FileName
     
     for entry in t:
         n=entry.EntryNo
@@ -105,10 +104,10 @@ def getBfEntry(mcf):
 
 def printChi2(chain, n):
     chain.GetEntry(n)
-    print "\nTotal X^2 = ", chain.treeVars["predictions"][ 0 ]   , " \n"
+    print "Total X^2 = %f" % chain.treeVars["predictions"][ 0 ]
 
 def printN(n):
-    print "\nFound entry number: ", n , "\n"
+    print "Found entry number: %d" % n
 
 def printX2BreakDown(chain,mcf,n):
     import models
@@ -116,9 +115,11 @@ def printX2BreakDown(chain,mcf,n):
     model  = models.get_model_from_file(mcf)
     lhoods = models.get_lhood_names(mcf)
     MCVdict=v.mc_variables()
-    print "\nThe gaussian constraints give penalties:\n"
-    print "    Penalty       Value Name            Type        Constraint"
-    print "==================================================================="
+    if len( model ) > 0 :
+        print "\nThe gaussian constraints give penalties:\n"
+        print "==================================================================="
+        print "    Penalty       Value Name            Type        Constraint"
+        print "==================================================================="
     for constraint in model:
         sn=constraint.short_name
         MCV=MCVdict[sn]
@@ -130,7 +131,7 @@ def printX2BreakDown(chain,mcf,n):
         #print "{chi2:>f} {".format(chi2=chi2)
     print "==================================================================="
 
-    print "\nThe likelihoods give penalties:\n"
+    if len(lhoods.keys()) > 0 : print "\nThe likelihoods give penalties:\n"
     for i, lhood in enumerate(lhoods):
         chi2=chain.treeVars["lhoods"][i]
         print "{:11.4g} {!r}". format( chi2, lhood )
