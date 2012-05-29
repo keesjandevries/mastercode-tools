@@ -116,7 +116,7 @@ def printX2BreakDown(chain,mcf,n):
     lhoods = models.get_lhood_names(mcf)
     MCVdict=v.mc_variables()
     if len( model ) > 0 :
-        print "\nThe gaussian constraints give penalties:\n"
+        print "\nchi2 penalties from gaussian constraints :"
         print "==================================================================="
         print "    Penalty       Value Name            Type       Constraint"
         print "==================================================================="
