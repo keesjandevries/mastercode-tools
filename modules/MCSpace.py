@@ -5,8 +5,7 @@ class MCSpace( object ) : # file specific object version of MCVariable
     def __init__( self, MCF, MCVs, options ) :
         assert len(MCVs) == len(options["nbins"]), \
             "Wrong number of Variables or Options to make a space"
-
-        self.log = [False]*len(MCVs) # FIXME
+        self.log = options.get( 'logaxes' ,[False]*len(MCVs)) # FIXME
 
         self.dimension   = len(MCVs)
         self.indices     = [ v.getIndex(MCF) for v in MCVs ]
