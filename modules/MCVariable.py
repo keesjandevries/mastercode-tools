@@ -66,8 +66,9 @@ class Constraint(object ):
         return self.short_name
 
     def __repr__( self ) :
-        r_f = "%s                            [%s] %0.4f +- %0.4f" 
-        return r_f % ( self.short_name, self.constraint_type, self.limit_value, getattr(self,"error",0.) )
+        return "{name:15} {ctype:5} {limit} {error}".format(
+            name=self.short_name, ctype=self.constraint_type,
+            limit=self.limit_value, error=getattr(self,"error",0.) )
 
     def getZValue(self, value) :
         return zvalue_functions[self.constraint_type]( self, value )
