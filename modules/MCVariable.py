@@ -66,7 +66,7 @@ class Constraint(object ):
         return self.short_name
 
     def __repr__( self ) :
-        return "{name:15} {ctype:5} {limit} {error}".format(
+        return "{name:15} {ctype:5} {limit:8} +- {error:<9.4g}".format(
             name=self.short_name, ctype=self.constraint_type,
             limit=self.limit_value, error=getattr(self,"error",0.) )
 
