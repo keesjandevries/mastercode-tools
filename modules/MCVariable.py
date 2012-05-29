@@ -21,6 +21,9 @@ class Variable(object) :
     def __str__( self ) :
         return self.short_name
 
+    def __repr__( self ) :
+        return " %s %s " % (self.short_name, self.long_name )
+
   
 
 class MCVariable(Variable, object) :
