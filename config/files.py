@@ -8,9 +8,9 @@ def histo_files() :
     return d
 
 def recalc_files() :
-    #d = files.cmssm_test_input_files()
+    d = files.cmssm_test_input_files()
 #    d = files.nuhm1_MCMh_MC7_input()
-    d = files.nuhm1_Bsmm2012_input()
+#    d = files.nuhm1_Bsmm2012_input()
 #    d = files.nuhm1_test_input_files()
     return d
 

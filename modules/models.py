@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import lhood_dict as ld
+import constraint_dict as cd
 import lhood_module as lhm
 import variables as v
 
@@ -24,14 +25,14 @@ def get_lhood_from_file( mcf ) :
     return out
 
 def get_model_from_file( mcf ) :
-    d = v.mc_variables()
+    d=cd.get_constraint_dict()
     out = []
     filename = getattr( mcf, "ModelFile" ) # fail cos this doesn't make any sense
     with open(filename, 'rb') as f:
         for line in f :
             constraint = line[:-1]
-            if constraint in d :
+            if constraint in d :#FIXME: do we want to check here if the shortname for the contraint also exists?
                 out.append(d[constraint])
             else :
-                print ">", constraint, "< not in variable list (check modules/variables.py)"
+                print ">", constraint, "< not in variable list (check modules/constraint_dict.py)"
     return out
