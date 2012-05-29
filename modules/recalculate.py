@@ -156,9 +156,7 @@ def recalc_to_file( collection ) :
             chi2 = 0
 
             for constraint in model :
-                sn=constraint.short_name
-
-                MCV=MCVdict[sn]
+                MCV=MCVdict[constraint.short_name]
                 v_index = MCV.getIndex(collection)
                 
                 chi2_t = constraint.getChi2( chain.treeVars["predictions"][v_index] )
