@@ -92,6 +92,17 @@ def cmssm_MC8_all_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
+def nuhm1_test_input() :
+    gd = nuhm1_test_histo_dict()
+    gd["StartEntry"] = 15486728     
+    gd["EndEntry"]   = 15486729
+    fd = {
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
 def nuhm1_MCMh_mh125_input() :
     gd = nuhm1_MCMh_mh125_histo_dict()
 #    gd["StartEntry"] = 208280      
@@ -256,6 +267,30 @@ def cmssm_MC8_all_histo_dict() :
      }
 def cmssm_MC8_all_histo() :
     return [MCFile(cmssm_MC8_all_histo_dict() )]
+
+def nuhm1_test_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_test.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/MC8-All.lhood" ,
+        "ModelFile"         : "models/MC8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def nuhm1_test_histo() :
+    return [MCFile(nuhm1_test_histo_dict() )]
 
 def nuhm1_MCMh_mh125_histo_dict() :
     return {
