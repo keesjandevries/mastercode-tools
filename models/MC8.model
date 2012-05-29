@@ -8,7 +8,7 @@ R(B->taunu)_MC7
 R(B->Xsll)_MC7
 R(K->lnu)_MC7
 Delta(g-2)_MC7
-MW_MC7
+MW_MC8
 sintheta_eff_MC7
 Gamma_Z_MC7
 Rl_MC7
@@ -19,7 +19,7 @@ Afb(c)_MC7
 Ab16_MC7
 Ac17_MC7
 Al(SLD)_MC7
-m_h^0_MC7
+m_h^0_125
 Oh^2_MC7
 Al(P_tau)_MC7
 Al_fb_MC7
