@@ -109,9 +109,31 @@ def printChi2(chain, n):
 
 def printN(n):
     print "\nFound entry number: ", n , "\n"
+
+def printX2BreakDown(chain,mcf,n):
+    import models
+    model  = models.get_model_from_file(mcf)
+    lhoods = models.get_lhood_from_file(mcf)
+    import variables as v
+    MCVdict=v.mc_variables()
+    print "\nThe gaussian constraints give penalties:\n"
+    for constraint in model:
+        sn=constraint.short_name
+        MCV=MCVdict[sn]
+        v_index = MCV.getIndex(mcf)
+        chi2=chain.treeVars["contributions"][v_index]
+        pred=chain.treeVars["predictions"][v_index]
+        print ( "%.2f " % chi2), '{0:{width}{precision}{base}}'.format(pred, base='g', width=1, precision=4 ),"    " , repr(constraint)
+
+    print "\nThe likelihoods give penalties:\n"
+    for i, lhood in enumerate( lhoods):
+        chi2=chain.treeVars["lhoods"][i]
+        print ( "%.2f " % chi2), "  ", lhood
+
     
 def printInfo(n,mcf) :
     chain = MCAnalysisChain( mcf )
     printN(n)
     printChi2(chain, n)
     printAfterBurnerCoordinates(chain, mcf, n)
+    printX2BreakDown(chain,mcf,n)
