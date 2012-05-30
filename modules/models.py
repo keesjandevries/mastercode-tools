@@ -24,6 +24,18 @@ def get_lhood_from_file( mcf ) :
                     print "Unknown Likelihood: %s, ignoring!" % name
     return out
 
+def get_lhood_names( mcf ) :
+    lhd = ld.get_lhood_dict()
+    out = OrderedDict()
+    mcvars=v.mc_variables()
+    filename=getattr( mcf, "LHoodFile", None )
+    if filename is not None :
+        with open(filename, 'rb') as f:
+            for line in f :
+                name = line[:-1] #cut EOL
+                out[ line[:-1] ] = [ mcvars[varname].getIndex(mcf) for varname in lhd[name]["vars"] ]
+    return out
+
 def get_model_from_file( mcf ) :
     d=cd.get_constraint_dict()
     out = []

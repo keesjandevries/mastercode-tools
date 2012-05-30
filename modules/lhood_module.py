@@ -69,7 +69,15 @@ class LHood( object ) :
         if lh_type == "Cartesian" :
             self.LH = CartesianLikelihood( *lhd["c_args"] )
 
+    def __str__(self ):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
     def getChi2( self, vals ) :
         args = [ vals[x] for x in self.var_pos ]
         chi2 = self.LH.getChi2( *args  )
         return chi2
+
+

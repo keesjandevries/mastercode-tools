@@ -21,6 +21,10 @@ class Variable(object) :
     def __str__( self ) :
         return self.short_name
 
+    def __repr__( self ) :
+        return " %s %s " % (self.short_name, self.long_name )
+
+  
 
 class MCVariable(Variable, object) :
     def __init__( self, var, offset_relative_to = None, index_offset = 0 ) :
@@ -62,8 +66,9 @@ class Constraint(object ):
         return self.short_name
 
     def __repr__( self ) :
-        r_f = "%s [%s] %0.4f +- %0.4f" 
-        return r_f % ( self.short_name, self.constraint_type, self.limit_value, getattr(self,"error",0.) )
+        return "{name:15} {ctype:5} {limit:8} +- {error:<9.4g}".format(
+            name=self.short_name, ctype=self.constraint_type,
+            limit=self.limit_value, error=getattr(self,"error",0.) )
 
     def getZValue(self, value) :
         return zvalue_functions[self.constraint_type]( self, value )
