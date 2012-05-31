@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import ROOT as r
 from optparse import OptionParser
+from modules import tests
 
 
 ############################################
@@ -11,8 +12,6 @@ def opts():
     parser.add_option( "-l", "--likelihood", action="store", dest="likelihood",
                        default=None , help="print info for specified likelihood" )
     options,args = parser.parse_args()
-    if options.constraint is not None : 
-        assert len(args) == 1, "Wrong number of parameters passed to constraint (expected 1, got %d)" % len(args)
     return options, args
 ############################################
 
@@ -21,29 +20,11 @@ def opts():
 def main( argv=None ) :
     options, args = opts()  
     
+    args = [ eval(a) for a in args ]
     if options.likelihood is not None :
-        import modules.lhood_module as lhm
-        import modules.lhood_dict as lhd
-        lh_opts = lhd.get_lhood_dict().get(options.likelihood,None)
-        assert lh_opts is not None, \
-            "Likelihood provided does not exist, likelihoods are %s" % \
-            lhd.get_lhood_dict().keys()
-        assert len(args) == len(lh_opts["vars"]), \
-            "Wrong number of inputs for likelihood (expected %d, got %d)" % \
-            (len(lh_opts["vars"]),len(args))
-        lh = lhm.LHood( var_pos=[None]*len(args), lhd=lh_opts )
-        vals = [ eval(a) for a in args ]
-        chi2 = lh.testChi2(vals)
-        print "{lhname} @ {args} => {chi2}".format( lhname=lh, args=vals, chi2=chi2 )
+        tests.runLikelihood( options.likelihood, [args] )
     elif options.constraint is not None :
-        import modules.constraint_dict as ctd
-        con = ctd.get_constraint_dict().get(options.constraint,None)
-        assert con is not None, \
-            "Constraint provided doe not exist, constraints are %s" % \
-            ctd.get_constraint_dict().keys()
-        val = eval(args[0])
-        chi2 = con.getChi2(val)
-        print "{cname} @ {val} => {chi2}".format( cname=con, val=val, chi2=chi2 )
+        tests.runConstraint( options.constraint, args )
 
 
 
