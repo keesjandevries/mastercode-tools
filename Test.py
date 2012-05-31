@@ -35,6 +35,16 @@ def main( argv=None ) :
         vals = [ eval(a) for a in args ]
         chi2 = lh.testChi2(vals)
         print "{lhname} @ {args} => {chi2}".format( lhname=lh, args=vals, chi2=chi2 )
+    elif options.constraint is not None :
+        import modules.constraint_dict as ctd
+        con = ctd.get_constraint_dict().get(options.constraint,None)
+        assert con is not None, \
+            "Constraint provided doe not exist, constraints are %s" % \
+            ctd.get_constraint_dict().keys()
+        val = eval(args[0])
+        chi2 = con.getChi2(val)
+        print "{cname} @ {val} => {chi2}".format( cname=con, val=val, chi2=chi2 )
+
 
 
 if __name__ == "__main__":
