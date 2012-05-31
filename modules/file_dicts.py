@@ -90,12 +90,22 @@ def cmssm_MC8_all_input() :
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf ], gd, warn = False)
+    fd2= {
+             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_short.root" ,  
+             "Chi2TreeName"      : "tree",
+         }
+    mcf2= MCFile( fd2,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    fd3= {
+             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_medium.root" ,  
+             "Chi2TreeName"      : "tree",
+         }
+    mcf3= MCFile( fd3,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf,mcf2,mcf3 ], gd, warn = False)
 
 def nuhm1_test_input() :
     gd = nuhm1_test_histo_dict()
-    gd["StartEntry"] = 15486728     
-    gd["EndEntry"]   = 15486729
+    gd["StartEntry"] = 16737459     # 16385171: ./Point.py -c "mA0=300" "tanb=20"on MC8 all
+    gd["EndEntry"]   = 16737460
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
@@ -288,6 +298,7 @@ def nuhm1_test_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
+        "MaxMADiff"         : 0.4,
      }
 def nuhm1_test_histo() :
     return [MCFile(nuhm1_test_histo_dict() )]
@@ -312,6 +323,7 @@ def nuhm1_MCMh_mh125_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
+        "MaxMADiff"         : 0.4,
      }
 def nuhm1_MCMh_mh125_histo() :
     return [MCFile(nuhm1_MCMh_mh125_histo_dict() )]
@@ -336,6 +348,7 @@ def nuhm1_MC8_all_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
+        "MaxMADiff"         : 0.4,
      }
 def nuhm1_MC8_all_histo() :
     return [MCFile(nuhm1_MC8_all_histo_dict() )]
