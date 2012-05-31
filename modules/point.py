@@ -136,6 +136,14 @@ def printX2BreakDown(chain,mcf,n):
         chi2=chain.treeVars["lhoods"][i]
         print "{:11.4g} {!r}". format( chi2, lhood )
 
+def printSpectrum(chain,mcf,n):
+    print "\nMass spectrum:\n"
+    print "for now: only MA = ",
+    import variables as v
+    MCVdict=v.mc_variables()
+    index = MCVdict["mA0"].getIndex(mcf)
+    MA=chain.treeVars["predictions"][index]
+    print MA 
     
 def printInfo(n,mcf) :
     chain = MCAnalysisChain( mcf )
@@ -143,3 +151,4 @@ def printInfo(n,mcf) :
     printChi2(chain, n)
     printAfterBurnerCoordinates(chain, mcf, n)
     printX2BreakDown(chain,mcf,n)
+    printSpectrum(chain,mcf,n)
