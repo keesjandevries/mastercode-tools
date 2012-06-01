@@ -80,4 +80,7 @@ class LHood( object ) :
         chi2 = self.LH.getChi2( *args  )
         return chi2
 
+    def testChi2( self, vals ) :
+        chi2 = self.LH.getChi2( *vals )
+        return chi2
 
