@@ -5,7 +5,7 @@ from itertools import permutations
 from histogramProcessing import entry_histo_full_path as histn
 from modules.MCChain import MCAnalysisChain
 
-AB_binary = "../bin/Afterburner.exe"
+AB_binary = "../bin/AfterBurner.exe"
 
 def getVars(argv) :
     # will output something like  {"m0" : 500, "m12" : 1000}
@@ -84,7 +84,7 @@ def getAfterBurnerCommand( chain, mfc, n) :
     return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
     
 def getInputCoordinates( chain, mfc, n ) :
-    chain.GetEntry(n)
+#    chain.GetEntry(n)
     return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
 
 def getBfEntry(mcf):
@@ -103,7 +103,7 @@ def getBfEntry(mcf):
     return n
 
 def printChi2(chain, n):
-    chain.GetEntry(n)
+#    chain.GetEntry(n)
     print "Total X^2 = %f" % chain.treeVars["predictions"][ 0 ]
 
 def printN(n):
@@ -136,19 +136,32 @@ def printX2BreakDown(chain,mcf,n):
         chi2=chain.treeVars["lhoods"][i]
         print "{:11.4g} {!r}". format( chi2, lhood )
 
-def printSpectrum(chain,mcf,n):
-    print "\nMass spectrum:\n"
-    print "for now: only MA = ",
+def printMAInfo(chain,mcf):
+    print "\nMA info: \n "
     import variables as v
     MCVdict=v.mc_variables()
     index = MCVdict["mA0"].getIndex(mcf)
     MA=chain.treeVars["predictions"][index]
-    print MA 
+    print "MA = %f" %MA 
+    index = MCVdict["mA0^2"].getIndex(mcf)
+    MA2=chain.treeVars["predictions"][index]
+    print "MA^2 = %f" %MA2 
+    from math import sqrt
+    a=(sqrt(MA2)-MA)/MA
+    print "a = %f" % a
     
+def printSpectrum(chain,mcf):
+    print "\nMass spectrum:\n"
+    import variables as v
+    MCVdict=v.mc_variables()
+
+
 def printInfo(n,mcf) :
     chain = MCAnalysisChain( mcf )
+    chain.GetEntry(n)
     printN(n)
     printChi2(chain, n)
     printAfterBurnerCoordinates(chain, mcf, n)
     printX2BreakDown(chain,mcf,n)
-    printSpectrum(chain,mcf,n)
+    printSpectrum(chain,mcf) 
+    printMAInfo(chain,mcf)
