@@ -18,3 +18,9 @@ Executables
 - `DataHistos.py` create histograms containing the &Chi;^2/ p(&Chi;^2,ndof) / &Delta;&Chi;^2 / Contribution data
 - `Point.py` finds the best point in entry histogram given inputs e.g. `./Point.py "m0=500" "m12=1000"`
 - `RecalculateChi2.py` recalculates the X^2 contributions for all the individual contraints as well as the total, for each point in parameter space. There are X^2 from 'constraints' and 'likelihood functions'. They values have to be modified in '/constraint_dict.py' and ['modules/lhood_dict.py' & 'reprocessing/lhoods/lookups/...' ] 
+- `Test.py` provides the ability to test the chi2 contribution for individual points for a single likelihood/constraint.  Usage:
+    - `./Test.py --constraint mtop_MC7 174.2`
+    - `./Test.py --likelihood CMSalphaT1.6 100 100`
+
+
+
