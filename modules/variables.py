@@ -49,6 +49,7 @@ def mc_variables() :
             "D_0(K*g)"     : MCV( b["D_0(K*g)"],      index_offset=28, offset_relative_to="PredictionIndex" ),
             "BR(b->sg)"    : MCV( b["BR(b->sg)"],     index_offset=29, offset_relative_to="PredictionIndex" ),
             "sigma_pp^SI"  : MCV( b["sigma_pp^SI"],   index_offset=33, offset_relative_to="PredictionIndex" ),
+            "mA0^2"        : MCV( b["mA0^2"],         index_offset=35, offset_relative_to="PredictionIndex" ),
             # Spectrum
             "chi1"         : MCV( b["chi1"],          index_offset=0,  offset_relative_to="SpectrumIndex" ),
             "chi2"         : MCV( b["chi2"],          index_offset=1,  offset_relative_to="SpectrumIndex" ),
@@ -120,6 +121,7 @@ def base_variables() :
         "D_0(K*g)"     : Var( "D_0(K*g)",      r"$\Delta_{0}(K^{*}\gamma$",          ), 
         "BR(b->sg)"    : Var( "BR(b->sg)",     r"$BR(b\rightarrow s\gamma)$",        ), 
         "sigma_pp^SI"  : Var( "sigma_pp^SI",   r"$\sigma_{p}^{SI}$" ),
+        "mA0^2"        : Var( "mA0^2",         r"$m_{A_{0}}^2 %s^{2} $" %GeVc2 ),
         "chi1"         : Var( "chi1",          r"$m_{\tilde{\chi}^{\pm}_{1}} %s$"%GeVc2 ),
         "chi2"         : Var( "chi2",          r"$m_{\tilde{\chi}^{\pm}_{2}} %s$"%GeVc2 ),
         "neu1"         : Var( "neu1",          r"$m_{\tilde{\chi}^{0}_{1}} %s$"%GeVc2 ),
