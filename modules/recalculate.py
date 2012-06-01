@@ -51,8 +51,11 @@ def good_point( point, mcfc, verbose = 0) :
     mA02 = point[mcfc.PredictionIndex+35]
     mA   = point[mcfc.SpectrumIndex+24]
     if hasattr( mcfc, "MaxMADiff" ) :
-        mAdiff = ( mA02 - sqrt(mA02) ) / mA
-        if mA > 0 and mA02 > 0 and mAdiff > mcfc.MaxMADiff :
+        if mA > 0 and mA02 > 0:
+            mAdiff = abs( ( mA - sqrt(mA02) ) / mA )
+        else :
+            mAdiff = 0 
+        if mAdiff > mcfc.MaxMADiff :
             good = False
             if verbose > 0 : problem += "\t! Too large a difference between mA and sqrt(mA02)\n"
 
