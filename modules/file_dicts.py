@@ -226,6 +226,7 @@ def cmssm_MCMh_mh125_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
+        "MaxMADiff"         : 0.4,
      }
 def cmssm_MCMh_mh125_histo() :
     return [MCFile(cmssm_MCMh_mh125_histo_dict() )]
@@ -272,8 +273,9 @@ def cmssm_MC8_all_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 50, 
         "MinContrib"        : 0,
+        "MaxMADiff"         : 0.4,
      }
 def cmssm_MC8_all_histo() :
     return [MCFile(cmssm_MC8_all_histo_dict() )]
@@ -298,7 +300,7 @@ def nuhm1_test_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
-        "MaxMADiff"         : 0.4,
+        "MaxMADiff"         : 0.5,
      }
 def nuhm1_test_histo() :
     return [MCFile(nuhm1_test_histo_dict() )]
