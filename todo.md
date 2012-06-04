@@ -3,7 +3,7 @@ ToDo
 
 Current Development
 -------------------
-* Investigate using google protoBufs:Python mangles these names with the class name: if class Foo has an attribute named __a, it cannot be accessed by Foo.__a. (An insistent user could still gain access by calling Foo._Foo__a.) Generally, double leading underscores should be used only to avoid name conflicts with attributes in classes designed to be subclassed.
+* Investigate using google protoBufs:
     * initial checks see small size gain and noticable speed gains (when using python module
     * **disadvantage**: we have to use `message.ParseFromString( f.read() )` and read the whole file in before doing anything
     * there maybe be a way around this using a small C++ module: use set size reads from an sstream object.  Keeps the handle open.
