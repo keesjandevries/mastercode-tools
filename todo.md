@@ -25,6 +25,8 @@ Problems
 Functionality
 -------------
 * KJ: Point-tools. Print all (relevant) predictions/ X^2 breakdown; if a plane
-    does not exist, make the missing plane; 
+    does not exist, make the missing plane;
 
-* SR: start storing separate "lhood_contrib" tree that hold our contributions per entry from the custom lhoods
+Repo
+----
+* Move this todo, etc. into issues (where relevant)
