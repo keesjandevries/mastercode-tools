@@ -74,17 +74,16 @@ def searchHistName(vars,mcf) :
         assert False, "The given coordinate(s) could not be found in a histogram. Please make a corresponding EntryHist. "
     return name, p
 
-def printAfterBurnerCoordinates(chain, mcf, n):
+def printAfterBurnerCoordinates(chain, mcf):
     print"Command for AfterBurner.exe is: "
-    print "\t%s" % getAfterBurnerCommand(chain, mcf, n)
+    print "\t%s" % getAfterBurnerCommand(chain, mcf)
 
-def getAfterBurnerCommand( chain, mfc, n) : 
-    input_coords = getInputCoordinates( chain, mfc, n )
+def getAfterBurnerCommand( chain, mfc) : 
+    input_coords = getInputCoordinates( chain, mfc )
     input_strings = [ str(input) for input in input_coords ]
     return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
     
-def getInputCoordinates( chain, mfc, n ) :
-#    chain.GetEntry(n)
+def getInputCoordinates( chain, mfc ) :
     return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
 
 def getBfEntry(mcf):
@@ -102,9 +101,8 @@ def getBfEntry(mcf):
     f.Close()
     return n
 
-def printChi2(chain, n):
-#    chain.GetEntry(n)
-    print "Total X^2 = %f" % chain.treeVars["predictions"][ 0 ]
+def printChi2(chain):
+    print "\nTotal X^2 = %f" % chain.treeVars["predictions"][ 0 ]
 
 def printN(n):
     print "Found entry number: %d" % n
@@ -118,7 +116,7 @@ def printX2BreakDown(chain,mcf,n):
     if len( model ) > 0 :
         print "\nchi2 penalties from gaussian constraints :"
         print "==================================================================="
-        print "    Penalty       Value Name            Type       Constraint"
+        print "    Penalty  Prediction   Name            Type       Constraint"
         print "==================================================================="
     for constraint in model:
         sn=constraint.short_name
@@ -127,41 +125,95 @@ def printX2BreakDown(chain,mcf,n):
         chi2=chain.treeVars["contributions"][v_index]
         pred=chain.treeVars["predictions"][v_index]
         #print "{:11g} {:<{width}{precision}{base}}{c!r}".format(chi2, pred, base='g', width=1, precision=4, c=constraint)
-        print "{:11.4g} {:11.4g} {!r}".format(chi2, pred, constraint)
+        print "{:11.2f} {:11.4g}   {!r}".format(chi2, pred, constraint)
         #print "{chi2:>f} {".format(chi2=chi2)
     print "==================================================================="
 
     if len(lhoods.keys()) > 0 : print "\nThe likelihoods give penalties:\n"
-    for i, lhood in enumerate(lhoods):
+    for i, lhood in enumerate(lhoods.items()):
         chi2=chain.treeVars["lhoods"][i]
-        print "{:11.4g} {!r}". format( chi2, lhood )
+        print "{:11.2f} {:16} {:16}". format( chi2, lhood[0], lhood[1] )
 
 def printMAInfo(chain,mcf):
-    print "\nMA info: \n "
-    import variables as v
-    MCVdict=v.mc_variables()
-    index = MCVdict["mA0"].getIndex(mcf)
-    MA=chain.treeVars["predictions"][index]
-    print "MA = %f" %MA 
-    index = MCVdict["mA0^2"].getIndex(mcf)
-    MA2=chain.treeVars["predictions"][index]
-    print "MA^2 = %f" %MA2 
     from math import sqrt
-    a=(sqrt(MA2)-MA)/MA
-    print "a = %f" % a
+    MA =getPrediction(chain,mcf,"mA0")
+    MAQ=sqrt(getPrediction(chain,mcf,"mA0^2"))
+    a=(MAQ-MA)/MA
+    print "\nMA info: \n "
+    print "MA(Q=M_Z)    = %f" %MA 
+    print "MA(Q=M_SUSY) = %f" %MAQ 
+    print "a            = %f" % a
     
-def printSpectrum(chain,mcf):
-    print "\nMass spectrum:\n"
+def getPrediction(chain,mcf,shortname):
     import variables as v
     MCVdict=v.mc_variables()
+    index = MCVdict[shortname].getIndex(mcf)
+    prediction=chain.treeVars["predictions"][index]
+    return prediction
 
+
+def printPrediction(chain,mcf,shortname):
+    p=getPrediction(chain,mcf,shortname)
+    print "{:11.2f} {!r}". format(p    , shortname) 
+
+
+def printSpectrum(chain,mcf):
+    spectrum_shortnames=[
+    "chi1"    , 
+    "chi2"    , 
+    "neu1"    , 
+    "neu2"    , 
+    "neu3"    , 
+    "neu4"    , 
+    "sel_r"   , 
+    "sel_l"   , 
+    "snu_e"   , 
+    "smu_r"   , 
+    "smu_l"   , 
+    "snu_mu"  , 
+    "stau_1"  , 
+    "stau_2"  , 
+    "snu_tau" , 
+    "squark_r",  
+    "squark_l", 
+    "stop1"   , 
+    "stop2"   , 
+    "sbottom1", 
+    "sbottom2", 
+    "gluino"  , 
+    "mh0"     , 
+    "mH0"     , 
+    "mA0"     , 
+    "mH+-"    ]
+
+    print "\nMass spectrum:\n"
+    for sn in spectrum_shortnames:
+        printPrediction(chain,mcf,sn)
+
+def printParameters(chain,mcf):
+    para_shortnames=[
+    "m0"  ,   
+    "m12" ,  
+    "A0"  ,  
+    "tanb",  ]
+    print "\nParameters:   \n"
+    for sn in para_shortnames:
+        printPrediction(chain,mcf,sn)
+    if mcf.PredictionIndex==12:
+        printPrediction(chain,mcf,"mh2")
+        
+def printMu(chain,mcf):
+    print "\nmu:\n"
+    printPrediction(chain,mcf,"mu")
 
 def printInfo(n,mcf) :
     chain = MCAnalysisChain( mcf )
     chain.GetEntry(n)
     printN(n)
-    printChi2(chain, n)
-    printAfterBurnerCoordinates(chain, mcf, n)
-    printX2BreakDown(chain,mcf,n)
+    printAfterBurnerCoordinates(chain, mcf)
+    printChi2(chain)
+    printParameters(chain,mcf)
+    printMu(chain,mcf)
     printSpectrum(chain,mcf) 
+    printX2BreakDown(chain,mcf,n)
     printMAInfo(chain,mcf)
