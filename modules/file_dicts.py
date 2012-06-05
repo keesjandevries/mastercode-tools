@@ -90,17 +90,17 @@ def cmssm_MC8_all_input() :
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    fd2= {
-             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_short.root" ,  
-             "Chi2TreeName"      : "tree",
-         }
-    mcf2= MCFile( fd2,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    fd3= {
-             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_medium.root" ,  
-             "Chi2TreeName"      : "tree",
-         }
-    mcf3= MCFile( fd3,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf,mcf2,mcf3 ], gd, warn = False)
+#    fd2= { looked like it's rubbish
+#             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_short.root" ,  
+#             "Chi2TreeName"      : "tree",
+#         }
+#    mcf2= MCFile( fd2,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    fd3= {
+#             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_medium.root" ,  
+#             "Chi2TreeName"      : "tree",
+#         }
+#    mcf3= MCFile( fd3,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
 
 def nuhm1_test_input() :
     gd = nuhm1_test_histo_dict()
@@ -117,6 +117,29 @@ def nuhm1_MCMh_mh125_input() :
     gd = nuhm1_MCMh_mh125_histo_dict()
 #    gd["StartEntry"] = 208280      
 #    gd["EndEntry"]   = 208295 
+    fd = {
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_MC8_drop_ATLAS_input() :
+    gd = nuhm1_MC8_drop_ATLAS_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 2 
+    fd = {
+             "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_MC8_drop_Bsmm_input() :
+    gd = nuhm1_MC8_drop_Bsmm_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 208295 
+#    gd["EndEntry"]   = 2 
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
@@ -325,10 +348,60 @@ def nuhm1_MCMh_mh125_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
-        "MaxMADiff"         : 0.4,
+        "MaxMADiff"         : 0.45,
      }
 def nuhm1_MCMh_mh125_histo() :
     return [MCFile(nuhm1_MCMh_mh125_histo_dict() )]
+
+def nuhm1_MC8_drop_Bsmm_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_MC8_drop_Bsmm.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/MC8-drop-Bsmm.lhood" ,
+        "ModelFile"         : "models/MC8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+     }
+def nuhm1_MC8_drop_Bsmm_histo() :
+    return [MCFile(nuhm1_MC8_drop_Bsmm_histo_dict() )]
+
+def nuhm1_MC8_drop_ATLAS_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_MC8_drop_ATLAS.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/MC8-drop-ATLAS.lhood" ,
+        "ModelFile"         : "models/MC8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+     }
+def nuhm1_MC8_drop_ATLAS_histo() :
+    return [MCFile(nuhm1_MC8_drop_ATLAS_histo_dict() )]
 
 def nuhm1_MC8_all_histo_dict() :
     return {
@@ -350,7 +423,7 @@ def nuhm1_MC8_all_histo_dict() :
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
-        "MaxMADiff"         : 0.4,
+        "MaxMADiff"         : 0.45,
      }
 def nuhm1_MC8_all_histo() :
     return [MCFile(nuhm1_MC8_all_histo_dict() )]
