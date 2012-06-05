@@ -5,7 +5,7 @@ from ctypes import byref
 from ctypes import c_double
 from ctypes import c_int
 
-def makeLHLib() :
+def make_lhlib() :
     import os
     build_dir = "reprocessing"
     cwd = os.getcwd() # get current directory
@@ -20,7 +20,7 @@ lhlib_path = './reprocessing/libs/libLH.so'
 try:
     open(lhlib_path)
 except:
-    makeLHLib()
+    make_lhlib()
 finally:
     lhoodLib = cdll.LoadLibrary('./reprocessing/libs/libLH.so')
 
