@@ -46,9 +46,9 @@ def nuhm1_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def cmssm_MCMh_mh125_input() :
+def cmssm_mcmh_mh125_input() :
     # output / global options
-    gd = cmssm_MCMh_mh125_histo_dict()
+    gd = cmssm_mcmh_mh125_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
 
@@ -61,9 +61,9 @@ def cmssm_MCMh_mh125_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def cmssm_MCMh_MC7_input() :
+def cmssm_mcmh_mc7_input() :
     # output / global options
-    gd = cmssm_MCMh_MC7_histo_dict()
+    gd = cmssm_mcmh_mc7_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
 
@@ -77,9 +77,9 @@ def cmssm_MCMh_MC7_input() :
     return MCFileCollection( [ mcf ], gd, warn = False)
 
 
-def cmssm_MC8_all_input() :
+def cmssm_mc8_all_input() :
     # output / global options
-    gd = cmssm_MC8_all_histo_dict()
+    gd = cmssm_mc8_all_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
 
@@ -103,8 +103,8 @@ def nuhm1_test_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def nuhm1_MCMh_mh125_input() :
-    gd = nuhm1_MCMh_mh125_histo_dict()
+def nuhm1_mcmh_mh125_input() :
+    gd = nuhm1_mcmh_mh125_histo_dict()
 #    gd["StartEntry"] = 208280
 #    gd["EndEntry"]   = 208295
     fd = {
@@ -114,8 +114,8 @@ def nuhm1_MCMh_mh125_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def nuhm1_MC8_all_input() :
-    gd = nuhm1_MC8_all_histo_dict()
+def nuhm1_mc8_all_input() :
+    gd = nuhm1_mc8_all_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 208295
     fd = {
@@ -125,7 +125,7 @@ def nuhm1_MC8_all_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def nuhm1_Bsmm2012_input() :
+def nuhm1_bsmm2012_input() :
     gd = nuhm1_Bsmm2012_histo_dict()
 #    gd["StartEntry"] = 208280
 #    gd["EndEntry"]   = 208295
@@ -136,8 +136,8 @@ def nuhm1_Bsmm2012_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def nuhm1_MCMh_MC7_input() :
-    gd = nuhm1_MCMh_MC7_histo_dict()
+def nuhm1_mcmh_mc7_input() :
+    gd = nuhm1_mcmh_mc7_histo_dict()
     gd["StartEntry"] = 208288
     gd["EndEntry"]   = 208290
     fd = {
@@ -196,7 +196,7 @@ def nuhm1_test_file_histo_dict() :
         "MinContrib"        : 0,
      }
 
-def cmssm_MCMh_mh125_histo_dict() :
+def cmssm_mcmh_mh125_histo_dict() :
     return {
         "FileName"          : "%s/cmssm_MCMh_mh125.root" % base_directory(),
         "Chi2TreeName"      : "tree",
@@ -217,10 +217,10 @@ def cmssm_MCMh_mh125_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def cmssm_MCMh_mh125_histo() :
-    return [MCFile(cmssm_MCMh_mh125_histo_dict() )]
+def cmssm_mcmh_mh125_histo() :
+    return [MCFile(cmssm_mcmh_mh125_histo_dict() )]
 
-def cmssm_MCMh_MC7_histo_dict() :
+def cmssm_mcmh_mc7_histo_dict() :
     return {
         "FileName"          : "%s/cmssm_MCMh_MC7.root" % base_directory(),
         "Chi2TreeName"      : "tree",
@@ -241,10 +241,10 @@ def cmssm_MCMh_MC7_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def cmssm_MCMh_MC7_histo() :
-    return [MCFile(cmssm_MCMh_MC7_histo_dict() )]
+def cmssm_mcmh_mc7_histo() :
+    return [MCFile(cmssm_mcmh_mc7_histo_dict() )]
 
-def cmssm_MC8_all_histo_dict() :
+def cmssm_mc8_all_histo_dict() :
     return {
         "FileName"          : "%s/cmssm_MC8_all.root" % base_directory(),
         "Chi2TreeName"      : "tree",
@@ -265,8 +265,8 @@ def cmssm_MC8_all_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def cmssm_MC8_all_histo() :
-    return [MCFile(cmssm_MC8_all_histo_dict() )]
+def cmssm_mc8_all_histo() :
+    return [MCFile(cmssm_mc8_all_histo_dict() )]
 
 def nuhm1_test_histo_dict() :
     return {
@@ -292,7 +292,7 @@ def nuhm1_test_histo_dict() :
 def nuhm1_test_histo() :
     return [MCFile(nuhm1_test_histo_dict() )]
 
-def nuhm1_MCMh_mh125_histo_dict() :
+def nuhm1_mcmh_mh125_histo_dict() :
     return {
         "FileName"          : "%s/nuhm1_MCMh_mh125.root" % base_directory(),
         "Chi2TreeName"      : "tree",
@@ -313,10 +313,10 @@ def nuhm1_MCMh_mh125_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def nuhm1_MCMh_mh125_histo() :
-    return [MCFile(nuhm1_MCMh_mh125_histo_dict() )]
+def nuhm1_mcmh_mh125_histo() :
+    return [MCFile(nuhm1_mcmh_mh125_histo_dict() )]
 
-def nuhm1_MC8_all_histo_dict() :
+def nuhm1_mc8_all_histo_dict() :
     return {
         "FileName"          : "%s/nuhm1_MC8_all.root" % base_directory(),
         "Chi2TreeName"      : "tree",
@@ -337,8 +337,8 @@ def nuhm1_MC8_all_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def nuhm1_MC8_all_histo() :
-    return [MCFile(nuhm1_MC8_all_histo_dict() )]
+def nuhm1_mc8_all_histo() :
+    return [MCFile(nuhm1_mc8_all_histo_dict() )]
 
 def nuhm1_Bsmm2012_histo_dict() :
     return {
@@ -361,10 +361,10 @@ def nuhm1_Bsmm2012_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def nuhm1_Bsmm2012_histo() :
-    return [MCFile(nuhm1_Bsmm2012_histo_dict() )]
+def nuhm1_bsmm2012_histo() :
+    return [MCFile(nuhm1_bsmm2012_histo_dict() )]
 
-def nuhm1_MCMh_MC7_histo_dict() :
+def nuhm1_mcmh_mc7_histo_dict() :
     return {
         "FileName"          : "%s/nuhm1_MCMH_MC7.root" % base_directory(),
         "Chi2TreeName"      : "tree",
@@ -385,5 +385,5 @@ def nuhm1_MCMh_MC7_histo_dict() :
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
-def nuhm1_MCMh_MC7_histo() :
-    return [MCFile(nuhm1_MCMh_MC7_histo_dict() )]
+def nuhm1_mcmh_mc7_histo() :
+    return [MCFile(nuhm1_mcmh_mc7_histo_dict() )]
