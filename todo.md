@@ -13,6 +13,7 @@ Current Development
 
 Problems
 --------
+* Inconsistent style: clean up variable / function / class / module naming conventions for readability
 * Debug problems with logx and logy not working 
     [ confirmed in spaces at least ]
     [ confirm it still actually happens ]
@@ -24,6 +25,8 @@ Problems
 Functionality
 -------------
 * KJ: Point-tools. Print all (relevant) predictions/ X^2 breakdown; if a plane
-    does not exist, make the missing plane; 
+    does not exist, make the missing plane;
 
-* SR: start storing separate "lhood_contrib" tree that hold our contributions per entry from the custom lhoods
+Repo
+----
+* Move this todo, etc. into issues (where relevant)
