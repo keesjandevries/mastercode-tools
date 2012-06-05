@@ -2,7 +2,7 @@
 import ROOT as r
 from itertools import permutations
 
-from histogramProcessing import entry_histo_full_path as histn
+from histogram_processing import entry_histo_full_path
 from modules.mcchain import MCAnalysisChain
 
 AB_BINARY = "../bin/Afterburner.exe"
@@ -68,7 +68,7 @@ def search_hist_name(vars,mcf) :
     try :
         while not hExist :
             p = h.next()
-            name = histn(p, mcf)
+            name = entry_histo_full_path(p, mcf)
             hExist = hist_exists( name, mcf )
     except StopIteration  :
         assert False, "The given coordinate(s) could not be found in a histogram. Please make a corresponding EntryHist. "

@@ -2,7 +2,7 @@
 import ROOT as r
 
 from modules.mcchain import MCAnalysisChain
-from modules import histogramProcessing
+from modules import histogram_processing
 
 from config import files
 from modules import plots
@@ -23,9 +23,9 @@ def main( argv=None ) :
         print_spaces( spaces, "Plots to make" )
 
         chain = MCAnalysisChain( mcf )
-        complete_histos =  histogramProcessing.calculate_entry_histograms( spaces, chain )
+        complete_histos =  histogram_processing.calculate_entry_histograms( spaces, chain )
 
-        histogramProcessing.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
+        histogram_processing.save_hlist_to_root_file( complete_histos, mcf.FileName, mcf.EntryDirectory )
 
 if __name__ == "__main__":
     main()
