@@ -123,7 +123,7 @@ def printX2BreakDown(chain,mcf,n):
     for constraint in model:
         sn=constraint.short_name
         MCV=MCVdict[sn]
-        v_index = MCV.getIndex(mcf)
+        v_index = MCV.get_index(mcf)
         chi2=chain.treeVars["contributions"][v_index]
         pred=chain.treeVars["predictions"][v_index]
         #print "{:11g} {:<{width}{precision}{base}}{c!r}".format(chi2, pred, base='g', width=1, precision=4, c=constraint)

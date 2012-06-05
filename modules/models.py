@@ -18,7 +18,7 @@ def get_lhood_from_file( mcf ) :
             for line in f :
                 name = line[:-1] #cut EOL
                 if name in lhs :
-                    var_ints = [ mcvars[varname].getIndex(mcf) for varname in lhs[name]["vars"]  ]
+                    var_ints = [ mcvars[varname].get_index(mcf) for varname in lhs[name]["vars"]  ]
                     out[name] = lhm.LHood( var_ints, lhs[name] )
                 else :
                     print "Unknown Likelihood: %s, ignoring!" % name
@@ -33,7 +33,7 @@ def get_lhood_names( mcf ) :
         with open(filename, 'rb') as f:
             for line in f :
                 name = line[:-1] #cut EOL
-                out[name] = [ mcvars[varname].getIndex(mcf) for varname in lhd[name]["vars"] ]
+                out[name] = [ mcvars[varname].get_index(mcf) for varname in lhd[name]["vars"] ]
     return out
 
 def get_model_from_file( mcf ) :

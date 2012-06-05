@@ -157,13 +157,13 @@ def recalc_to_file( collection ) :
 
             for constraint in model :
                 MCV=MCVdict[constraint.short_name]
-                v_index = MCV.getIndex(collection)
+                v_index = MCV.get_index(collection)
 
-                chi2_t = constraint.getChi2( chain.treeVars["predictions"][v_index] )
+                chi2_t = constraint.get_chi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
                 chi2 += chi2_t
             for i,lh in enumerate(lhoods.values()) :
-                chi2_t = lh.getChi2( chain.treeVars["predictions"] )
+                chi2_t = lh.get_chi2( chain.treeVars["predictions"] )
                 lhoodvars[i] = chi2_t
                 chi2 += chi2_t
 

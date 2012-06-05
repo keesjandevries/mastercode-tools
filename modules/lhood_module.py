@@ -27,7 +27,7 @@ finally:
 contour_base_dir = '../reprocessing/lhoods/contour_lookups/'
 lh1d_base_dir = '../reprocessing/lhoods/1d_lookups/'
 
-# should update to have getChi2 inherited from base LHood
+# should update to have get_chi2 inherited from base LHood
 # can abstract the constructor as well and have a function as a member of the class (i.e. LH1D just sets. self.lhood = RadialLikelihood_new
 
 class RadialLikelihood( object ):
@@ -36,7 +36,7 @@ class RadialLikelihood( object ):
         chi2_inf_c = c_double( chi2_inf )
         self.obj = lhoodLib.RadialLikelihood_new( str(filename), byref(chi2_c),
                                                   byref(chi2_inf_c) )
-    def getChi2( self, x, y ) :
+    def get_chi2( self, x, y ) :
         x_c = c_double(x)
         y_c = c_double(y)
         c2_c = c_double()
@@ -52,7 +52,7 @@ class CartesianLikelihood( object ) :
         self.obj = lhoodLib.CartesianLikelihood_new( byref(function_c), byref(mu_c),
                                                      byref(sigma_c), byref(ndof_c),
                                                      str(filename) )
-    def getChi2( self, x, y = 0. ) :
+    def get_chi2( self, x, y = 0. ) :
         x_c = c_double(x)
         y_c = c_double(y)
         c2_c = c_double()
@@ -75,12 +75,11 @@ class LHood( object ) :
     def __repr__(self):
         return self.name
 
-    def getChi2( self, vals ) :
+    def get_chi2( self, vals ) :
         args = [ vals[x] for x in self.var_pos ]
-        chi2 = self.LH.getChi2( *args  )
+        chi2 = self.LH.get_chi2( *args  )
         return chi2
 
-    def testChi2( self, vals ) :
-        chi2 = self.LH.getChi2( *vals )
+    def test_chi2( self, vals ) :
+        chi2 = self.LH.get_chi2( *vals )
         return chi2
-

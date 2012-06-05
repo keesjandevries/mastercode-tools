@@ -74,5 +74,5 @@ def runConstraint( constraint, args ) :
         "Constraint provided doe not exist, constraints are %s" % \
         ctd.get_constraint_dict().keys()
     for arg in argset :
-        chi2 = con.getChi2(arg[0])
+        chi2 = con.get_chi2(arg[0])
         print "{cname} @ {arg} => {chi2}".format( cname=con, arg=arg[0], chi2=chi2 )
