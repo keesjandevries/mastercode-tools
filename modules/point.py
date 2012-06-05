@@ -5,7 +5,7 @@ from itertools import permutations
 from histogramProcessing import entry_histo_full_path as histn
 from modules.mcchain import MCAnalysisChain
 
-AB_binary = "../bin/Afterburner.exe"
+AB_BINARY = "../bin/Afterburner.exe"
 
 def get_vars(argv) :
     # will output something like  {"m0" : 500, "m12" : 1000}
@@ -81,7 +81,7 @@ def print_afterburner_coordinates(chain, mcf, n):
 def get_afterburner_command( chain, mfc, n) :
     input_coords = get_input_coordinates( chain, mfc, n )
     input_strings = [ str(input) for input in input_coords ]
-    return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
+    return "%s 0 %s" % ( AB_BINARY, " ".join( input_strings ) )
 
 def get_input_coordinates( chain, mfc, n ) :
     chain.GetEntry(n)
