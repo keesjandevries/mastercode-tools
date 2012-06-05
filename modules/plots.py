@@ -1,6 +1,6 @@
 from config import plots as pc
-from modules.MCSpace import MCSpace
-from modules.MCSpace import MCContribution
+from modules.mcspace import MCSpace
+from modules.mcspace import MCContribution
 from modules.variables import mc_variables
 
 def get_plots(mcf) :

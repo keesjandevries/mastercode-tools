@@ -4,7 +4,7 @@ import ROOT as r
 from array import array
 from collections import defaultdict
 
-from modules.MCFile import MCFileCollection
+from modules.mcfile import MCFileCollection
 
 #-- Tree Classes
 #---------------
@@ -95,7 +95,7 @@ class MCRecalcChain( MCChain, object ) :
 
 class MCAnalysisChain( MCChain, object ) :
     def __init__(self, mcf) : #no need for a collection here
-        tData = [ 
+        tData = [
             treeData( "predictions", mcf.Chi2TreeName,    mcf.Chi2BranchName    ),
             treeData( "contributions", mcf.ContribTreeName, mcf.ContribBranchName ),
             treeData( "lhoods", mcf.LHoodTreeName,   mcf.LHoodBranchName   ),

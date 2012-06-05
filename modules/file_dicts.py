@@ -1,9 +1,9 @@
 import getpass
 import socket
 
-from commands import getoutput 
-from modules.MCFile import MCFileCollection
-from modules.MCFile import MCFile
+from commands import getoutput
+from modules.mcfile import MCFileCollection
+from modules.mcfile import MCFile
 
 def base_directory() :
     user = getpass.getuser()
@@ -25,10 +25,10 @@ def base_directory() :
 
 def cmssm_test_input_files() :
     # output / global options
-    gd = cmssm_test_file_histo_dict() 
+    gd = cmssm_test_file_histo_dict()
 #    gd["StartEntry"] = 1
 #    gd["EndEntry"]   = 4000
-    
+
     # input files: 1 dict per file
     fd = {
              "FileName"          : "%s/cmssm_test.root" % base_directory(),
@@ -46,47 +46,47 @@ def nuhm1_test_input_files() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def cmssm_MCMh_mh125_input() :   
+def cmssm_MCMh_mh125_input() :
     # output / global options
-    gd = cmssm_MCMh_mh125_histo_dict()   
+    gd = cmssm_MCMh_mh125_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
-    
+
     # input files: 1 dict per file
     fd = {
              # copied from /vols/cms03/kjd110/Mar2012-CMSSM-AB-output/dm_aab_force_out.root
-             "FileName"          : "%s/dm_aab_force_out.root" % base_directory(),  
+             "FileName"          : "%s/dm_aab_force_out.root" % base_directory(),
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def cmssm_MCMh_MC7_input() :   
+def cmssm_MCMh_MC7_input() :
     # output / global options
-    gd = cmssm_MCMh_MC7_histo_dict()   
+    gd = cmssm_MCMh_MC7_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
-    
+
     # input files: 1 dict per file
     fd = {
              # copied from /vols/cms03/kjd110/Mar2012-CMSSM-AB-output/dm_aab_force_out.root
-             "FileName"          : "%s/dm_aab_force_out.root" % base_directory(),  
+             "FileName"          : "%s/dm_aab_force_out.root" % base_directory(),
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
 
-def cmssm_MC8_all_input() :   
+def cmssm_MC8_all_input() :
     # output / global options
-    gd = cmssm_MC8_all_histo_dict()   
+    gd = cmssm_MC8_all_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
-    
+
     # input files: 1 dict per file
     fd = {
              # copied from /vols/cms03/kjd110/Mar2012-CMSSM-AB-output/dm_aab_force_out.root
-             "FileName"          : "%s/dm_aab_force_out.root" % base_directory(),  
+             "FileName"          : "%s/dm_aab_force_out.root" % base_directory(),
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
@@ -94,7 +94,7 @@ def cmssm_MC8_all_input() :
 
 def nuhm1_test_input() :
     gd = nuhm1_test_histo_dict()
-    gd["StartEntry"] = 15486728     
+    gd["StartEntry"] = 15486728
     gd["EndEntry"]   = 15486729
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
@@ -105,8 +105,8 @@ def nuhm1_test_input() :
 
 def nuhm1_MCMh_mh125_input() :
     gd = nuhm1_MCMh_mh125_histo_dict()
-#    gd["StartEntry"] = 208280      
-#    gd["EndEntry"]   = 208295 
+#    gd["StartEntry"] = 208280
+#    gd["EndEntry"]   = 208295
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
@@ -116,8 +116,8 @@ def nuhm1_MCMh_mh125_input() :
 
 def nuhm1_MC8_all_input() :
     gd = nuhm1_MC8_all_histo_dict()
-#    gd["StartEntry"] = 0      
-#    gd["EndEntry"]   = 208295 
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 208295
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
@@ -127,8 +127,8 @@ def nuhm1_MC8_all_input() :
 
 def nuhm1_Bsmm2012_input() :
     gd = nuhm1_Bsmm2012_histo_dict()
-#    gd["StartEntry"] = 208280 
-#    gd["EndEntry"]   = 208295 
+#    gd["StartEntry"] = 208280
+#    gd["EndEntry"]   = 208295
     fd = {
              "FileName"          : "%s/new-nuhm1-MC75-source.root" % base_directory(),
              "Chi2TreeName"      : "tree",
@@ -209,7 +209,7 @@ def cmssm_MCMh_mh125_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/MC7.lhood",     
+        "LHoodFile"         : "models/MC7.lhood",
         "ModelFile"         : "models/MCMh-mh125.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
@@ -305,7 +305,7 @@ def nuhm1_MCMh_mh125_histo_dict() :
         "PredictionIndex"   : 12,
         "SpectrumIndex"     : 119,
         "Inputs"            : 12, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/MC7.lhood",     
+        "LHoodFile"         : "models/MC7.lhood",
         "ModelFile"         : "models/MCMh-mh125.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",

@@ -3,7 +3,7 @@ import ROOT as r
 from itertools import permutations
 
 from histogramProcessing import entry_histo_full_path as histn
-from modules.MCChain import MCAnalysisChain
+from modules.mcchain import MCAnalysisChain
 
 AB_binary = "../bin/Afterburner.exe"
 
@@ -78,11 +78,11 @@ def printAfterBurnerCoordinates(chain, mcf, n):
     print"Command for AfterBurner.exe is: "
     print "\t%s" % getAfterBurnerCommand(chain, mcf, n)
 
-def getAfterBurnerCommand( chain, mfc, n) : 
+def getAfterBurnerCommand( chain, mfc, n) :
     input_coords = getInputCoordinates( chain, mfc, n )
     input_strings = [ str(input) for input in input_coords ]
     return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
-    
+
 def getInputCoordinates( chain, mfc, n ) :
     chain.GetEntry(n)
     return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
@@ -95,7 +95,7 @@ def getBfEntry(mcf):
         t=f.Get(bfName).Clone()
     except ReferenceError:
         assert False,   "%s does not contain a tree with the best fit point" % mcf.FileName
-    
+
     for entry in t:
         n=entry.EntryNo
 
@@ -136,7 +136,7 @@ def printX2BreakDown(chain,mcf,n):
         chi2=chain.treeVars["lhoods"][i]
         print "{:11.4g} {!r}". format( chi2, lhood )
 
-    
+
 def printInfo(n,mcf) :
     chain = MCAnalysisChain( mcf )
     printN(n)
