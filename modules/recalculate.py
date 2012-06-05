@@ -95,10 +95,10 @@ def spectrum_constraints( point, collection, verbose = 0 ) :
 
     return penalty
 
-def recalc_to_file( collection ) :
+def recalc_to_file( collection, output_file = "" ) :
     model  = models.get_model_from_file(collection)
     lhoods = models.get_lhood_from_file(collection)
-    outfile = collection.FileName
+    outfile = collection.FileName if output_file == "" else output_file
     print "Output file is %s" % outfile
 
     # initialise the MC-variables
@@ -206,5 +206,5 @@ def recalc_to_file( collection ) :
         print "%10e(%10e)" % ( total_delta, (total_delta/(end-begin)) )
         print "\n--------------------------\n"
 
-def go( collection ) :
-    recalc_to_file( collection )
+def go( collection, output_file ) :
+    recalc_to_file( collection, output_file )
