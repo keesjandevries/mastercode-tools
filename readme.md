@@ -22,5 +22,10 @@ Executables
     - `./Test.py --constraint mtop_MC7 174.2`
     - `./Test.py --likelihood CMSalphaT1.6 100 100`
 
+Development
+-----------
+Note, as much as reasonable we try to follow the [PEP 8 Style
+Guide](http://www.python.org/dev/peps/pep-0008/).
 
-
+The main exception to this is implementing ROOT interfaces where leading we use
+their style of `AlternatingCase` for all member functions.

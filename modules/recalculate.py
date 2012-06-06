@@ -2,7 +2,7 @@
 import models
 
 import ROOT as r
-from modules.MCChain import MCRecalcChain
+from modules.mcchain import MCRecalcChain
 import variables as v
 
 from progress_bar import ProgressBar
@@ -131,13 +131,13 @@ def recalc_to_file( collection, output_file = "" ) :
     varsOutName = "vars[%d]/D" % ( nLHoods )
     lhoodtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     lhoodtree.Branch("vars",lhoodvars,varsOutName)
-    
+
     # want to save best fit point entry number: create new tree and branch
-    bfname = getattr( collection, "BestFitEntryName", "BestFitEntry"  ) 
+    bfname = getattr( collection, "BestFitEntryName", "BestFitEntry"  )
     bft=r.TTree(bfname, "Entry")
     bfn=array('i',[0])
     bft.Branch('EntryNo',bfn,'EntryNo/I')
-    
+
     # and the minChi minEntry
     minChi=1e9
     minEntry=-1
@@ -157,13 +157,13 @@ def recalc_to_file( collection, output_file = "" ) :
 
             for constraint in model :
                 MCV=MCVdict[constraint.short_name]
-                v_index = MCV.getIndex(collection)
-                
-                chi2_t = constraint.getChi2( chain.treeVars["predictions"][v_index] )
+                v_index = MCV.get_index(collection)
+
+                chi2_t = constraint.get_chi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
                 chi2 += chi2_t
             for i,lh in enumerate(lhoods.values()) :
-                chi2_t = lh.getChi2( chain.treeVars["predictions"] )
+                chi2_t = lh.get_chi2( chain.treeVars["predictions"] )
                 lhoodvars[i] = chi2_t
                 chi2 += chi2_t
 

@@ -4,7 +4,7 @@ import ROOT as r
 from array import array
 from collections import defaultdict
 
-from modules.MCFile import MCFileCollection
+from modules.mcfile import MCFileCollection
 
 #-- Tree Classes
 #---------------
@@ -36,10 +36,10 @@ class MCChain( object ) :
         if mcfc.__class__.__name__ == "MCFile" :
             mcfc = MCFileCollection([mcfc])
         if not hasattr(self, "treeFiles") : setattr( self, "treeFiles", [] )
-        self.initializeChains()
-        self.setupBranches()
+        self.initialize_chains()
+        self.setup_branches()
 
-    def initializeChains( self ) :
+    def initialize_chains( self ) :
         self.chains = {}
         self.branchNames = {}
         for tFile in self.treeFiles :
@@ -56,7 +56,7 @@ class MCChain( object ) :
         self.contentKeys = sorted(self.chains.keys())
         self.baseKey = self.contentKeys[0]
 
-    def setupBranches( self ) :
+    def setup_branches( self ) :
         self.nTotVars = {}
         self.treeVars = {}
         for contentKey in self.contentKeys :
@@ -95,7 +95,7 @@ class MCRecalcChain( MCChain, object ) :
 
 class MCAnalysisChain( MCChain, object ) :
     def __init__(self, mcf) : #no need for a collection here
-        tData = [ 
+        tData = [
             treeData( "predictions", mcf.Chi2TreeName,    mcf.Chi2BranchName    ),
             treeData( "contributions", mcf.ContribTreeName, mcf.ContribBranchName ),
             treeData( "lhoods", mcf.LHoodTreeName,   mcf.LHoodBranchName   ),

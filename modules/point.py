@@ -2,36 +2,36 @@
 import ROOT as r
 from itertools import permutations
 
-from histogramProcessing import entry_histo_full_path as histn
-from modules.MCChain import MCAnalysisChain
+from histogram_processing import entry_histo_full_path
+from modules.mcchain import MCAnalysisChain
 
-AB_binary = "../bin/Afterburner.exe"
+AB_BINARY = "../bin/Afterburner.exe"
 
-def getVars(argv) :
+def get_vars(argv) :
     # will output something like  {"m0" : 500, "m12" : 1000}
     vars={}
     for arg in argv:
-        var,val=  parseVar(arg)
+        var,val=  parse_var(arg)
         vars[var]=val
     return vars
 
-def parseVar(arg) :
+def parse_var(arg) :
     s=arg.split("=")
     var=s[0].replace(' ','')
     val=float(s[1])
     return var, val
 
-def getCoorEntry(vars,mcf) :
-    name,order=searchHistName(vars,mcf)
+def get_coor_entry(vars,mcf) :
+    name,order=search_hist_name(vars,mcf)
 
     if name:
         print "Coordinates found in ", name
-        n=getEntryFromHisto(vars,order,name,mcf)
+        n=get_entry_from_histo(vars,order,name,mcf)
         return n
     else :
         return -1
 
-def getEntryFromHisto(vars,order,name,mcf) :
+def get_entry_from_histo(vars,order,name,mcf) :
     f = r.TFile.Open(mcf.FileName)
     hist = f.Get(name).Clone()
     hist.SetDirectory(0)
@@ -44,7 +44,7 @@ def getEntryFromHisto(vars,order,name,mcf) :
     n = hist.GetBinContent(hBin)
     return int(n)
 
-def histExists(name, mcf) :
+def hist_exists(name, mcf) :
     filename = mcf.FileName
     f = r.TFile(filename)
     assert not f.IsZombie(), filename
@@ -57,37 +57,37 @@ def histExists(name, mcf) :
         exists = False
     return exists
 
-def listPermutations( l ) :
+def list_permutations( l ) :
     return list( permutations(l) )
 
-def searchHistName(vars,mcf) :
-    var_perms = listPermutations( vars.keys() )
+def search_hist_name(vars,mcf) :
+    var_perms = list_permutations( vars.keys() )
     h = iter(var_perms)
 
     hExist = False
     try :
         while not hExist :
             p = h.next()
-            name = histn(p, mcf)
-            hExist = histExists( name, mcf )
+            name = entry_histo_full_path(p, mcf)
+            hExist = hist_exists( name, mcf )
     except StopIteration  :
         assert False, "The given coordinate(s) could not be found in a histogram. Please make a corresponding EntryHist. "
     return name, p
 
-def printAfterBurnerCoordinates(chain, mcf, n):
+def print_afterburner_coordinates(chain, mcf, n):
     print"Command for AfterBurner.exe is: "
-    print "\t%s" % getAfterBurnerCommand(chain, mcf, n)
+    print "\t%s" % get_afterburner_command(chain, mcf, n)
 
-def getAfterBurnerCommand( chain, mfc, n) : 
-    input_coords = getInputCoordinates( chain, mfc, n )
+def get_afterburner_command( chain, mfc, n) :
+    input_coords = get_input_coordinates( chain, mfc, n )
     input_strings = [ str(input) for input in input_coords ]
-    return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
-    
-def getInputCoordinates( chain, mfc, n ) :
+    return "%s 0 %s" % ( AB_BINARY, " ".join( input_strings ) )
+
+def get_input_coordinates( chain, mfc, n ) :
     chain.GetEntry(n)
     return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
 
-def getBfEntry(mcf):
+def get_best_fit_entry(mcf):
     f=r.TFile(mcf.FileName)
     bfName=getattr(mcf,"BestFitEntryName","BestFitEntry" )
     #check wheterh best fit point is in the file
@@ -95,21 +95,21 @@ def getBfEntry(mcf):
         t=f.Get(bfName).Clone()
     except ReferenceError:
         assert False,   "%s does not contain a tree with the best fit point" % mcf.FileName
-    
+
     for entry in t:
         n=entry.EntryNo
 
     f.Close()
     return n
 
-def printChi2(chain, n):
+def print_chi2(chain, n):
     chain.GetEntry(n)
     print "Total X^2 = %f" % chain.treeVars["predictions"][ 0 ]
 
-def printN(n):
+def print_n(n):
     print "Found entry number: %d" % n
 
-def printX2BreakDown(chain,mcf,n):
+def print_chi2_breakdown(chain,mcf,n):
     import models
     import variables as v
     model  = models.get_model_from_file(mcf)
@@ -123,7 +123,7 @@ def printX2BreakDown(chain,mcf,n):
     for constraint in model:
         sn=constraint.short_name
         MCV=MCVdict[sn]
-        v_index = MCV.getIndex(mcf)
+        v_index = MCV.get_index(mcf)
         chi2=chain.treeVars["contributions"][v_index]
         pred=chain.treeVars["predictions"][v_index]
         #print "{:11g} {:<{width}{precision}{base}}{c!r}".format(chi2, pred, base='g', width=1, precision=4, c=constraint)
@@ -136,10 +136,10 @@ def printX2BreakDown(chain,mcf,n):
         chi2=chain.treeVars["lhoods"][i]
         print "{:11.4g} {!r}". format( chi2, lhood )
 
-    
-def printInfo(n,mcf) :
+
+def print_info(n,mcf) :
     chain = MCAnalysisChain( mcf )
-    printN(n)
-    printChi2(chain, n)
-    printAfterBurnerCoordinates(chain, mcf, n)
-    printX2BreakDown(chain,mcf,n)
+    print_n(n)
+    print_chi2(chain, n)
+    print_afterburner_coordinates(chain, mcf, n)
+    print_chi2_breakdown(chain,mcf,n)

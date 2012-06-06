@@ -15,20 +15,20 @@ def opts():
     return options, args
 ############################################
 
-    
+
 
 def main( argv=None ) :
-    options, args = opts()  
-    
+    options, args = opts()
+
     try :
         l_args = [ eval(a) for a in args ]
     except NameError :
         print "Assuming arguments are filenames"
         l_args = [ str(a) for a in args ]
     if  options.likelihood is not None :
-        tests.runLikelihood( options.likelihood, l_args )
+        tests.run_likelihood( options.likelihood, l_args )
     elif options.constraint is not None :
-        tests.runConstraint( options.constraint, l_args )
+        tests.run_constraint( options.constraint, l_args )
 
 
 

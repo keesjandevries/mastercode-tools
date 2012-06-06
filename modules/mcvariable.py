@@ -24,7 +24,6 @@ class Variable(object) :
     def __repr__( self ) :
         return " %s %s " % (self.short_name, self.long_name )
 
-  
 
 class MCVariable(Variable, object) :
     def __init__( self, var, offset_relative_to = None, index_offset = 0 ) :
@@ -40,10 +39,10 @@ class MCVariable(Variable, object) :
         return self.short_name
 
     def __repr__( self ) :
-        r_f = "%s [%s] %0.4f +- %0.4f ( %s + %d )" 
+        r_f = "%s [%s] %0.4f +- %0.4f ( %s + %d )"
         return  "%s ( %s + %d )"  % (super(MCVariable, self).__repr__(), self.offset_relative_to, self.index_offset )
 
-    def getIndex(self,mcf) :
+    def get_index(self,mcf) :
         offset = getattr( mcf, self.offset_relative_to, None ) if (self.offset_relative_to is not None) else 0
         return ( self.index_offset + offset ) if offset is not None else -1
 
@@ -70,11 +69,11 @@ class Constraint(object ):
             name=self.short_name, ctype=self.constraint_type,
             limit=self.limit_value, error=getattr(self,"error",0.) )
 
-    def getZValue(self, value) :
+    def get_z_value(self, value) :
         return zvalue_functions[self.constraint_type]( self, value )
 
-    def getChi2(self, value) :
-        return self.getZValue(value)**2
+    def get_chi2(self, value) :
+        return self.get_z_value(value)**2
 
-    def getShortName(self):
+    def get_short_name(self):
         return self.short_name

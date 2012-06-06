@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import ROOT as r
-import MCSpace as s
-from modules.MCChain import MCAnalysisChain
+import mcspace as s
+from modules.mcchain import MCAnalysisChain
 from progress_bar import ProgressBar
 from sys import stdout
 from array import array
@@ -27,7 +27,7 @@ def histo_name( vl = [], f = entry_histo_prefix ) :
 def entry_histo_full_path(vl,mcf):
     entry_hist_dict = mcf.EntryDirectory
     hist_name =  histo_name(vl)
-    full_name =  "%s/%s" % ( entry_hist_dict, hist_name ) 
+    full_name =  "%s/%s" % ( entry_hist_dict, hist_name )
     return full_name
 
 
@@ -68,7 +68,7 @@ def initialize_histo( obj ) :
 
     bins = [ array('d',[0.0] * (abins+1)) for abins in obj.nbins ]
 #    print "***"
-#    for index, min_val, max_val, nbins, name, log in zip( obj.indices, 
+#    for index, min_val, max_val, nbins, name, log in zip( obj.indices,
 #            obj.min_vals, obj.max_vals, obj.nbins, obj.names,
 #            obj.log ) :
 #        print index, min_val, max_val, nbins, name, log
@@ -103,7 +103,7 @@ def initialize_histo( obj ) :
 
     content = r.Long(1e9)
     econtent = -1
-    
+
     up_bin = [ abin + 1 for abin in obj.nbins ]
     nbins = reduce(mul, up_bin)
     for i in range(0,nbins) :
@@ -129,7 +129,7 @@ def calculate_entry_histograms( plots, chain ) :
         prog.increment_amount()
         print prog,'\r',
         stdout.flush()
-        chain.GetEntry(entry) 
+        chain.GetEntry(entry)
         for h, c, plot in zip( histos, chi2histos, plots ) :
             indices = plot.get_indices()
             vals = [ chain.treeVars["predictions"][ index ] for index in indices ]
@@ -138,25 +138,25 @@ def calculate_entry_histograms( plots, chain ) :
             if ibin != 0 and ibin < nbins+1 :
                 chi2 = chain.treeVars["predictions"][0]
                 if chi2 < c.GetBinContent(ibin) :
-                    c.SetBinContent(ibin, chi2) 
+                    c.SetBinContent(ibin, chi2)
                     h.SetBinContent(ibin, entry)
 
     print
     return histos
- 
+
 def count_ndof( c, min_contrib, inputs ) :
     count = 0
-    for x in c[1:] :    
+    for x in c[1:] :
         if x > min_contrib :
             count += 1
     count -= inputs
     return count
 
 def check_chi_mode(mode):
-    if mode == "chi2" or mode == "dchi": 
+    if mode == "chi2" or mode == "dchi":
         return 0
 
-    # If one specifies dchi_i , then the dX^2 contibution of constraint i is given!    
+    # If one specifies dchi_i , then the dX^2 contibution of constraint i is given!
     m=mode.split("_")
     if len(m) == 2 and m[0]=="dchi":
         i= int(m[1])
@@ -164,15 +164,15 @@ def check_chi_mode(mode):
 
     else:
         return -1
-     
 
-def fill_bins( histo_cont, contrib_cont, contribs, bin, chain, mcf ) : 
+
+def fill_bins( histo_cont, contrib_cont, contribs, bin, chain, mcf ) :
     for mode in histo_cont.keys() :
         fill = False
         curr_content = histo_cont[mode].GetBinContent(bin)
         content = 0.
-        if mode == "chi2" or mode == "dchi" :  
-        #if check_chi_mode(mode) >= 0:  
+        if mode == "chi2" or mode == "dchi" :
+        #if check_chi_mode(mode) >= 0:
             # for dchi offset is done later
             #ichi= check_chi_mode(mode)
             content = chain.treeVars["contributions"][0]
@@ -182,7 +182,7 @@ def fill_bins( histo_cont, contrib_cont, contribs, bin, chain, mcf ) :
             chi2 = chain.treeVars["predictions"][0]
             content = r.TMath.Prob( chi2, ndof )
             fill = ( content > curr_content )
-        if fill : 
+        if fill :
             histo_cont[mode].SetBinContent(bin,content)
             if mode == "chi2" : # want to also fill values for the contrib
                 for contrib in contribs :
@@ -200,7 +200,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
 
         h_dim = int(h.ClassName()[2])
         dim_range = range(h_dim)
-        
+
         axis_nbins = []
         axis_mins = []
         axis_maxs = []
