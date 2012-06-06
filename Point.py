@@ -13,7 +13,7 @@ def opts():
                        default= False , help="print info of best fit point" )
     parser.add_option( "-c", "--coordinates", action="store_true", dest="coor_mode",
                        default= False , help="print info for specified coordinates, e.g. \"m0= 500\" \"m12 = 1000\"" )
-    parser.add_option( "-n", "--entrynumber", action="store", dest="entry_nr",
+    parser.add_option( "-n", "--entrynumber", action="store", dest="entry_nr", type="int",
                        default= -1 , help="print info for entry number " )
     options,args = parser.parse_args()
     return options, args
@@ -41,9 +41,9 @@ def main( argv=None ) :
             pt.print_info(n,mcf)
 
         if options.entry_nr >= 0 :
-            n=int(options.entry_nr)
+            n=options.entry_nr
             print "\nSearch entry number %d point in %s" % (n, mcf.FileName)
-            pt.printInfo(n,mcf)
+            pt.print_info(n,mcf)
 
 
 if __name__ == "__main__":
