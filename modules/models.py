@@ -33,7 +33,6 @@ def get_lhood_names( mcf ) :
         with open(filename, 'rb') as f:
             for line in f :
                 name = line[:-1] #cut EOL
-              #  out[name] = [ mcvars[varname].getIndex(mcf) for varname in lhd[name]["vars"] ]
                 out[name] = lhd[name]["name"] 
     return out
 
