@@ -76,12 +76,12 @@ def search_hist_name(vars,mcf) :
 
 def print_afterburner_coordinates(chain, mcf):
     print"Command for AfterBurner.exe is: "
-    print "\t%s" % get_after_burner_command(chain, mcf)
+    print "\t%s" % get_afterburner_command(chain, mcf)
 
 def get_afterburner_command( chain, mfc) : 
     input_coords = get_input_coordinates( chain, mfc )
     input_strings = [ str(input) for input in input_coords ]
-    return "%s 0 %s" % ( AB_binary, " ".join( input_strings ) )
+    return "%s 0 %s" % ( AB_BINARY, " ".join( input_strings ) )
     
 def get_input_coordinates( chain, mfc ) :
     return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
@@ -147,7 +147,7 @@ def print_ma_info(chain,mcf):
 def get_prediction(chain,mcf,shortname):
     import variables as v
     MCVdict=v.mc_variables()
-    index = MCVdict[shortname].getIndex(mcf)
+    index = MCVdict[shortname].get_index(mcf)
     prediction=chain.treeVars["predictions"][index]
     return prediction
 
@@ -215,5 +215,5 @@ def print_info(n,mcf) :
     print_parameters(chain,mcf)
     print_mu(chain,mcf)
     print_spectrum(chain,mcf) 
-    print_chi2_breakdown(chain,mcf,n)
+    print_chi2_breakdown(chain,mcf)
     print_ma_info(chain,mcf)
