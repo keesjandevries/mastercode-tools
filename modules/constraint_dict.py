@@ -9,6 +9,7 @@ def get_constraint_dict():
         "R(b->sg)_MC7"     : Constraint( "R(b->sg)",       "GAUSS", 1.117,    [0.12] ),
         "R(D_ms)_MC7"      : Constraint( "R(D_ms)",        "GAUSS", 0.97,     [0.01, 0.27] ),
         "Bsmumu_MC7"       : Constraint( "Bsmumu",         "UL",    4.6E-8,   [0.1E-9, 0.2E-9] ),
+        "Bsmumu_test"      : Constraint( "Bsmumu",         "UL",    2.3E-9,   [ 1.73E-9] ),
         "R(B->taunu)_MC7"  : Constraint( "R(B->taunu)",    "GAUSS", 1.43,     [0.43] ),
         "R(B->Xsll)_MC7"   : Constraint( "R(B->Xsll)",     "GAUSS", 0.99,     [0.32, 0.00] ),
         "R(K->lnu)_MC7"    : Constraint( "R(K->lnu)",      "GAUSS", 1.008,    [0.014 ] ),

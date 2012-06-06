@@ -10,7 +10,7 @@ from modules import recalculate as recalc
 def opts():
     parser = OptionParser("usage: %prog [options]")
     parser.add_option( "-o", "--output", action="store", dest="output",
-                       default="recalc_out.root", help="name for output file" )
+                       default="", help="name for output file" )
     options,args = parser.parse_args()
     return options, args
 ############################################
