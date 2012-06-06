@@ -1,4 +1,4 @@
-from MCVariable import Constraint 
+from mcvariable import Constraint
 
 def get_constraint_dict():
     d={

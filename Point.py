@@ -19,26 +19,26 @@ def opts():
     return options, args
 ############################################
 
-    
+
 
 def main( argv=None ) :
     # retrieve file
     files = fd.point_files()
 
     #Get options
-    options, args = opts()  
-    
+    options, args = opts()
+
     for mcf in files:
         if options.coor_mode :
             print "\nSearch for coordinates", args, " in " , mcf.FileName
-            vars=pt.getVars(args)
-            n=pt.getCoorEntry(vars,mcf)
-            pt.printInfo(n,mcf)
+            vars=pt.get_vars(args)
+            n=pt.get_coor_entry(vars,mcf)
+            pt.print_info(n,mcf)
 
         if options.bf_mode :
             print "\nSearch for best it point in ", mcf.FileName
-            n=pt.getBfEntry(mcf)
-            pt.printInfo(n,mcf)
+            n=pt.get_best_fit_entry(mcf)
+            pt.print_info(n,mcf)
 
         if options.entry_nr >= 0 :
             n=int(options.entry_nr)

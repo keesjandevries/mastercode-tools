@@ -8,7 +8,7 @@ class MCSpace( object ) : # file specific object version of MCVariable
         self.log = options.get( 'logaxes' ,[False]*len(MCVs)) # FIXME
 
         self.dimension   = len(MCVs)
-        self.indices     = [ v.getIndex(MCF) for v in MCVs ]
+        self.indices     = [ v.get_index(MCF) for v in MCVs ]
         self.min_vals    = [ r[0] for r in options["ranges"] ]
         self.max_vals    = [ r[1] for r in options["ranges"] ]
         self.names       = [ v.long_name for v in MCVs ]
@@ -24,7 +24,7 @@ class MCSpace( object ) : # file specific object version of MCVariable
     def __repr__( self ) :
         r_f = "(%s) %s" + ("[%4.2e, %4.2e]{%d}")*self.dimension
         l = []
-        [ l.extend( [ smin, smax, sbin ] ) for smin, smax, sbin in 
+        [ l.extend( [ smin, smax, sbin ] ) for smin, smax, sbin in
             zip (self.min_vals, self.max_vals, self.nbins ) ]
         return r_f % tuple(  [", ".join( [ str(index) for index in self.indices ] ), self.name] + l )
 
@@ -36,6 +36,6 @@ class MCSpace( object ) : # file specific object version of MCVariable
 
 class MCContribution( object ) :
     def __init__( self, MCF, MCV ) :
-        self.index = MCV.getIndex(MCF)
+        self.index = MCV.get_index(MCF)
         self.name = MCV.long_name
         self.short_name = MCV.short_name
