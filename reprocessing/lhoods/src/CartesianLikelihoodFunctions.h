@@ -17,6 +17,7 @@ class CartesianLikelihoodFunctions
     // likelihood functions
     double Gauss(double,double,Coords&);
     double PDF(double,double,Coords&); 
+    double CHI2(double,double,Coords&);
     double CL(double,double,Coords&);
     double XenonMC6(double,double,Coords&);
     double BsmmMC6(double,double,Coords&);

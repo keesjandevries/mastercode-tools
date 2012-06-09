@@ -4,6 +4,12 @@
 #include <cmath>
 #include <string>
 
+double getChi2_Chi2(Coords& c, double val)
+{
+  // get the X^2 directly !!!!
+  return c.getYVal(val);
+}
+
 double getChi2_CL(Coords& c, double val)
 {
   double chi2 = 0;
@@ -66,6 +72,11 @@ double CartesianLikelihoodFunctions::Gauss( double P, double Q, Coords &c )
 double CartesianLikelihoodFunctions::PDF( double P, double Q, Coords &c )
 {
     return getChi2_PDF( c, P );
+}
+
+double CartesianLikelihoodFunctions::CHI2( double P, double Q, Coords &c )
+{
+    return getChi2_Chi2( c, P );
 }
 
 double CartesianLikelihoodFunctions::CL( double P, double Q, Coords &c )
