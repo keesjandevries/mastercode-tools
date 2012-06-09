@@ -81,6 +81,10 @@ def mc_variables() :
             "mH0"          : MCV( b["mH0"],           index_offset=23, offset_relative_to="SpectrumIndex" ),
             "mA0"          : MCV( b["mA0"],           index_offset=24, offset_relative_to="SpectrumIndex" ),
             "mH+-"         : MCV( b["mH+-"],          index_offset=25, offset_relative_to="SpectrumIndex" ),
+            "ssmh0"        : MCV( b["ssmh0"],         index_offset=30, offset_relative_to="SpectrumIndex" ),
+            "ssmH0"        : MCV( b["ssmH0"],         index_offset=31, offset_relative_to="SpectrumIndex" ),
+            "ssmA0"        : MCV( b["ssmA0"],         index_offset=32, offset_relative_to="SpectrumIndex" ),
+            "ssmH+-"       : MCV( b["ssmH+-"],        index_offset=33, offset_relative_to="SpectrumIndex" ),
     }
     return m
 
@@ -99,7 +103,7 @@ def base_variables() :
         "DAlpha_had"   : Var( "DAlpha_had",    r"$\Delta\alpha_{had}$"               ),
         "R(b->sg)"     : Var( "R(b->sg)",      r"$R(b\rightarrow s\gamma)$"          ),
         "R(D_ms)"      : Var( "R(D_ms)",       r"$R(\Delta_{ms}$"                    ),
-        "Bsmumu"       : Var( "Bsmumu",        r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})"),
+        "Bsmumu"       : Var( "Bsmumu",        r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})$"),
         "R(B->taunu)"  : Var( "R(B->taunu)",   r"$R(B\rightarrow\tau\nu)$"           ),
         "R(B->Xsll)"   : Var( "R(B->Xsll)",    r"$R(B\rightarrow X_{s}\ell\ell$"     ),
         "R(K->lnu)"    : Var( "R(K->lnu)",     r"$R(K\rightarrow\ell\nu)$",          ),
@@ -145,8 +149,10 @@ def base_variables() :
         "stau_1"       : Var( "stau_1",        r"$m_{\tilde{\tau}_{1}} %s$"%GeVc2 ),
         "stau_2"       : Var( "stau_2",        r"$m_{\tilde{\tau}_{2}} %s$"%GeVc2 ),
         "snu_tau"      : Var( "snu_tau",       r"$m_{\tilde{\nu}_{\tau}} %s$"%GeVc2 ),
-        "squark_r"     : Var( "squark_r",      r"$m_{\tilde{q}_{r}} %s \textrm{(average)}$"%GeVc2 ),
-        "squark_l"     : Var( "squark_l",      r"$m_{\tilde{q}_{l}} %s \textrm{(average)}$"%GeVc2 ),
+#        "squark_r"     : Var( "squark_r",      r"$m_{\tilde{q}_{r}} %s \textrm{(average)}$"%GeVc2 ), FIXME: \textrm is not accepted
+        "squark_r"     : Var( "squark_r",      r"$m_{\tilde{q}_{r,ave}} %s}$"%GeVc2 ), 
+#        "squark_l"     : Var( "squark_l",      r"$m_{\tilde{q}_{l}} %s \textrm{(average)}$"%GeVc2 ), FIXME: same
+        "squark_l"     : Var( "squark_l",      r"$m_{\tilde{q}_{l,ave}} %s}$"%GeVc2 ),
         "stop1"        : Var( "stop1",         r"$m_{\tilde{t}_{1}} %s$"%GeVc2 ),
         "stop2"        : Var( "stop2",         r"$m_{\tilde{t}_{2}} %s$"%GeVc2 ),
         "sbottom1"     : Var( "sbottom1",      r"$m_{\tilde{b}_{1}} %s$"%GeVc2 ),
@@ -156,4 +162,8 @@ def base_variables() :
         "mH0"          : Var( "mH0",           r"$m_{H^{0}} %s$"%GeVc2 ),
         "mA0"          : Var( "mA0",           r"$m_{A^{0}} %s$"%GeVc2 ),
         "mH+-"         : Var( "mH+-",          r"$m_{H^{\pm}} %s$"%GeVc2 ),
+        "ssmh0"        : Var( "ssmh0",           r"$m_{h^{0}} %s$"%GeVc2 ),
+        "ssmH0"        : Var( "ssmH0",           r"$m_{H^{0}} %s$"%GeVc2 ),
+        "ssmA0"        : Var( "ssmA0",           r"$m_{A^{0}} %s$"%GeVc2 ),
+        "ssmH+-"       : Var( "ssmH+-",          r"$m_{H^{\pm}} %s$"%GeVc2 ),
     }
