@@ -24,3 +24,12 @@ def get_contribs( mcf ) :
         opts = v[contrib]
         contribs.append( MCContribution( mcf, v[contrib] ) )
     return contribs
+
+def get_predicts( mcf ) :
+    v = mc_variables()
+    p = pc.predictions_to_make()
+    predicts = []
+    for predict in p :
+        opts = v[predict]
+        predicts.append( MCContribution( mcf, v[predict] ) )
+    return predicts
