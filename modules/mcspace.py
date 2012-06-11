@@ -39,3 +39,9 @@ class MCContribution( object ) :
         self.index = MCV.get_index(MCF)
         self.name = MCV.long_name
         self.short_name = MCV.short_name
+
+    def __str__(self ):
+        return self.short_name
+
+    def __repr__( self):
+        return "{:} {:} {:} ".format( self.short_name, self.index, self.name)

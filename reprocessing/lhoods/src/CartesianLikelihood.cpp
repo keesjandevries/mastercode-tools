@@ -117,6 +117,15 @@ void CartesianLikelihood::configure(int function, double mu, double sigma, int n
             valindex.doPopulate(filename);
             break;
         }
+        case 10:
+        {
+            std::cout << "Using CartesianLikelihood X^2 directly from lookup (MC8)" << std::endl;
+            lhood = new LikelihoodFunctor1D<CartesianLikelihoodFunctions> 
+                (&lfuncs,&CartesianLikelihoodFunctions::CHI2);
+            valindex.doPopulate(filename);
+            break;
+
+        }
         default: // Gaussian
         {
             lfuncs.set_values(mu,sigma,ndf);

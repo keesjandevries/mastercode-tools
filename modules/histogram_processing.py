@@ -166,7 +166,7 @@ def check_chi_mode(mode):
         return -1
 
 
-def fill_bins( histo_cont, contrib_cont, contribs, bin, chain, mcf ) :
+def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin , chain, mcf ):
     for mode in histo_cont.keys() :
         fill = False
         curr_content = histo_cont[mode].GetBinContent(bin)
@@ -186,10 +186,12 @@ def fill_bins( histo_cont, contrib_cont, contribs, bin, chain, mcf ) :
             histo_cont[mode].SetBinContent(bin,content)
             if mode == "chi2" : # want to also fill values for the contrib
                 for contrib in contribs :
-                    contib_cont[contrib.short_name].SetBinContent(bin, chain.treeVars["contributions"][contrib.index] ) #!!!
+                    contrib_cont[contrib.short_name].SetBinContent(bin, chain.treeVars["contributions"][contrib.index] ) #!!!
+                for predict in predicts :
+                    predict_cont[predict.short_name].SetBinContent(bin, chain.treeVars["predictions"][predict.index] ) #!!!
 
 #def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
-def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
+def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
     axes = [ "X", "Y", "Z" ]
     chain = MCAnalysisChain( mcf )
     nentries = chain.GetEntries()
@@ -197,6 +199,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
     for h in hlist :
         histo_cont = {}
         contrib_cont = {}
+        predict_cont = {}
 
         h_dim = int(h.ClassName()[2])
         dim_range = range(h_dim)
@@ -249,9 +252,14 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
             for bin in range( firstbin, lastbin + 1 ) :
                 histo_cont[mode].SetBinContent( bin, base_val )
         for c in contribs : # contribs is a list of Contribution objects
-            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_" + c.short_name, title, *th_arg_list )' % h_dim )
+            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_dX_" + c.short_name, title, *th_arg_list )' % h_dim )
             for bin in range( firstbin, lastbin + 1 ) :
-                contib_cont[c.short_name].SetBinContent( bin, 0.0 )
+                contrib_cont[c.short_name].SetBinContent( bin, 0.0 )
+        for p in predicts : # predicts is a list of Contribution objects
+            predict_cont[p.short_name] = eval( 'r.TH%dD( h.GetName() + "_pred_" + p.short_name, title, *th_arg_list )' % h_dim )
+            for bin in range( firstbin, lastbin + 1 ) :
+                predict_cont[p.short_name].SetBinContent( bin, 0.0 )
+            print "yes", p
 
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
         for i in range( 0, nbins + 1 ) :
@@ -261,11 +269,12 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
             entry = int( h.GetBinContent(i) )
             if entry > 0 :
                 chain.GetEntry(entry)
-                fill_bins( histo_cont, contrib_cont, contribs, i, chain, mcf )
+                fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf )
         perform_zero_offset( histo_cont["dchi"] )
         print
         save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
         save_hdict_to_root_file( contrib_cont, mcf.FileName, mcf.DataDirectory)
+        save_hdict_to_root_file( predict_cont, mcf.FileName, mcf.DataDirectory)
 
 def get_entry_hist_list( mcf, plots ) :
     hl = []

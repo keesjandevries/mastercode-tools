@@ -206,6 +206,12 @@ def print_mu(chain,mcf):
     print "\nmu:\n"
     print_prediction(chain,mcf,"mu")
 
+def print_bsmmm(chain,mcf):
+    print "\nbsmm:\n"
+    shortname= "Bsmumu"
+    p=get_prediction(chain,mcf,shortname)
+    print "{:11.4g} {!r}". format(p    , shortname) 
+
 def print_info(n,mcf) :
     chain = MCAnalysisChain( mcf )
     chain.GetEntry(n)
@@ -214,6 +220,7 @@ def print_info(n,mcf) :
     print_chi2(chain)
     print_parameters(chain,mcf)
     print_mu(chain,mcf)
+    print_bsmmm(chain,mcf)
     print_spectrum(chain,mcf) 
     print_chi2_breakdown(chain,mcf)
     print_ma_info(chain,mcf)
