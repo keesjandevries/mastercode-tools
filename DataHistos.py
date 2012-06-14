@@ -7,6 +7,7 @@ def main( argv=None ) :
     files = fd.histo_files()
 
     for mcf in files :
+        print mcf.FileName # FIXME: nicer info 
         plot_vars = plots.get_plots(mcf)
         contrib_vars = plots.get_contribs(mcf)
         predict_vars = plots.get_predicts(mcf)
