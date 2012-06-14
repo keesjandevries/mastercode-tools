@@ -23,6 +23,12 @@ def good_point( point, mcfc, verbose = 0) :
         good = False
         if verbose > 0 : problem += "\t! Gravitino LSP (mSUGRA)\n"
 
+
+    # The so called surgical amputation: removing points from " the infamous region C  "
+    if getattr( mcfc, "SurgicalAmputation", False ) and point[2] > (600+2.7*point[1]) :
+        good = False
+        if verbose > 0 : problem += "\t! Apply surgical amputation of point in region C\n"
+
     tanb = point[4]
     if tanb > 70 :
         good = False
