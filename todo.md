@@ -26,6 +26,7 @@ Functionality
 -------------
 * KJ: Point-tools. Print all (relevant) predictions/ X^2 breakdown; if a plane
     does not exist, make the missing plane;
+*KJ: change print_prediction to also be suitable for bsmm
 
 Repo
 ----
