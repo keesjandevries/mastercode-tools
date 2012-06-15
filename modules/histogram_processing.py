@@ -319,7 +319,7 @@ def get_hist_minimum_values( hl ) :
 
 def perform_zero_offset( h ) :
     axes = ["X", "Y", "Z"]
-    h_dim = int(h.ClassName()[2])
+    h_dim = get_histogram_dimension(h)
     axes_nbins = []
     for axis in range(h_dim) :
         axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
