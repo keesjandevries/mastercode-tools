@@ -12,7 +12,7 @@ def base_directory() :
     imperial_users = { "sr505"  : "/vols/cms03/mastercode/test_files/",
                        "kjd110" : "/vols/cms04/kjd110/test-sam-py-plotting/",
                      }
-    imperial_hosts = ["lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ]
+    imperial_hosts = [ "lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ] + [ "heppc157.hep.ph.ic.ac.uk" ]
 
     d = {
             "localhost.localdomain" :  {
@@ -107,9 +107,9 @@ def cmssm_mc8_drop_bsmm_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
-def cmssm_mc8_all_input() :
+def cmssm_mc8_combine_sampling_input() :
     # output / global options
-    gd = cmssm_mc8_all_histo_dict()
+    gd = cmssm_mc8_combine_sampling_histo_dict()
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
 
@@ -135,7 +135,54 @@ def cmssm_mc8_all_input() :
              "Chi2TreeName"      : "tree",
          }
     mcf4= MCFile( fd4,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4 ], gd, warn = False)
+    fd5= {
+             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_medium.root" ,  
+             "Chi2TreeName"      : "tree",
+         }
+    mcf5= MCFile( fd5,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    fd6= {
+             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_short.root" ,  
+             "Chi2TreeName"      : "tree",
+         }
+    mcf6= MCFile( fd6,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    fd7= {
+             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,  
+             "Chi2TreeName"      : "tree",
+         }
+    mcf7= MCFile( fd7,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4,mcf5,mcf6 ], gd, warn = False)
+    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4,mcf5      ], gd, warn = False)
+
+def cmssm_mc8_all_input() :
+    # output / global options
+    gd = cmssm_mc8_all_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+             # copied from /vols/cms03/kjd110/Mar2012-CMSSM-AB-output/dm_aab_force_out.root
+             "FileName"          : "%s/cmssm_mc8_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    fd2= { 
+#             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012_cmssm_mh125_bsmm_medium01.root" ,  
+#             "Chi2TreeName"      : "tree",
+#         }
+#    mcf2= MCFile( fd2,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    fd3= {
+#             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012_cmssm_mh125_bsmm_medium02.root" ,  
+#             "Chi2TreeName"      : "tree",
+#         }
+#    mcf3= MCFile( fd3,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    fd4= {
+#             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125/dm_June2012_cmssm_mh125_short.root" ,  
+#             "Chi2TreeName"      : "tree",
+#         }
+#    mcf4= MCFile( fd4,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+#    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4 ], gd, warn = False)
+    return MCFileCollection( [ mcf ], gd, warn = False)
 
 def nuhm1_test_input() :
     gd = nuhm1_test_histo_dict()
@@ -388,6 +435,31 @@ def cmssm_mc8_all_histo_dict() :
 def cmssm_mc8_all_histo() :
     return [MCFile(cmssm_mc8_all_histo_dict() )]
 
+def cmssm_mc8_combine_sampling_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_mc8_combine_sampling.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 10, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc7.lhood" ,
+        "ModelFile"         : "models/mcmh-mh125.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 50, 
+        "MinContrib"        : 0,
+    #    "MaxMADiff"         : 0.4,
+     }
+def cmssm_mc8_combine_sampling_histo() :
+    return [MCFile(cmssm_mc8_combine_sampling_histo_dict() )]
+
 def nuhm1_test_histo_dict() :
     return {
         "FileName"          : "%s/nuhm1_test.root" % base_directory(),
@@ -401,8 +473,8 @@ def nuhm1_test_histo_dict() :
         "PredictionIndex"   : 12,
         "SpectrumIndex"     : 119,
         "Inputs"            : 12, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/mc8-all.lhood" ,
-        "ModelFile"         : "models/mc8.model" ,
+        "LHoodFile"         : "models/test.lhood" ,
+        "ModelFile"         : "models/test.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,

@@ -61,7 +61,7 @@ def run_likelihood( likelihood, args ) :
     if len(argset) > 0 :
         lh = get_no_var_likelihood( likelihood, len(argset[0]) )
         for arg in argset :
-            chi2 = lh.testChi2(arg)
+            chi2 = lh.test_chi2(arg)
             print "{lhname} @ {arg} => {chi2}".format( lhname=lh, arg=arg, chi2=chi2 )
     else :
         print "Got no valid inputs for the likelihood"
