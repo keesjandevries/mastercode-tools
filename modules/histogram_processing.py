@@ -49,8 +49,8 @@ def get_histogram_bin_range(h, minimums = None, maximums = None):
             axis_nbins = eval("h.Get{axis}axis().GetNbins()".format(axis=axis))
             maximums.append(eval("h.Get{axis}axis().GetBinUpEdge({abin})".format(axis=axis,abin=axis_nbins)))
     if minimums is None:
-        minimums = [0.]*len(maximums)
-    first_bin = h.FindBin(*maximums)
+        minimums = [0]*len(maximums)
+    first_bin = h.FindBin(*minimums)
     last_bin = h.FindBin(*maximums)
     return first_bin, last_bin
 
@@ -271,7 +271,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
                 predict_cont[p.short_name].SetBinContent( bin, 0.0 )
             print "yes", p
 
-        prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
+        prog = ProgressBar(0, (lastbin-firstbin)+1, 77, mode='fixed', char='#')
         for i in range( firstbin, lastbin+1 ) :
             prog.increment_amount()
             print prog,'\r',
