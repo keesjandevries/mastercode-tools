@@ -30,4 +30,4 @@ Functionality
 
 Repo
 ----
-* Move this todo, etc. into issues (where relevant)
+* Move this todo, etc. into issues (where relevant) 
