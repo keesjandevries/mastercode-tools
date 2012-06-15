@@ -105,8 +105,10 @@ def initialize_histo( obj ) :
     econtent = -1
 
     up_bin = [ abin + 1 for abin in obj.nbins ]
-    nbins = reduce(mul, up_bin)
-    for i in range(0,nbins) :
+
+    first_bin = histo.FindBin(*obj.min_vals)
+    last_bin = histo.FindBin(*obj.max_vals)
+    for i in range(first_bin,last_bin+1) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
             c2histo.SetBinContent(i,content)
             histo.SetBinContent(i,econtent)
@@ -135,7 +137,8 @@ def calculate_entry_histograms( plots, chain ) :
             vals = [ chain.treeVars["predictions"][ index ] for index in indices ]
             nbins = plot.bins
             ibin = h.FindBin(*vals)
-            if ibin != 0 and ibin < nbins+1 :
+            max_bin = h.FindBin(*plot.max_vals)
+            if ibin != 0 and ibin < max_bin :
                 chi2 = chain.treeVars["predictions"][0]
                 if chi2 < c.GetBinContent(ibin) :
                     c.SetBinContent(ibin, chi2)
@@ -240,6 +243,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
 
         firstbin = h.FindBin( *axis_mins )
         lastbin = h.FindBin( *axis_maxs )
+        print firstbin, lastbin
         for mode in modes :
             # here need to add in check on contrib and make one for each contribution
             histo_cont[mode] = eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim )
@@ -254,7 +258,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
                 contib_cont[c.short_name].SetBinContent( bin, 0.0 )
 
         prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
-        for i in range( 0, nbins + 1 ) :
+        for i in range( firstbin, lastbin+1 ) :
             prog.increment_amount()
             print prog,'\r',
             stdout.flush()
