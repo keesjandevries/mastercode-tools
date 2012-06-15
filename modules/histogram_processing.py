@@ -66,7 +66,10 @@ def save_hlist_to_root_file( hlist, filename, directory = None ) :
 def initialize_histo( obj ) :
     dim = obj.dimension
 
+    #initialise bins
     bins = [ array('d',[0.0] * (abins+1)) for abins in obj.nbins ]
+    # bins wil  be filled with begin_value, ..... , end_value [total nbins+1 values], they mark the bin edges.
+
 #    print "***"
 #    for index, min_val, max_val, nbins, name, log in zip( obj.indices,
 #            obj.min_vals, obj.max_vals, obj.nbins, obj.names,
@@ -77,10 +80,11 @@ def initialize_histo( obj ) :
     for i,log in enumerate(obj.log) :
         if log :
             logmin = r.TMath.Log10( obj.min_vals[i] )
+            print "logmin", logmin, r.TMath.Power( 10,logmin)
             logmax = r.TMath.Log10( obj.max_vals[i] )
             binwidth = (logmax - logmin) / float(obj.nbins[i])
             for c, b in enumerate( bins[i] ) :
-                b = r.TMath.Power(10, logmin*c*binwidth)
+                b = r.TMath.Power( 10, logmin+c*binwidth)
         else :
             bmin = obj.min_vals[i]
             bmax = obj.max_vals[i]
