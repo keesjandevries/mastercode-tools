@@ -153,7 +153,7 @@ def recalc_to_file( collection, output_file = "" ) :
     count=-1 # becuase the first entry has number 0
 
     prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
-    for entry in range(begin,end) :
+    for entry in xrange(begin,end) :
 
         prog.increment_amount()
         print prog,'\r',
