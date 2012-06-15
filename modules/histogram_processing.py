@@ -37,7 +37,19 @@ def get_histogram_dimension_from_name( name, delim = "_" ) :
     return len(x)-1
 
 def get_histogram_dimension( h ):
-    return int( h.Class()[2] )
+    return int( h.ClassName()[2] )
+
+def get_histogram_bin_range(h):
+    dim = get_histogram_dimension(h)
+    axes = ["X", "Y", "Z"]
+
+    maximums = []
+    for axis in axes[0:dim]:
+        axis_nbins = eval("h.Get{axis}axis().GetNbins()".format(axis=axis))
+        maximums.append(eval("h.Get{axis}axis().GetBinUpEdge({abin})".format(axis=axis,abin=axis_nbins)))
+    first_bin = 0
+    last_bin = h.FindBin(*maximums)
+    return first_bin, last_bin
 
 def save_hdict_to_root_file( hdict, filename, directory = None ) :
     f = r.TFile( filename, "UPDATE" )
@@ -106,8 +118,9 @@ def initialize_histo( obj ) :
 
     up_bin = [ abin + 1 for abin in obj.nbins ]
 
-    first_bin = histo.FindBin(*obj.min_vals)
-    last_bin = histo.FindBin(*obj.max_vals)
+    #first_bin = histo.FindBin(*obj.min_vals)
+    #last_bin = histo.FindBin(*obj.max_vals)
+    first_bin, last_bin = get_histogram_bin_range(histo)
     for i in range(first_bin,last_bin+1) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
             c2histo.SetBinContent(i,content)
@@ -204,7 +217,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
         contrib_cont = {}
         predict_cont = {}
 
-        h_dim = int(h.ClassName()[2])
+        h_dim = get_histogram_dimension(h)
         dim_range = range(h_dim)
 
         axis_nbins = []
