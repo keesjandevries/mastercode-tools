@@ -39,15 +39,18 @@ def get_histogram_dimension_from_name( name, delim = "_" ) :
 def get_histogram_dimension( h ):
     return int( h.ClassName()[2] )
 
-def get_histogram_bin_range(h):
+def get_histogram_bin_range(h, minimums = None, maximums = None):
     dim = get_histogram_dimension(h)
     axes = ["X", "Y", "Z"]
 
-    maximums = []
-    for axis in axes[0:dim]:
-        axis_nbins = eval("h.Get{axis}axis().GetNbins()".format(axis=axis))
-        maximums.append(eval("h.Get{axis}axis().GetBinUpEdge({abin})".format(axis=axis,abin=axis_nbins)))
-    first_bin = 0
+    if maximums is None:
+        maximums = []
+        for axis in axes[0:dim]:
+            axis_nbins = eval("h.Get{axis}axis().GetNbins()".format(axis=axis))
+            maximums.append(eval("h.Get{axis}axis().GetBinUpEdge({abin})".format(axis=axis,abin=axis_nbins)))
+    if minimums is None:
+        minimums = [0.]*len(maximums())
+    first_bin = h.FindBin(*maximums)
     last_bin = h.FindBin(*maximums)
     return first_bin, last_bin
 
