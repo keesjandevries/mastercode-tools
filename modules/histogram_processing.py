@@ -243,7 +243,6 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs ) :
 
         firstbin = h.FindBin( *axis_mins )
         lastbin = h.FindBin( *axis_maxs )
-        print firstbin, lastbin
         for mode in modes :
             # here need to add in check on contrib and make one for each contribution
             histo_cont[mode] = eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim )
