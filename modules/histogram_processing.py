@@ -277,7 +277,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
             if entry > 0 :
                 chain.GetEntry(entry)
                 fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf )
-        perform_zero_offset( histo_cont["dchi"] )
+        perform_zero_offset( histo_cont["dchi"],firstbin,lastbin )
         print
         save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
         save_hdict_to_root_file( contrib_cont, mcf.FileName, mcf.DataDirectory)
@@ -308,7 +308,7 @@ def get_hist_minimum_values( hl ) :
         mins.append(min_val)
     return mins
 
-def perform_zero_offset( h ) :
+def perform_zero_offset( h,firstbin,lastbin ) :
     axes = ["X", "Y", "Z"]
     h_dim = int(h.ClassName()[2])
     axes_nbins = []
@@ -316,9 +316,9 @@ def perform_zero_offset( h ) :
         axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
     nbins = reduce(mul, axes_nbins)
     min_val = 1e9
-    for bin in range(nbins+1) :
+    for bin in range(firstbin,lastbin+1) :
         c = h.GetBinContent(bin)
         if c < min_val and c > 0 : min_val = c
-    for bin in range(nbins+1) :
+    for bin in range(firstbin,lastbin+1) :
         content = h.GetBinContent(bin)
         h.SetBinContent( bin, content - min_val )
