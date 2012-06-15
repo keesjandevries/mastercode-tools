@@ -111,43 +111,33 @@ def cmssm_combine_sampling_input() :
 #    gd["EndEntry"]   = 50000
 
     # input files: 1 dict per file
-    fd = {
+    fd1 = {
              "FileName"          : "/vols/cms03/kjd110/Mar2012-CMSSM-AB-output/dm_aab_force_out.root",
              "Chi2TreeName"      : "tree",
          }
-    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     fd2= { 
-             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012_cmssm_mh125_bsmm_medium01.root" ,  
+             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012-cmssm-mh125-bsmm.root",  
              "Chi2TreeName"      : "tree",
          }
-    mcf2= MCFile( fd2,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     fd3= {
-             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012_cmssm_mh125_bsmm_medium02.root" ,  
+             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm-holes/dm_June2012-cmssm-mh125-bsmm-holes.root",
              "Chi2TreeName"      : "tree",
          }
-    mcf3= MCFile( fd3,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     fd4= {
-             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125/dm_June2012_cmssm_mh125_short.root" ,  
+             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm-holes-no-g2/dm_June2012-cmssm-mh125-bsmm-holes-no-g2.root",
              "Chi2TreeName"      : "tree",
          }
-    mcf4= MCFile( fd4,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     fd5= {
-             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_medium.root" ,  
+             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125/dm_June2012_cmssm_mh125.root",  
              "Chi2TreeName"      : "tree",
          }
-    mcf5= MCFile( fd5,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     fd6= {
-             "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_May2012_short.root" ,  
-             "Chi2TreeName"      : "tree",
-         }
-    mcf6= MCFile( fd6,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    fd7= {
              "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,  
              "Chi2TreeName"      : "tree",
          }
-    mcf7= MCFile( fd7,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-#    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4,mcf5,mcf6 ], gd, warn = False)
-    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4,mcf5      ], gd, warn = False)
+#    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6 ]] # dont warn us on missing attributes as they're handled by MCFC
+    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6, ]] # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection(  mcfs, gd, warn = False)
 
 def cmssm_mc8_all_input() :
     # output / global options
@@ -214,7 +204,23 @@ def nuhm1_combine_sampling_input() :
              "FileName"          : "/vols/cms03/kjd110/Apr-2012-NUHM1-mh125-sampling/dm_mh123.root" ,
              "Chi2TreeName"      : "tree",
          }
-    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5]]
+    fd6 = {
+             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-mh125-bsmm-bf/dm_June-2012-nuhm1-mh125-bsmm-bf.root",
+             "Chi2TreeName"      : "tree",
+         }
+    fd7 = {
+             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-mh125-bsmm/dm_June-2012-nuhm1-mh125-bsmm.root",
+             "Chi2TreeName"      : "tree",
+         }
+    fd8 = {
+             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-mh125-bsmm-no-g2/dm_June-2012-nuhm1-mh125-bsmm-no-g2.root",
+             "Chi2TreeName"      : "tree",
+         }
+    fd9 = {
+             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_June-2012-nuhm1-from-cmssm.root" ,
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd9]]
     return MCFileCollection(  mcf , gd, warn = False)
 
 def nuhm1_mcmh_mh125_input() :
@@ -493,9 +499,9 @@ def cmssm_combine_sampling_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
-#        "LHoodFile"         : "models/mc7.lhood" ,
-#        "ModelFile"         : "models/mcmh-mh125.model" ,
-        "ModelFile"         : "models/mc7.model" ,
+        "LHoodFile"         : "models/mc7.lhood" ,
+        "ModelFile"         : "models/mcmh-mh125.model" ,
+#        "ModelFile"         : "models/mc7.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
@@ -544,9 +550,8 @@ def nuhm1_combine_sampling_histo_dict() :
         "PredictionIndex"   : 12,
         "SpectrumIndex"     : 119,
         "Inputs"            : 12, # FIXME: check this number is right!!!
-#        "LHoodFile"         : "models/mc7.lhood",
-#        "ModelFile"         : "models/mcmh-mh125.model" ,
-        "ModelFile"         : "models/mc7.model" ,
+        "LHoodFile"         : "models/mc7.lhood",
+        "ModelFile"         : "models/mcmh-mh125.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
