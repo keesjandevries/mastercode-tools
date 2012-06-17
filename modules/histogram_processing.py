@@ -95,11 +95,10 @@ def initialize_histo( obj ) :
     for i,log in enumerate(obj.log) :
         if log :
             logmin = r.TMath.Log10( obj.min_vals[i] )
-            print "logmin", logmin, r.TMath.Power( 10,logmin)
             logmax = r.TMath.Log10( obj.max_vals[i] )
             binwidth = (logmax - logmin) / float(obj.nbins[i])
             for c, b in enumerate( bins[i] ) :
-                b = r.TMath.Power( 10, logmin+c*binwidth)
+                bins[i][c] = r.TMath.Power( 10, logmin+c*binwidth)
         else :
             bmin = obj.min_vals[i]
             bmax = obj.max_vals[i]
@@ -143,7 +142,7 @@ def calculate_entry_histograms( plots, chain ) :
     for p in plots :
         entryhisto, chi2histo = initialize_histo( p )
         histos.append(entryhisto)
-        chi2histos.append(chi2histo)
+        chi2histos.append(chi2histo)  #FIXME: is the X^2 histogram still needed?
 
     nentries = chain.GetEntries()
     prog = ProgressBar(0, nentries+1, 77, mode='fixed', char='#')
@@ -279,7 +278,6 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
             predict_cont[p.short_name] = eval( 'r.TH%dD( h.GetName() + "_pred_" + p.short_name, title, *th_arg_list )' % h_dim )
             for bin in range( firstbin, lastbin + 1 ) :
                 predict_cont[p.short_name].SetBinContent( bin, 0.0 )
-            print "yes", p
 
         prog = ProgressBar(0, (lastbin-firstbin)+1, 77, mode='fixed', char='#')
         for i in range( firstbin, lastbin+1 ) :
