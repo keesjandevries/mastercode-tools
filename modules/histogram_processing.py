@@ -37,7 +37,22 @@ def get_histogram_dimension_from_name( name, delim = "_" ) :
     return len(x)-1
 
 def get_histogram_dimension( h ):
-    return int( h.Class()[2] )
+    return int( h.ClassName()[2] )
+
+def get_histogram_bin_range(h, minimums = None, maximums = None):
+    dim = get_histogram_dimension(h)
+    axes = ["X", "Y", "Z"]
+
+    if maximums is None:
+        maximums = []
+        for axis in axes[0:dim]:
+            axis_nbins = eval("h.Get{axis}axis().GetNbins()".format(axis=axis))
+            maximums.append(eval("h.Get{axis}axis().GetBinUpEdge({abin})".format(axis=axis,abin=axis_nbins)))
+    if minimums is None:
+        minimums = [0]*len(maximums)
+    first_bin = h.FindBin(*minimums)
+    last_bin = h.FindBin(*maximums)
+    return first_bin, last_bin
 
 def save_hdict_to_root_file( hdict, filename, directory = None ) :
     f = r.TFile( filename, "UPDATE" )
@@ -100,7 +115,7 @@ def initialize_histo( obj ) :
     cname = histo_name( obj.short_names, chi2_histo_prefix )
 
     args = []
-    [ args.extend( [ nb, b ] ) for nb, b in zip( obj.nbins, bins )  ]
+    [ args.extend( [ nb, b ] ) for nb, b in zip( obj.nbins, bins ) ]
 
     histo = eval( "r.TH%dI( hname, title, *args )" % dim )
     c2histo = eval( "r.TH%dD( cname, title, *args )" % dim )
@@ -110,8 +125,9 @@ def initialize_histo( obj ) :
 
     up_bin = [ abin + 1 for abin in obj.nbins ]
 
-    first_bin = histo.FindBin(*obj.min_vals)
-    last_bin = histo.FindBin(*obj.max_vals)
+    #first_bin = histo.FindBin(*obj.min_vals)
+    #last_bin = histo.FindBin(*obj.max_vals)
+    first_bin, last_bin = get_histogram_bin_range(histo)
     for i in range(first_bin,last_bin+1) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
             c2histo.SetBinContent(i,content)
@@ -208,7 +224,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
         contrib_cont = {}
         predict_cont = {}
 
-        h_dim = int(h.ClassName()[2])
+        h_dim = get_histogram_dimension(h)
         dim_range = range(h_dim)
 
         axis_nbins = []
@@ -245,11 +261,8 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
         print user_notify_format % tuple(user_notify)
 
         title = title_format % tuple(title_items)
-        up_bin = [ abin + 1 for abin in axis_nbins ]
-        nbins = reduce(mul, up_bin)
 
-        firstbin = h.FindBin( *axis_mins )
-        lastbin = h.FindBin( *axis_maxs )
+        firstbin, lastbin = get_histogram_bin_range(h)
         for mode in modes :
             # here need to add in check on contrib and make one for each contribution
             histo_cont[mode] = eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim )
@@ -268,7 +281,7 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
                 predict_cont[p.short_name].SetBinContent( bin, 0.0 )
             print "yes", p
 
-        prog = ProgressBar(0, nbins+1, 77, mode='fixed', char='#')
+        prog = ProgressBar(0, (lastbin-firstbin)+1, 77, mode='fixed', char='#')
         for i in range( firstbin, lastbin+1 ) :
             prog.increment_amount()
             print prog,'\r',
@@ -302,7 +315,8 @@ def get_hist_minimum_values( hl ) :
     for h in hl :
         nbins = h.GetNbinsX()*h.GetNbinsY()
         min_val = 1e9
-        for bin in range(nbins+1) :
+        first_bin, last_bin = get_histogram_bin_range(h)
+        for bin in range(first_bin,last_bin+1):
             c = h.GetBinContent(bin)
             if c < min_val and c > 0 : min_val = c
         mins.append(min_val)
@@ -310,15 +324,15 @@ def get_hist_minimum_values( hl ) :
 
 def perform_zero_offset( h,firstbin,lastbin ) :
     axes = ["X", "Y", "Z"]
-    h_dim = int(h.ClassName()[2])
+    h_dim = get_histogram_dimension(h)
     axes_nbins = []
     for axis in range(h_dim) :
         axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
-    nbins = reduce(mul, axes_nbins)
+    first_bin, last_bin = get_histogram_bin_range(h)
     min_val = 1e9
-    for bin in range(firstbin,lastbin+1) :
+    for bin in range(first_bin, last_bin+1) :
         c = h.GetBinContent(bin)
         if c < min_val and c > 0 : min_val = c
-    for bin in range(firstbin,lastbin+1) :
+    for bin in range(first_bin, last_bin+1) :
         content = h.GetBinContent(bin)
         h.SetBinContent( bin, content - min_val )
