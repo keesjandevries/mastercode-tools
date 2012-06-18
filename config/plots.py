@@ -12,9 +12,10 @@ def plots_to_make() :
 #            ("neu1",)     : { "ranges" : [ (1,1000) ],  "nbins" : [100] },
 #            ("m_h^0",)    : { "ranges" : [ (110,140) ],  "nbins" : [100] },
 #            ("stau_1",)   : { "ranges" : [ (0,5000) ],  "nbins" : [100] },
-            ("gluino",)   : { "ranges" : [ (0,6000) ],  "nbins" : [100] },
+#            ("gluino",)   : { "ranges" : [ (0,6000) ],  "nbins" : [100] },
 #            ("squark_r",) : { "ranges" : [ (0,6000) ],  "nbins" : [100] },
-#            ("Bsmumu",)   : { "ranges" : [ (0,10E-9) ], "nbins" : [100] },
+            ("Bsmumu",)   : { "ranges" : [ (0,10.38E-9) ], "nbins" : [100] },
+            ("BsmumuRatio",)   : { "ranges" : [ (0,3) ], "nbins" : [100] },
       }
     return d
 

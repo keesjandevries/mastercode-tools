@@ -1,3 +1,4 @@
+from modules.mcvariable import DerivedMCVariable as DMCV
 from modules.mcvariable import MCVariable as MCV
 from modules.mcvariable import Variable as Var
 
@@ -7,6 +8,7 @@ MeV  ="[MeV]"
 
 def mc_variables() :
     b=base_variables()
+    f=get_variables_funtions()
     m={
             # inputs
             "m0"           : MCV( b["m0"],            index_offset=1 ),
@@ -85,6 +87,8 @@ def mc_variables() :
             "ssmH0"        : MCV( b["ssmH0"],         index_offset=31, offset_relative_to="SpectrumIndex" ),
             "ssmA0"        : MCV( b["ssmA0"],         index_offset=32, offset_relative_to="SpectrumIndex" ),
             "ssmH+-"       : MCV( b["ssmH+-"],        index_offset=33, offset_relative_to="SpectrumIndex" ),
+            "BsmumuRatio"  : DMCV(b["BsmumuRatio"], f["BsmumuRatio"] ,["Bsmumu"] ),
+#            "BsmumuRatio"  : DMCV(b["BsmumuRatio"], ["Bsmumu"] ),
     }
     return m
 
@@ -104,6 +108,7 @@ def base_variables() :
         "R(b->sg)"     : Var( "R(b->sg)",      r"$R(b\rightarrow s\gamma)$"          ),
         "R(D_ms)"      : Var( "R(D_ms)",       r"$R(\Delta_{ms}$"                    ),
         "Bsmumu"       : Var( "Bsmumu",        r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})$"),
+        "BsmumuRatio"  : Var( "BsmumuRatio", r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
         "R(B->taunu)"  : Var( "R(B->taunu)",   r"$R(B\rightarrow\tau\nu)$"           ),
         "R(B->Xsll)"   : Var( "R(B->Xsll)",    r"$R(B\rightarrow X_{s}\ell\ell$"     ),
         "R(K->lnu)"    : Var( "R(K->lnu)",     r"$R(K\rightarrow\ell\nu)$",          ),
@@ -167,3 +172,13 @@ def base_variables() :
         "ssmA0"        : Var( "ssmA0",           r"$m_{A^{0}} %s$"%GeVc2 ),
         "ssmH+-"       : Var( "ssmH+-",          r"$m_{H^{\pm}} %s$"%GeVc2 ),
     }
+
+def get_variables_funtions():
+    function_dict= {
+       "BsmumuRatio" :  get_bsmumu_ratio
+    }
+    return function_dict
+
+def get_bsmumu_ratio(vals):
+    bsmm=vals[0]
+    return (bsmm/3.46e-9)
