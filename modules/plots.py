@@ -2,9 +2,11 @@ from config import plots as pc
 from modules.mcspace import MCSpace
 from modules.mcspace import MCContribution
 from modules.variables import mc_variables
+from modules.variables import base_variables
 
 def get_plots(mcf) :
-    v = mc_variables()
+    # plots from now on based on Variables, so that it can accomodate for MCVariables and DerivedMCVariables
+    v = base_variables()   
     plots = pc.plots_to_make()
     for plane, opts in plots.iteritems() :
         assert len(plane) == len( opts["ranges"] ) == len( opts["nbins"] ), \
@@ -13,7 +15,7 @@ def get_plots(mcf) :
     for plot_vars, options in plots.iteritems() :
         d[tuple([ v[var] for var in plot_vars])] = options
 
-    spaces = [ MCSpace( mcf, MCV, opts ) for (MCV, opts) in d.iteritems() ]
+    spaces = [ MCSpace( mcf, Var, opts ) for (Var, opts) in d.iteritems() ]
     return spaces
 
 def get_contribs( mcf ) :

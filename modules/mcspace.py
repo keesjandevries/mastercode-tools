@@ -2,18 +2,19 @@
 from operator import mul
 
 class MCSpace( object ) : # file specific object version of MCVariable
-    def __init__( self, MCF, MCVs, options ) :
-        assert len(MCVs) == len(options["nbins"]), \
+    def __init__( self, MCF, Vars, options ) :
+        # MCSpace based on Variable instead of MCVariable. Hence the fact that mcf is now an attribute, and an MCSPace has no more indicis
+        assert len(Vars) == len(options["nbins"]), \
             "Wrong number of Variables or Options to make a space"
-        self.log = options.get( 'logaxes' ,[False]*len(MCVs)) # FIXME
+        self.log = options.get( 'logaxes' ,[False]*len(Vars)) # FIXME
 
-        self.dimension   = len(MCVs)
-        self.indices     = [ v.get_index(MCF) for v in MCVs ]
+        self.dimension   = len(Vars)
         self.min_vals    = [ r[0] for r in options["ranges"] ]
         self.max_vals    = [ r[1] for r in options["ranges"] ]
-        self.names       = [ v.long_name for v in MCVs ]
-        self.short_names = [ v.short_name for v in MCVs ]
+        self.names       = [ v.long_name for v in Vars ]
+        self.short_names = [ v.short_name for v in Vars ]
         self.nbins       = options["nbins"]
+        self.mcf         = MCF
 
         self.bins = reduce(mul, self.nbins)
         self.name = "( %s )" % ( ", ".join(self.names) )
@@ -27,6 +28,9 @@ class MCSpace( object ) : # file specific object version of MCVariable
         [ l.extend( [ smin, smax, sbin ] ) for smin, smax, sbin in
             zip (self.min_vals, self.max_vals, self.nbins ) ]
         return r_f % tuple(  [", ".join( [ str(index) for index in self.indices ] ), self.name] + l )
+
+    def get_short_names( self ) :
+        return self.short_names
 
     def get_indices( self ) :
         return self.indices

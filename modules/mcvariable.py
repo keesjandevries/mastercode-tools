@@ -25,6 +25,26 @@ class Variable(object) :
         return " %s %s " % (self.short_name, self.long_name )
 
 
+class DerivedMCVariable( Variable, object) :
+    def __init__( self, var, function, input_vars, info=None ) :
+        #FIXME: should check whether the number of  input parameters a
+        self.__dict__ = var.__dict__.copy()
+        self.function = function
+        self.input_vars= input_vars
+        self.info = info
+
+    def __str__( self ) :
+        return self.short_name
+
+    def __repr__( self ) :
+        return "%s , %s, %s " % self.short_name , self.long_name, info
+        
+    def get_input_vars(self):
+        return self.input_vars
+
+    def get_function(self) :
+        return self.function
+
 class MCVariable(Variable, object) :
     def __init__( self, var, offset_relative_to = None, index_offset = 0 ) :
 
