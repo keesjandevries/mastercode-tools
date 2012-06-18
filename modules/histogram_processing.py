@@ -7,6 +7,8 @@ from sys import stdout
 from array import array
 from operator import mul
 
+from modules import variables as v
+
 def histo_call_count() :
     c = 0
     while True:
@@ -136,7 +138,6 @@ def initialize_histo( obj ) :
 
 def get_values_from_chain(chain,plot):
     values=[]
-    from modules import variables as v
     for var_name in plot.get_short_names():
        var = v.mc_variables()[var_name]
        if (var.__class__.__name__ == "MCVariable"):
