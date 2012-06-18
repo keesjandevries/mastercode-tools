@@ -306,7 +306,7 @@ def cmssm_test_file_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/test.lhood" ,
+#        "LHoodFile"         : "models/test.lhood" ,
         "ModelFile"         : "models/test.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
