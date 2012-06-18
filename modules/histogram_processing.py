@@ -134,6 +134,23 @@ def initialize_histo( obj ) :
 
     return histo,c2histo
 
+def get_values_from_chain(chain,plot):
+    values=[]
+    from modules import variables as v
+    for var_name in plot.get_short_names():
+       var = v.mc_variables()[var_name]
+       if (var.__class__.__name__ == "MCVariable"):
+           index = var.get_index(plot.mcf)
+           values.append( chain.treeVars["predictions"][ index ] )
+       elif (var.__class__.__name__ == "DerivedMCVariable"):
+           input_vars_sns = var.get_input_vars()
+           input_mcvs = [v.mc_variables()[mcvsn] for mcvsn in input_vars_sns  ]
+           input_vals = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
+           values.append(var.function(input_vals) )
+    return values
+
+
+
 def calculate_entry_histograms( plots, chain ) :
     ##assert canvas is not None, "Canvas must be specified in calculate_histograms"
     # setup our 2d histos
@@ -152,8 +169,7 @@ def calculate_entry_histograms( plots, chain ) :
         stdout.flush()
         chain.GetEntry(entry)
         for h, c, plot in zip( histos, chi2histos, plots ) :
-            indices = plot.get_indices()
-            vals = [ chain.treeVars["predictions"][ index ] for index in indices ]
+            vals = get_values_from_chain(chain,plot) 
             nbins = plot.bins
             ibin = h.FindBin(*vals)
             max_bin = h.FindBin(*plot.max_vals)
