@@ -220,7 +220,11 @@ def nuhm1_combine_sampling_input() :
              "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_June-2012-nuhm1-from-cmssm.root" ,
              "Chi2TreeName"      : "tree",
          }
-    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd9]]
+    fd10= {
+             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_mc7_sampling_nuhm1_from_cmssm.root",
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd9,fd10]]
     return MCFileCollection(  mcf , gd, warn = False)
 
 def nuhm1_mcmh_mh125_input() :
@@ -499,9 +503,9 @@ def cmssm_combine_sampling_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/mc7.lhood" ,
-        "ModelFile"         : "models/mcmh-mh125.model" ,
-#        "ModelFile"         : "models/mc7.model" ,
+#        "LHoodFile"         : "models/mc7.lhood" ,
+#        "ModelFile"         : "models/mcmh-mh125.model" ,
+        "ModelFile"         : "models/mc7.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
@@ -550,8 +554,9 @@ def nuhm1_combine_sampling_histo_dict() :
         "PredictionIndex"   : 12,
         "SpectrumIndex"     : 119,
         "Inputs"            : 12, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/mc7.lhood",
-        "ModelFile"         : "models/mcmh-mh125.model" ,
+   #     "LHoodFile"         : "models/mc7.lhood",
+   #     "ModelFile"         : "models/mcmh-mh125.model" ,
+        "ModelFile"         : "models/mc7.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
