@@ -89,6 +89,7 @@ def mc_variables() :
             "ssmH+-"       : MCV( b["ssmH+-"],        index_offset=33, offset_relative_to="SpectrumIndex" ),
             "BsmumuRatio"  : DMCV(b["BsmumuRatio"], f["BsmumuRatio"] ,["Bsmumu"] ),
 #            "BsmumuRatio"  : DMCV(b["BsmumuRatio"], ["Bsmumu"] ),
+            "sigma_pp^SI_cm-2"  : DMCV(b["sigma_pp^SI_cm-2"], f["sigma_pp^SI_cm-2"],["sigma_pp^SI"]   )
     }
     return m
 
@@ -137,6 +138,7 @@ def base_variables() :
         "D_0(K*g)"     : Var( "D_0(K*g)",      r"$\Delta_{0}(K^{*}\gamma$",          ),
         "BR(b->sg)"    : Var( "BR(b->sg)",     r"$BR(b\rightarrow s\gamma)$",        ),
         "sigma_pp^SI"  : Var( "sigma_pp^SI",   r"$\sigma_{p}^{SI}$" ),
+        "sigma_pp^SI_cm-2"  : Var( "sigma_pp^SI_cm-2",   r"$\sigma_{p}^{SI} [cm^{-2}] $" ),
         "mu"           : Var( "mu"   ,         r"$\mu$"                        ),
         "mA0^2"        : Var( "mA0^2",         r"$m_{A_{0}}^2 %s^{2} $" %GeVc2 ),
         "chi1"         : Var( "chi1",          r"$m_{\tilde{\chi}^{\pm}_{1}} %s$"%GeVc2 ),
@@ -175,10 +177,16 @@ def base_variables() :
 
 def get_variables_funtions():
     function_dict= {
-       "BsmumuRatio" :  get_bsmumu_ratio
+       "BsmumuRatio" :  get_bsmumu_ratio,
+       "sigma_pp^SI_cm-2" : get_sigma_pp_si_cm
     }
     return function_dict
 
 def get_bsmumu_ratio(vals):
     bsmm=vals[0]
     return (bsmm/3.46e-9)
+
+
+def get_sigma_pp_si_cm(vals):
+    ssi=vals[0]
+    return (ssi*1e-36)
