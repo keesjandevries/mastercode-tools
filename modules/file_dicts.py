@@ -135,8 +135,12 @@ def cmssm_combine_sampling_input() :
              "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,  
              "Chi2TreeName"      : "tree",
          }
+    fd7= {
+             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm-pre-Gino-fix-last/dm_June2012-cmssm-mh125-bsmm-pre-Gino-fix-last.root", 
+             "Chi2TreeName"      : "tree",
+         }
 #    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6 ]] # dont warn us on missing attributes as they're handled by MCFC
-    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6, ]] # dont warn us on missing attributes as they're handled by MCFC
+    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6,fd7 ]] 
     return MCFileCollection(  mcfs, gd, warn = False)
 
 def cmssm_mc8_all_input() :
@@ -216,15 +220,20 @@ def nuhm1_combine_sampling_input() :
              "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-mh125-bsmm-no-g2/dm_June-2012-nuhm1-mh125-bsmm-no-g2.root",
              "Chi2TreeName"      : "tree",
          }
-    fd9 = {
-             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_June-2012-nuhm1-from-cmssm.root" ,
+#    fd9 = {
+#             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_June-2012-nuhm1-from-cmssm.root" ,
+#             "Chi2TreeName"      : "tree",
+#         }
+#    fd10= {
+#             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_mc7_sampling_nuhm1_from_cmssm.root",
+#             "Chi2TreeName"      : "tree",
+#         }
+    fd11= {
+             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-mh125-bsmm-pre-Gino-fix-last/dm_June-2012-nuhm1-mh125-bsmm-pre-Gino-fix-last.root",
              "Chi2TreeName"      : "tree",
          }
-    fd10= {
-             "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-from-cmssm/dm_mc7_sampling_nuhm1_from_cmssm.root",
-             "Chi2TreeName"      : "tree",
-         }
-    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd9,fd10]]
+#    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd9,fd10]]
+    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd11]]
     return MCFileCollection(  mcf , gd, warn = False)
 
 def nuhm1_mcmh_mh125_input() :
@@ -509,7 +518,7 @@ def cmssm_combine_sampling_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 50, 
+        "MaxChi2"           : 45, 
         "MinContrib"        : 0,
     #    "MaxMADiff"         : 0.4,
      }
@@ -560,10 +569,10 @@ def nuhm1_combine_sampling_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 50 ,
+        "MaxChi2"           : 45 ,
         "MinContrib"        : 0,
         "MaxMADiff"         : 0.45,
-        "SurgicalAmputation": True,
+#       "SurgicalAmputation": True,
      }
 def nuhm1_combine_sampling_histo() :
     return [MCFile(nuhm1_combine_sampling_histo_dict() )]
@@ -734,7 +743,7 @@ def nuhm1_mcmh_mc7_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 45 ,
         "MinContrib"        : 0,
      }
 def nuhm1_mcmh_mc7_histo() :
