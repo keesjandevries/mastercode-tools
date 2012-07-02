@@ -5,6 +5,11 @@ def recalc_files() :
 # COMBINATION OF ALL SAMPLING, APPLYING X^2 CUT
 #    d = files.cmssm_combine_sampling_input()
 #    d = files.nuhm1_combine_sampling_input()
+# RESAMPLING 
+#    d = files.cmssm_SuFla_selected_input()
+#    d = files.cmssm_SuFla_no_bug_selected_input()
+#    d = files.nuhm1_SuFla_selected_input()
+#    d = files.nuhm1_SuFla_no_bug_selected_input()
 # TEST
 #    d = files.cmssm_test_input_files()
 #    d = files.nuhm1_test_input()
