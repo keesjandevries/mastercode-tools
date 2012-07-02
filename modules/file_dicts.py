@@ -12,7 +12,7 @@ def base_directory() :
     imperial_users = { "sr505"  : "/vols/cms03/mastercode/test_files/",
                        "kjd110" : "/vols/cms04/kjd110/mc8/",
                      }
-    imperial_hosts = [ "lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ] + [ "heppc157.hep.ph.ic.ac.uk" ]
+    imperial_hosts = [ "lx0%d.hep.ph.ic.ac.uk" % node for node in range(4,7) ] + ["heppc52.hep.ph.ic.ac.uk", "heppc157.hep.ph.ic.ac.uk","heppc101.hep.ph.ic.ac.uk" ]
 
     d = {
             "localhost.localdomain" :  {
@@ -27,35 +27,91 @@ def cmssm_test_input_files() :
     # output / global options
     gd = cmssm_test_file_histo_dict()
 #    gd["StartEntry"] = 1
-#    gd["EndEntry"]   = 4000
+#    gd["EndEntry"]   = 40
 
     # input files: 1 dict per file
-    fd = {
-             "FileName"          : "%s/cmssm_test.root" % base_directory(),
+#    fd = {
+#             "FileName"          : "%s/cmssm_test.root" % base_directory(),
+#    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+#             "Chi2TreeName"      : "tree",
+#         }
+    fd1 = {
+             "FileName"          : "%s/cmssm_SuFla_no_bug_selected.root" % base_directory(),
     #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
              "Chi2TreeName"      : "tree",
          }
-    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf ], gd, warn = False)
+    fd2= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_selected_the_rest.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "chi2tree",
+         }
+    fd3= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_selected_1000.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "chi2tree",
+         }
+    fd4= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_selected_1.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "chi2tree",
+         }
+    mcfs = [MCFile( fd, warn = False ) for fd in [fd3 ,fd2,fd4,fd1]] # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection(  mcfs, gd, warn = False)
 
 def nuhm1_test_input_files() :
     gd = nuhm1_test_file_histo_dict()
-    fd = {
-             "FileName"          : "%s/nuhm1_large_test.root" % base_directory(),
+#    fd = {
+#             "FileName"          : "%s/nuhm1_large_test.root" % base_directory(),
+#             "Chi2TreeName"      : "tree",
+#         }
+    fd1= {
+             "FileName"          : "%s/nuhm1_SuFla_no_bug_selected.root" % base_directory(),
              "Chi2TreeName"      : "tree",
          }
-    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-    return MCFileCollection( [ mcf ], gd, warn = False)
+    fd2= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_selected_the_rest.root",
+             "Chi2TreeName"      : "chi2tree",
+         }
+    mcfs = [MCFile( fd, warn = False ) for fd in [fd2,fd1]] # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection(  mcfs, gd, warn = False)
 
 def cmssm_mcmh_mh125_input() :
     # output / global options
     gd = cmssm_mcmh_mh125_histo_dict()
-#    gd["StartEntry"] = 0
-#    gd["EndEntry"]   = 50000
+    gd["StartEntry"] = 0
+    gd["EndEntry"]   = 50000
 
     # input files: 1 dict per file
     fd = {
              "FileName"          : "%s/cmssm_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def cmssm_SuFla_no_bug_selected_input() :
+    # output / global options
+    gd = cmssm_SuFla_no_bug_selected_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 2357
+
+    # input files: 1 dict per file
+    fd = {
+             "FileName"          : "%s/cmssm_for_resampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def cmssm_SuFla_selected_input() :
+    # output / global options
+    gd = cmssm_SuFla_selected_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 2357
+
+    # input files: 1 dict per file
+    fd = {
+             "FileName"          : "%s/cmssm_for_resampling.root" % base_directory(),
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
@@ -292,6 +348,28 @@ def nuhm1_bsmm2012_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
+def nuhm1_SuFla_no_bug_selected_input() :
+    gd = nuhm1_SuFla_no_bug_selected_histo_dict()
+#    gd["StartEntry"] = 208288
+    #gd["EndEntry"]   = 20000
+    fd = {
+             "FileName"          : "%s/nuhm1_for_resampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_SuFla_selected_input() :
+    gd = nuhm1_SuFla_selected_histo_dict()
+#    gd["StartEntry"] = 208288
+    #gd["EndEntry"]   = 20000
+    fd = {
+             "FileName"          : "%s/nuhm1_for_resampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
 def nuhm1_mcmh_mc7_input() :
     gd = nuhm1_mcmh_mc7_histo_dict()
 #    gd["StartEntry"] = 208288
@@ -309,7 +387,7 @@ def nuhm1_mcmh_mc7_input() :
 def cmssm_test_file_histo_dict() :
     return {
         "FileName"          : "%s/recalc_out.root" % base_directory(),
-        "Chi2TreeName"      : "tree",
+        "Chi2TreeName"      : "chi2tree",
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
         "ContribBranchName" : "vars",
@@ -319,8 +397,11 @@ def cmssm_test_file_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8.model" ,
+
 #        "LHoodFile"         : "models/test.lhood" ,
-        "ModelFile"         : "models/test.model" ,
+#        "ModelFile"         : "models/test.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
@@ -333,7 +414,8 @@ def cmssm_test_file_histo() :
 def nuhm1_test_file_histo_dict() :
     return {
         "FileName"          : "%s/nuhm1_recalc_out.root" % base_directory(),
-        "Chi2TreeName"      : "tree",
+        #"Chi2TreeName"      : "tree",
+        "Chi2TreeName"      : "chi2tree",
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
         "ContribBranchName" : "vars",
@@ -344,13 +426,18 @@ def nuhm1_test_file_histo_dict() :
         "SpectrumIndex"     : 119,
         "Inputs"            : 10, # FIXME: check this number is right!!!
 #        "LHoodFile"         : "models/tester.lhood" ,
-        "ModelFile"         : "models/tester.model" ,
+#        "ModelFile"         : "models/tester.model" ,
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
+        "MaxMADiff"         : 0.45,
         "MinChi2"           : 0,
         "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
      }
+def nuhm1_test_file_histo() :
+    return [MCFile( nuhm1_test_file_histo_dict() )]
 
 def cmssm_mcmh_mh125_histo_dict() :
     return {
@@ -376,6 +463,54 @@ def cmssm_mcmh_mh125_histo_dict() :
      }
 def cmssm_mcmh_mh125_histo() :
     return [MCFile(cmssm_mcmh_mh125_histo_dict() )]
+
+def cmssm_SuFla_no_bug_selected_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_SuFla_no_bug_selected.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 10, # FIXME: check this number is right!!!
+        "ModelFile"         : "models/mc7.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SelectSuFlaNoneBugPoints": True,
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def cmssm_SuFla_no_bug_selected_histo() :
+    return [MCFile(cmssm_SuFla_no_bug_selected_histo_dict() )]
+
+def cmssm_SuFla_selected_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_SuFla_selected.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 10, # FIXME: check this number is right!!!
+        "ModelFile"         : "models/mc7.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SelectSuFlaBugPoints": True,
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def cmssm_SuFla_selected_histo() :
+    return [MCFile(cmssm_SuFla_selected_histo_dict() )]
 
 def cmssm_pre_lhc_histo_dict() :
     return {
@@ -518,7 +653,7 @@ def cmssm_combine_sampling_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 45, 
+        "MaxChi2"           : 100,
         "MinContrib"        : 0,
     #    "MaxMADiff"         : 0.4,
      }
@@ -569,9 +704,9 @@ def nuhm1_combine_sampling_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 45 ,
+        "MaxChi2"           : 100 ,
         "MinContrib"        : 0,
-        "MaxMADiff"         : 0.45,
+    #    "MaxMADiff"         : 0.45,
 #       "SurgicalAmputation": True,
      }
 def nuhm1_combine_sampling_histo() :
@@ -724,6 +859,54 @@ def nuhm1_pre_lhc_histo_dict() :
      }
 def nuhm1_pre_lhc_histo() :
     return [MCFile(nuhm1_pre_lhc_histo_dict() )]
+
+def nuhm1_SuFla_no_bug_selected_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_SuFla_no_bug_selected.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "ModelFile"         : "models/mc7.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SelectSuFlaNoneBugPoints" : True,
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def nuhm1_SuFla_no_bug_selected_histo() :
+    return [MCFile(nuhm1_SuFla_no_bug_selected_histo_dict() )]
+
+def nuhm1_SuFla_selected_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_SuFla_selected.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 12, # FIXME: check this number is right!!!
+        "ModelFile"         : "models/mc7.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SelectSuFlaBugPoints": True,
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MinContrib"        : 0,
+     }
+def nuhm1_SuFla_selected_histo() :
+    return [MCFile(nuhm1_SuFla_selected_histo_dict() )]
 
 def nuhm1_mcmh_mc7_histo_dict() :
     return {
