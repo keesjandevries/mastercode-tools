@@ -24,6 +24,22 @@ def good_point( point, mcfc, verbose = 0) :
         if verbose > 0 : problem += "\t! Gravitino LSP (mSUGRA)\n"
 
 
+    # make the cut for resampling the SuFla buggy points, see mail (Final (?) reprocessing? II)
+    if getattr( mcfc, "SelectSuFlaBugPoints", False ): 
+        MA = point[mcfc.SpectrumIndex+24]
+        tanb = point[4]
+        if not ( (mcfc.SpectrumIndex==117 and tanb >40) or (mcfc.SpectrumIndex==119 and( ( tanb >30 and MA<2000) or (tanb>40 and MA>=200) ))):
+            good = False
+        if verbose > 0 : problem += "\t! In bugged region \n"
+
+    # make the cut for resampling the SuFla buggy points, see mail (Final (?) reprocessing? II)
+    if getattr( mcfc, "SelectSuFlaNoneBugPoints", False ): 
+        MA = point[mcfc.SpectrumIndex+24]
+        tanb = point[4]
+        if  ( (mcfc.SpectrumIndex==117 and tanb >40) or (mcfc.SpectrumIndex==119 and( ( tanb >30 and MA<2000) or (tanb>40 and MA>=200) ))):
+            good = False
+        if verbose > 0 : problem += "\t! Not in bugged region \n"
+
     # The so called surgical amputation: removing points from " the infamous region C  "
     if getattr( mcfc, "SurgicalAmputation", False ) and point[2] > (600+2.7*point[1]) :
         good = False
