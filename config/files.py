@@ -7,8 +7,10 @@ def recalc_files() :
 #    d = files.nuhm1_combine_sampling_input()
 # RESAMPLING 
 #    d = files.cmssm_SuFla_selected_input()
+#    d = files.cmssm_SuFla_triangle_input()
 #    d = files.cmssm_SuFla_no_bug_selected_input()
 #    d = files.nuhm1_SuFla_selected_input()
+#    d = files.nuhm1_SuFla_lowtanb_input()
 #    d = files.nuhm1_SuFla_no_bug_selected_input()
 # TEST
 #    d = files.cmssm_test_input_files()
