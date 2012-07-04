@@ -462,8 +462,9 @@ def nuhm1_test_file_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MaxMADiff"         : 0.45,
+        "SurgicalAmputation": True,
         "MinChi2"           : 0,
-        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 42 ,
         "MinContrib"        : 0,
      }
 def nuhm1_test_file_histo() :
