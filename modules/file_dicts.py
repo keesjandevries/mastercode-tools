@@ -77,7 +77,11 @@ def nuhm1_test_input_files() :
              "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_selected_the_rest.root",
              "Chi2TreeName"      : "chi2tree",
          }
-    mcfs = [MCFile( fd, warn = False ) for fd in [fd2,fd1]] # dont warn us on missing attributes as they're handled by MCFC
+    fd3= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_lowtanb.root",
+             "Chi2TreeName"      : "tree",
+         }
+    mcfs = [MCFile( fd, warn = False ) for fd in [fd2,fd1,fd3]] # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection(  mcfs, gd, warn = False)
 
 def cmssm_mcmh_mh125_input() :
