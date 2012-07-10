@@ -30,11 +30,11 @@ def cmssm_test_input_files() :
 #    gd["EndEntry"]   = 40
 
     # input files: 1 dict per file
-#    fd = {
-#             "FileName"          : "%s/cmssm_test.root" % base_directory(),
-#    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
-#             "Chi2TreeName"      : "tree",
-#         }
+    fd0 = {
+             "FileName"          : "%s/cmssm_test.root" % base_directory(),
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "tree",
+         }
     fd1 = {
              "FileName"          : "%s/cmssm_SuFla_no_bug_selected.root" % base_directory(),
     #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
@@ -60,7 +60,8 @@ def cmssm_test_input_files() :
     #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
              "Chi2TreeName"      : "tree",
          }
-    mcfs = [MCFile( fd, warn = False ) for fd in [fd3 ,fd2,fd4,fd1,fd5]] # dont warn us on missing attributes as they're handled by MCFC
+    #mcfs = [MCFile( fd, warn = False ) for fd in [fd3 ,fd2,fd4,fd1,fd5]] # dont warn us on missing attributes as they're handled by MCFC
+    mcfs = [MCFile( fd, warn = False ) for fd in [fd0]] # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection(  mcfs, gd, warn = False)
 
 def nuhm1_test_input_files() :
@@ -420,8 +421,10 @@ def nuhm1_mcmh_mc7_input() :
 ###############
 def cmssm_test_file_histo_dict() :
     return {
-        "FileName"          : "%s/recalc_out.root" % base_directory(),
-        "Chi2TreeName"      : "chi2tree",
+        "FileName"          : "%s/recalc_out_temp_ssi.root" % base_directory(),
+        #"FileName"          : "%s/recalc_out.root" % base_directory(),
+        #"Chi2TreeName"      : "chi2tree",
+        "Chi2TreeName"      : "tree",
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
         "ContribBranchName" : "vars",
@@ -431,11 +434,11 @@ def cmssm_test_file_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
-        "LHoodFile"         : "models/mc8-all.lhood" ,
-        "ModelFile"         : "models/mc8.model" ,
+    #    "LHoodFile"         : "models/mc8-all.lhood" ,
+    #    "ModelFile"         : "models/mc8.model" ,
 
 #        "LHoodFile"         : "models/test.lhood" ,
-#        "ModelFile"         : "models/test.model" ,
+        "ModelFile"         : "models/test.model" ,
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,

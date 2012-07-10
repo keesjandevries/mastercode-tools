@@ -13,7 +13,7 @@ def recalc_files() :
 #    d = files.nuhm1_SuFla_lowtanb_input()
 #    d = files.nuhm1_SuFla_no_bug_selected_input()
 # TEST
-#    d = files.cmssm_test_input_files()
+    d = files.cmssm_test_input_files()
 #    d = files.nuhm1_test_input()
 #    d = files.nuhm1_test_input_files()
 # NUHM1
@@ -34,7 +34,7 @@ def recalc_files() :
 def histo_files() :
 # TEST
 #    d = files.cmssm_test_file_histo()
-#    d = files.nuhm1_test_file_histo()
+    d = files.nuhm1_test_file_histo()
 #    d = files.nuhm1_test_histo()
 # NUHM1
 #    d = files.nuhm1_pre_lhc_histo()
