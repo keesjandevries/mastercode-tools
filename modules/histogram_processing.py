@@ -222,35 +222,12 @@ def check_chi_mode(mode):
 
     else:
         return -1
-def get_KO_chi2(ssi):
-
-    return 30
-
-def get_chi2_or_KOssi_chi2_from_range(chain,KOhack,ssi_range,ssi_index):
-    if not KOhack: chi2= chain.treeVars["contributions"][0]
-    else : 
-        # this the way it is done with the dm-tool!!!
-        KOssis=[chain.treeVars["predictions"][x] for x in range(ssi_index, ssi_index+20)]
-        mchi=chain.treeVars["predictions"][mchi_index]
-        ssi_in_bin_range=[]
-        for ssi in KOssis:
-            if ssi > ssi_range[0] and ssi < ssi_range[1]:
-                ssi_in_bin_range.append(ssi)
-
-        X2s=[get_KO_chi2(ssi) for ssi in ssi_in_bin_range]
-    return min(X2s)
-
-def get_KO_hack_ssi_low_up_bin_edge(h,KOhack_axes,i_bin):
-    axes=['X','Y']
-    assert True in KOhack_axes
-    for hack, axis in zip(KOhack_axes,axes):
-        if hack:
-            low_ssi=eval("h.Get%saxis().GetBinLowEdge(i_bin)" % axis )
-            up_ssi =eval("h.Get%saxis().GetBinUpEdge(i_bin)" % axis )
-    return [low_ssi,up_ssi]
 
 
-def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin , chain, mcf, KOhack,ssi_range,ssi_index ):
+
+
+#def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin , chain, mcf, KOhack,ssi_range,ssi_index ):
+def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin , chain, mcf, KOhack ):
     for mode in histo_cont.keys() :
         fill = False
         curr_content = histo_cont[mode].GetBinContent(bin)
@@ -259,7 +236,8 @@ def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin ,
         #if check_chi_mode(mode) >= 0:
             # for dchi offset is done later
             #ichi= check_chi_mode(mode)
-            content = get_chi2_or_KOssi_chi2_from_range(chain,KOhack,ssi_range) 
+            #content = get_chi2_or_KOssi_chi2_from_range(chain,KOhack,ssi_range) 
+            content = get_modified_chi2(chain,KOhack) 
             fill = ( content < curr_content )
         if mode == "pval" :
             ndof = count_ndof( chain.treeVars["contributions"], getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
@@ -274,26 +252,91 @@ def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin ,
                 for predict in predicts :
                     predict_cont[predict.short_name].SetBinContent(bin, chain.treeVars["predictions"][predict.index] ) #!!!
 
-#class KOhack(object):
-#    def __init_(self):
-#        self.mchi_index=None
-#        self.KOssi_first_index=None
-#        self.bin_range=None
-#        self.ssi_bin_range= None
-#        self.lhood = None
-#        self.KOssi_histo_index = None
-#        self.ssi_axis = None
+class KOhack_class(object):
+    def __init__(self,mcf):
+        self.mcf =mcf
+        self.hack_applied= False
+        # the rest only gets initiated upon calling init_hack 
+        self.mneu1_index=None
+        self.KOssi_first_index=None
+        self.bin_range=None
+        self.ssi_bin_range= None
+        self.lhood = None
+        self.KOssi_histo_index = None
+        self.ssi_axis = None
+        self.xenon_ssi_sn = None
+        self.xenon_ssi_index = None
+
+    def init_hack(self):
+        self.hack_applied=True
+        self.init_xenon2012_lhood() 
+        self.init_var_indices()
+
+    def init_xenon2012_lhood(self):
+        from modules.lhood_dict import get_lhood_dict
+        from modules.lhood_module import LHood
+        xenon2011_dict=get_lhood_dict()["Xenon2011"]
+        self.lhood = LHood(None,xenon2011_dict)
+        self.xenon_ssi_sn = xenon2011_dict["vars"][1]
+        print self.xenon_ssi_sn
+
+    def init_var_indices(self):
+        vars = v.mc_variables()
+        # one will need indices: first   of KO's (to find the other 21); m_neutralino; ssi with whith the normal X^2 was calculated
+        self.KOssi_first_index=vars["KOsigma_pp^SI"].get_index(self.mcf)
+        self.mnue1_index = vars["neu1"].get_index(self.mcf)
+        self.xenon_ssi_index = vars[self.xenon_ssi_sn].get_index(self.mcf)
+        print self.KOssi_first_index, self.mnue1_index, self.xenon_ssi_index
+         
+
+################## Genaral    - functions #########################
+    def get_lh_chi2(self,mneu1,ssi):
+        return self.lhood.test_chi2([mneu1,ssi])
+
+    def set_axis(self, axis):
+        self.ssi_axis= axis
+
+    def get_hack_applied(self):
+        return self.hack_applied
+
+################## DataHistos - functions #########################
+    def set_ssi_bin_range(self,histo, i_bin):
+        assert self.ssi_axis is not None
+        low_ssi=eval("histo.Get%saxis().GetBinLowEdge(i_bin)" % self.ssi_axis )
+        up_ssi =eval("histo.Get%saxis().GetBinUpEdge(i_bin)" % self.ssi_axis )
+        self.bin_range= [low_ssi,up_ssi]
+
+    def get_KO_chi2(self,chain):
+        mneu1=chain.treeVars["predictions"][self.mneu1_index]
+        xenon_ssi=chain.treeVars["predictions"][self.xenon_ssi_index]
+        KO_ssi_i_s=[(chain.treeVars["predictions"][i+self.KOssi_first_index ] , i) for i in range(0,20)]
+        old_tot_chi2=chain.treeVars["contributions"][0]
+
+        ZSigPiNs=[0,0, 0.2,-0.,2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
+               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
+
+        ssis_in_bin=[]
+        for ssi_i in KO_ssi_i_s:
+            if ssi_i[0] > self.bin_range[0] and ssi_i[0] < self.bin_range[1]:
+                ssi_i_s_in_bin.append(ssi_i)
+
+        X2s_in_bin= [ZSigPiNs[ssi_i[1]]**2 +get_lh_chi2(mneu1,ssi_i[0] + (old_tot_chi2 - get_lh_chi2(mneu1,xenon_ssi)))  for ssi_i in ssi_i_s_in_bin ]
+        return min(X2s_in_bin)
+
+
+def get_modified_chi2(chain,KOhack):
+    if  KOhack.get_hack_applied(): chi2 = KOhack.get_KO_chi2(chain) 
+    else  : chi2= chain.treeVars["contributions"][0]
+    return chi2 
+        
 
 #def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
 def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
     axes = [ "X", "Y", "Z" ]
     chain = MCAnalysisChain( mcf )
     nentries = chain.GetEntries()
-#############################################
-    vars = v.mc_variables()
-    ssi_index = vars["KOsigma_pp^SI"]
-#############################################
-
+    
+    KOhack=KOhack_class(mcf)
     for h in hlist :
         histo_cont = {}
         contrib_cont = {}
@@ -315,10 +358,6 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
 
         title_format = "%s"
         title_items = [ h.GetTitle() ]
-        #Either of the axes contains "sigma"
-#############################################
-        KOhack_axes=[]
-#############################################
         for axis in dim_range :
             axis_nbins.append( eval( "h.GetNbins%s()" % axes[axis] ) )
             axis_mins.append( eval( "h.Get%saxis().GetXmin()" % axes[axis] ) )
@@ -327,7 +366,9 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
             axis_titles.append( eval( "h.Get%saxis().GetTitle()" % axes[axis] ) )
 # Introduce Hack for Keith's ssi points
 #############################################
-            KOhack_axes.append( "sigma" in eval( "h.Get%saxis().GetTitle()" % axes[axis]   ))
+            if ("sigma" in eval( "h.Get%saxis().GetTitle()" % axes[axis])   ): 
+                KOhack.set_axis(axes[axis])
+                KOhack.init_hack()
 #############################################
 
             th_arg_list.append( axis_nbins[-1] )
@@ -342,10 +383,8 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
             title_items.append( axis_titles[-1] )
 
 #############################################
-        if True in KOhack_axes:
+        if KOhack.get_hack_applied():
             "USING HACK BECAUSE THE AXIS NAME CONTAINTS \"SIGMA\""
-            KOhack=True
-        else: KOhack=False
 #############################################
 
         print user_notify_format % tuple(user_notify)
@@ -379,11 +418,11 @@ def fill_and_save_data_hists( mcf, modes, hlist, contribs,predicts ) :
             if entry > 0 :
                 chain.GetEntry(entry)
 #############################################
-                ssi_range = None  
-                if KOhack: 
-                    ssi_range=get_KO_hack_ssi_low_up_bin_edge(h,KOhack_axes,i)
+                if KOhack.get_hack_applied(): 
+                     KOhack.set_ssi_bin_range(h,i)
 #############################################
-                fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf, KOhack,ssi_range,ssi_index )
+#                fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf, KOhack,ssi_range,ssi_index )
+                fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf, KOhack )
         perform_zero_offset( histo_cont["dchi"],firstbin,lastbin )
         print
         save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
