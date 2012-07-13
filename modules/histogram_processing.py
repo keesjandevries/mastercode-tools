@@ -326,8 +326,14 @@ class KOhack_class(object):
 ################## DataHistos - functions #########################
     def set_ssi_bin_range(self,histo, i_bin):
         assert self.ssi_axis is not None
-        low_ssi=eval("histo.Get%saxis().GetBinLowEdge(i_bin)" % self.ssi_axis )
-        up_ssi =eval("histo.Get%saxis().GetBinUpEdge(i_bin)" % self.ssi_axis )
+#        print self.ssi_axis
+        nX,nY,nZ=r.Long(0),r.Long(0),r.Long(0)
+        histo.GetBinXYZ(i_bin,nX,nY,nX)
+        print nX,nY,nZ
+        low_ssi=eval("histo.Get%saxis().GetBinLowEdge(n%s)" % (self.ssi_axis,self.ssi_axis) )
+        up_ssi =eval("histo.Get%saxis().GetBinUpEdge(n%s)" % (self.ssi_axis,self.ssi_axis) )
+#        print histo.GetXaxis().GetBinCenter(i_bin)
+#        print low_ssi, up_ssi
         self.bin_range= [low_ssi,up_ssi]
 
     #def get_KO_chi2(self,xenon_ssi, mneu1,ssi_i):
@@ -349,21 +355,28 @@ class KOhack_class(object):
 
 #        ZSigPiNs=[0,0, 0.2,-0.,2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
 #               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
-
-        ssis_in_bin=[]
+#        print KO_ssi_i_s
+#        print self.bin_range[0]
+        ssi_i_s_in_bin=[]
+        print self.bin_range[0], self.bin_range[1]
         for ssi_i in KO_ssi_i_s:
             if ssi_i[0] > self.bin_range[0] and ssi_i[0] < self.bin_range[1]:
                 ssi_i_s_in_bin.append(ssi_i)
 
 #        X2s_in_bin= [ZSigPiNs[ssi_i[1]]**2 +get_lh_chi2(mneu1,ssi_i[0] + (old_tot_chi2 - get_lh_chi2(mneu1,xenon_ssi)))  for ssi_i in ssi_i_s_in_bin ]
-        X2s_in_bin= [get_KO_chi2(chain, mneu1,ssi_i)  for ssi_i in ssi_i_s_in_bin ]
-        return min(X2s_in_bin)
+        X2s_in_bin= [self.get_KO_chi2(chain, mneu1,ssi_i)  for ssi_i in ssi_i_s_in_bin ]
+        if len(X2s_in_bin)==0:
+            chi2=1e9
+        else:
+            print "yes"
+            chi2=min(X2s_in_bin)
+        return chi2
 
 
 def get_modified_entry_chi2(values,chain,KOhack,s):
     if  KOhack.get_hack_applied(): 
         xenon_ssi=chain.treeVars["predictions"][KOhack.xenon_ssi_index]
-        ssi_i=(values[0],s)
+        ssi_i=(values[1],s)
         mneu1=values[1]
         chi2 = KOhack.get_KO_chi2(chain, mneu1,ssi_i) 
     else  : chi2= chain.treeVars["contributions"][0]
