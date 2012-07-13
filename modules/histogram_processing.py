@@ -150,28 +150,45 @@ def get_plots_lhoods(plots,vars):
                     lhood[var_name]=LHood(None,lhd[lhood_name])
     return lhood
 
-def get_values_from_chain(chain,plot,vars,lhoods):
+def get_modified_data_chi2(chain,KOhack):
+    if  KOhack.get_hack_applied(): chi2 = KOhack.get_bin_KO_chi2(chain) 
+    else  : chi2= chain.treeVars["contributions"][0]
+    return chi2 
+
+def get_values_from_chain(chain,plot,vars,s,KOhack):
     values=[]
     for var_name in plot.get_short_names():
        var = vars[var_name]
-       if (var.__class__.__name__ == "MCVariable"):
+       if (var.__class__.__name__ == "MCVariable") and not KOhack.get_hack_applied():
            index = var.get_index(plot.mcf)
            values.append( chain.treeVars["predictions"][ index ] )
-       elif (var.__class__.__name__ == "DerivedMCVariable"):
+       elif (var.__class__.__name__ == "DerivedMCVariable") and not KOhack.get_hack_applied() :
            input_vars_sns = var.get_input_vars()
            #input_mcvs = [v.mc_variables()[mcvsn] for mcvsn in input_vars_sns  ]
            input_mcvs = [vars[mcvsn] for mcvsn in input_vars_sns  ]
            input_args = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
-           if var_name in lhoods : input_args.append(LHood(None,lhoods[var_name])  )
+#           if var_name in lhoods : input_args.append(LHood(None,lhoods[var_name])  )
            values.append(var.function(input_args) )
+       elif   KOhack.get_hack_applied():
+           mneu1=chain.treeVars["predictions"][KOhack.mneu1_index]
+           KO_ssi=chain.treeVars["predictions"][s+KOhack.KOssi_first_index ] 
+           values=[mneu1,KO_ssi]
+#           values.append(mneu1)
+#           values.append(KO_ssi)
     return values
 
-
+def check_entry_KO_hack(plot):
+    hack=False
+    for n in plot.get_short_names():
+        if "sigma" in n: 
+            hack=True
+    return hack
 
 def calculate_entry_histograms( plots, chain ) :
     ##assert canvas is not None, "Canvas must be specified in calculate_histograms"
     # setup our 2d histos
     vars = v.mc_variables()
+    KOhack=KOhack_class(plots[0].mcf)
     # initialise likelihoods
     lhoods = get_plots_lhoods(plots,vars)
     histos = []
@@ -180,6 +197,8 @@ def calculate_entry_histograms( plots, chain ) :
         entryhisto, chi2histo = initialize_histo( p )
         histos.append(entryhisto)
         chi2histos.append(chi2histo)  #FIXME: is the X^2 histogram still needed?
+        if check_entry_KO_hack(p):
+            KOhack.init_hack()
 
     nentries = chain.GetEntries()
     prog = ProgressBar(0, nentries+1, 77, mode='fixed', char='#')
@@ -189,15 +208,20 @@ def calculate_entry_histograms( plots, chain ) :
         stdout.flush()
         chain.GetEntry(entry)
         for h, c, plot in zip( histos, chi2histos, plots ) :
-            vals = get_values_from_chain(chain,plot,vars,lhoods) 
-            nbins = plot.bins
-            ibin = h.FindBin(*vals)
-            max_bin = h.FindBin(*plot.max_vals)
-            if ibin != 0 and ibin < max_bin :
-                chi2 = chain.treeVars["predictions"][0]
-                if chi2 < c.GetBinContent(ibin) :
-                    c.SetBinContent(ibin, chi2)
-                    h.SetBinContent(ibin, entry)
+            steps = 1
+            if KOhack.get_hack_applied() and check_entry_KO_hack(plot):
+                steps = 21
+            for s in range(0,steps):
+                vals = get_values_from_chain(chain,plot,vars,s,KOhack) 
+                nbins = plot.bins
+                ibin = h.FindBin(*vals)
+                max_bin = h.FindBin(*plot.max_vals)
+                if ibin != 0 and ibin < max_bin :
+                  #  chi2 = chain.treeVars["predictions"][0]
+                    chi2 = get_modified_entry_chi2(vals,chain,KOhack,s)
+                    if chi2 < c.GetBinContent(ibin) :
+                        c.SetBinContent(ibin, chi2)
+                        h.SetBinContent(ibin, entry)
 
     print
     return histos
@@ -237,7 +261,7 @@ def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin ,
             # for dchi offset is done later
             #ichi= check_chi_mode(mode)
             #content = get_chi2_or_KOssi_chi2_from_range(chain,KOhack,ssi_range) 
-            content = get_modified_chi2(chain,KOhack) 
+            content = get_modified_data_chi2(chain,KOhack) 
             fill = ( content < curr_content )
         if mode == "pval" :
             ndof = count_ndof( chain.treeVars["contributions"], getattr( mcf, "MinContrib", 0 ), getattr( mcf, "Inputs", 0 ) )
@@ -284,9 +308,9 @@ class KOhack_class(object):
         vars = v.mc_variables()
         # one will need indices: first   of KO's (to find the other 21); m_neutralino; ssi with whith the normal X^2 was calculated
         self.KOssi_first_index=vars["KOsigma_pp^SI"].get_index(self.mcf)
-        self.mnue1_index = vars["neu1"].get_index(self.mcf)
+        self.mneu1_index = vars["neu1"].get_index(self.mcf)
         self.xenon_ssi_index = vars[self.xenon_ssi_sn].get_index(self.mcf)
-        print self.KOssi_first_index, self.mnue1_index, self.xenon_ssi_index
+        print self.KOssi_first_index, self.mneu1_index, self.xenon_ssi_index
          
 
 ################## Genaral    - functions #########################
@@ -306,26 +330,42 @@ class KOhack_class(object):
         up_ssi =eval("histo.Get%saxis().GetBinUpEdge(i_bin)" % self.ssi_axis )
         self.bin_range= [low_ssi,up_ssi]
 
-    def get_KO_chi2(self,chain):
-        mneu1=chain.treeVars["predictions"][self.mneu1_index]
+    #def get_KO_chi2(self,xenon_ssi, mneu1,ssi_i):
+    def get_KO_chi2(self,chain    , mneu1,ssi_i):
+
         xenon_ssi=chain.treeVars["predictions"][self.xenon_ssi_index]
-        KO_ssi_i_s=[(chain.treeVars["predictions"][i+self.KOssi_first_index ] , i) for i in range(0,20)]
         old_tot_chi2=chain.treeVars["contributions"][0]
 
         ZSigPiNs=[0,0, 0.2,-0.,2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
                1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
+
+        return (  ZSigPiNs[ssi_i[1]]**2 +self.get_lh_chi2(mneu1,ssi_i[0]) + (old_tot_chi2 - self.get_lh_chi2(mneu1,xenon_ssi)) )
+
+    def get_bin_KO_chi2(self,chain):
+        mneu1=chain.treeVars["predictions"][self.mneu1_index]
+        xenon_ssi=chain.treeVars["predictions"][self.xenon_ssi_index]
+        KO_ssi_i_s=[(chain.treeVars["predictions"][i+self.KOssi_first_index ] , i) for i in range(0,20)]
+     #   old_tot_chi2=chain.treeVars["contributions"][0]
+
+#        ZSigPiNs=[0,0, 0.2,-0.,2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
+#               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
 
         ssis_in_bin=[]
         for ssi_i in KO_ssi_i_s:
             if ssi_i[0] > self.bin_range[0] and ssi_i[0] < self.bin_range[1]:
                 ssi_i_s_in_bin.append(ssi_i)
 
-        X2s_in_bin= [ZSigPiNs[ssi_i[1]]**2 +get_lh_chi2(mneu1,ssi_i[0] + (old_tot_chi2 - get_lh_chi2(mneu1,xenon_ssi)))  for ssi_i in ssi_i_s_in_bin ]
+#        X2s_in_bin= [ZSigPiNs[ssi_i[1]]**2 +get_lh_chi2(mneu1,ssi_i[0] + (old_tot_chi2 - get_lh_chi2(mneu1,xenon_ssi)))  for ssi_i in ssi_i_s_in_bin ]
+        X2s_in_bin= [get_KO_chi2(chain, mneu1,ssi_i)  for ssi_i in ssi_i_s_in_bin ]
         return min(X2s_in_bin)
 
 
-def get_modified_chi2(chain,KOhack):
-    if  KOhack.get_hack_applied(): chi2 = KOhack.get_KO_chi2(chain) 
+def get_modified_entry_chi2(values,chain,KOhack,s):
+    if  KOhack.get_hack_applied(): 
+        xenon_ssi=chain.treeVars["predictions"][KOhack.xenon_ssi_index]
+        ssi_i=(values[0],s)
+        mneu1=values[1]
+        chi2 = KOhack.get_KO_chi2(chain, mneu1,ssi_i) 
     else  : chi2= chain.treeVars["contributions"][0]
     return chi2 
         
