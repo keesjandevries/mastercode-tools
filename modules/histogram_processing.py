@@ -82,11 +82,11 @@ def save_hlist_to_root_file( hlist, filename, directory = None ) :
         h.Write("",r.TObject.kOverwrite)
     f.Close()
 
-def initialize_histo( obj ) :
-    dim = obj.dimension
+def initialize_histo( space,hname,entry=False, data=False,chi2=False ) :
+    dim = space.dimension
 
     #initialise bins
-    bins = [ array('d',[0.0] * (abins+1)) for abins in obj.nbins ]
+    bins = [ array('d',[0.0] * (abins+1)) for abins in space.nbins ]
     # bins wil  be filled with begin_value, ..... , end_value [total nbins+1 values], they mark the bin edges.
 
 #    print "***"
@@ -96,47 +96,54 @@ def initialize_histo( obj ) :
 #        print index, min_val, max_val, nbins, name, log
 #    print "***"
 
-    for i,log in enumerate(obj.log) :
+    for i,log in enumerate(space.log) :
         if log :
-            logmin = r.TMath.Log10( obj.min_vals[i] )
-            logmax = r.TMath.Log10( obj.max_vals[i] )
-            binwidth = (logmax - logmin) / float(obj.nbins[i])
+            logmin = r.TMath.Log10( space.min_vals[i] )
+            logmax = r.TMath.Log10( space.max_vals[i] )
+            binwidth = (logmax - logmin) / float(space.nbins[i])
             for c, b in enumerate( bins[i] ) :
                 bins[i][c] = r.TMath.Power( 10, logmin+c*binwidth)
         else :
-            bmin = obj.min_vals[i]
-            bmax = obj.max_vals[i]
-            binwidth = float(bmax-bmin) / float(obj.nbins[i])
+            bmin = space.min_vals[i]
+            bmax = space.max_vals[i]
+            binwidth = float(bmax-bmin) / float(space.nbins[i])
             for c in range(len( bins[i] )) :
                 bins[i][c] = bmin + binwidth*c
 
     title_f = ";%s" * dim
-    title = title_f % tuple( obj.names )
+    title = title_f % tuple( space.names )
 
 
-    hname = histo_name( obj.short_names, entry_histo_prefix )
-    cname = histo_name( obj.short_names, chi2_histo_prefix )
+#    hname = histo_name( space.short_names, entry_histo_prefix )
+#    cname = histo_name( space.short_names, chi2_histo_prefix )
 
     args = []
-    [ args.extend( [ nb, b ] ) for nb, b in zip( obj.nbins, bins ) ]
+    [ args.extend( [ nb, b ] ) for nb, b in zip( space.nbins, bins ) ]
 
-    histo = eval( "r.TH%dI( hname, title, *args )" % dim )
-    c2histo = eval( "r.TH%dD( cname, title, *args )" % dim )
+    if entry:
+        histo = eval( "r.TH%dI( hname, title, *args )" % dim )
+        content = -1
+    elif chi2:
+        histo = eval( "r.TH%dD( hname, title, *args )" % dim )
+        content = r.Long(1e9)
+    elif data:
+        histo = eval( "r.TH%dD( hname, title, *args )" % dim )
+        content = r.Long(1e9)
+    else:
+        histo = None
+        content = None
 
-    content = r.Long(1e9)
-    econtent = -1
 
-    up_bin = [ abin + 1 for abin in obj.nbins ]
+    up_bin = [ abin + 1 for abin in space.nbins ]
 
     #first_bin = histo.FindBin(*obj.min_vals)
     #last_bin = histo.FindBin(*obj.max_vals)
     first_bin, last_bin = get_histogram_bin_range(histo)
     for i in range(first_bin,last_bin+1) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
-            c2histo.SetBinContent(i,content)
-            histo.SetBinContent(i,econtent)
+            histo.SetBinContent(i,content)
 
-    return histo,c2histo
+    return histo
 
 #def get_plots_lhoods(plots,vars):
 #    lhood ={}
@@ -201,9 +208,15 @@ def calculate_entry_histograms( plots, chain ) :
     histos = []
     chi2histos = []
     for p in plots :
-        entryhisto, chi2histo = initialize_histo( p )
+        hname = histo_name( p.short_names, entry_histo_prefix )
+        cname = histo_name( p.short_names, chi2_histo_prefix )
+
+        entryhisto = initialize_histo( p,hname,entry=True )
+        chi2histo  = initialize_histo( p,cname,chi2 =True )
+
         histos.append(entryhisto)
-        chi2histos.append(chi2histo)  #FIXME: is the X^2 histogram still needed?
+        chi2histos.append(chi2histo)
+
         if check_entry_KO_hack(p):
             KOhack.init_hack()
             KOhack.noxenon2011=p.noxenon2011
@@ -299,6 +312,7 @@ class KOhack_class(object):
         self.xenon_ssi_index = None
 
     def init_hack(self):
+        self.ssi_axis = 'Y' # FIXME:this is now hard coded!!!
         self.hack_applied=True
         self.init_xenon2012_lhood() 
         self.init_var_indices()
@@ -381,74 +395,30 @@ def get_modified_entry_chi2(values,chain,KOhack,s):
         
 
 #def fill_all_data_hists( mcf, hlist, contribs, toFill, toFillContrib) :
-def fill_and_save_data_hists( mcf, modes, hist_KOhack_list, contribs,predicts ) :
+def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts ) :
     axes = [ "X", "Y", "Z" ]
     chain = MCAnalysisChain( mcf )
     nentries = chain.GetEntries()
     
     KOhack=KOhack_class(mcf)
-    for h,kohack in hist_KOhack_list :
-        if kohack[0]:
-            print "USING HACK "
+    for p , e_h in zip(plots,entry_hists) :
+        h=e_h[0]
+        if check_entry_KO_hack(p):
             KOhack.init_hack()
-            if kohack[1]:
-                KOhack.noxenon2011=True    
-                print "no xenon applied!!!"
+            KOhack.noxenon2011=p.noxenon2011
+            KOhack.df=get_dimension_factor(p)
             
         histo_cont = {}
         contrib_cont = {}
         predict_cont = {}
 
-        h_dim = get_histogram_dimension(h)
-        dim_range = range(h_dim)
-
-        axis_nbins = []
-        axis_mins = []
-        axis_maxs = []
-        axis_bins = []
-        axis_titles = []
-
-        th_arg_list  = []
-
-        user_notify_format = ""
-        user_notify = []
-
-        title_format = "%s"
-        title_items = [ h.GetTitle() ]
-        for axis in dim_range :
-            axis_nbins.append( eval( "h.GetNbins%s()" % axes[axis] ) )
-            axis_mins.append( eval( "h.Get%saxis().GetXmin()" % axes[axis] ) )
-            axis_maxs.append( eval( "h.Get%saxis().GetXmax()" % axes[axis] ) )
-            axis_bins.append( eval( "h.Get%saxis().GetXbins().GetArray()" % axes[axis] ) )
-            axis_titles.append( eval( "h.Get%saxis().GetTitle()" % axes[axis] ) )
-# Introduce Hack for Keith's ssi points
-#############################################
-            if ("sigma" in eval( "h.Get%saxis().GetTitle()" % axes[axis])   ): 
-                KOhack.set_axis(axes[axis])
-                if ("cm" in eval( "h.Get%saxis().GetTitle()" % axes[axis])):
-                    KOhack.df=1.e-36
-
-#############################################
-
-            th_arg_list.append( axis_nbins[-1] )
-            th_arg_list.append( axis_mins[-1] )
-            th_arg_list.append( axis_maxs[-1] )
-
-            user_notify_format += ": [ %.2e, %.2e ] :"
-            user_notify.append( axis_mins[-1] )
-            user_notify.append( axis_maxs[-1] )
-
-            title_format += ";%s"
-            title_items.append( axis_titles[-1] )
-
-        print user_notify_format % tuple(user_notify)
-
-        title = title_format % tuple(title_items)
 
         firstbin, lastbin = get_histogram_bin_range(h)
         for mode in modes :
             # here need to add in check on contrib and make one for each contribution
-            histo_cont[mode] = eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim )
+            hname = histo_name( p.short_names, entry_histo_prefix )+ "_" + mode
+            #histo_cont[mode] = eval( 'r.TH%dD( h.GetName() + "_" + mode, title, *th_arg_list )' % h_dim )
+            histo_cont[mode] =initialize_histo( p,hname,data =True ) 
             base_val = 1e9
             if mode == "pval" :
                 base_val = 0.0
