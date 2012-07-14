@@ -203,12 +203,15 @@ def print_parameters(chain,mcf):
         print_prediction(chain,mcf,"mh2")
         
 def print_mu(chain,mcf):
-    print "\nmu:\n"
+    #print "\nmu:\n"
     print_prediction(chain,mcf,"mu")
 
 def print_bsmmm(chain,mcf):
     print "\nbsmm:\n"
     shortname= "Bsmumu"
+    p=get_prediction(chain,mcf,shortname)
+    print "{:11.4g} {!r}". format(p    , shortname) 
+    shortname= "sigma_pp^SI"
     p=get_prediction(chain,mcf,shortname)
     print "{:11.4g} {!r}". format(p    , shortname) 
 
