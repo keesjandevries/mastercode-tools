@@ -8,6 +8,8 @@ class MCSpace( object ) : # file specific object version of MCVariable
             "Wrong number of Variables or Options to make a space"
         self.log = options.get( 'logaxes' ,[False]*len(Vars)) # FIXME
 
+        self.KOhack      = options.get('KOhack',False)
+        self.noxenon2011 = options.get('noxenon2011',False)
         self.dimension   = len(Vars)
         self.min_vals    = [ r[0] for r in options["ranges"] ]
         self.max_vals    = [ r[1] for r in options["ranges"] ]
