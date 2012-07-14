@@ -21,7 +21,8 @@ def base_directory() :
         }
 
     d.update( dict.fromkeys(imperial_hosts, imperial_users) )
-    return d[fqdn][user]
+#    return d[fqdn][user]
+    return "/vols/cms04/kjd110/mc8/"
 
 def cmssm_test_input_files() :
     # output / global options
@@ -71,7 +72,7 @@ def nuhm1_test_input_files() :
 #             "Chi2TreeName"      : "tree",
 #         }
     fd1= {
-             "FileName"          : "%s/nuhm1_SuFla_no_bug_selected.root" % base_directory(),
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_lowtanb_lowMA.root" ,
              "Chi2TreeName"      : "tree",
          }
     fd2= {
@@ -82,14 +83,18 @@ def nuhm1_test_input_files() :
              "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_lowtanb.root",
              "Chi2TreeName"      : "tree",
          }
-    mcfs = [MCFile( fd, warn = False ) for fd in [fd2,fd1,fd3]] # dont warn us on missing attributes as they're handled by MCFC
+    fd4= {
+             "FileName"          : "%s/nuhm1_from_cmssm.root" % base_directory(),
+             "Chi2TreeName"      : "chi2tree",
+         }
+    mcfs = [MCFile( fd, warn = False ) for fd in [fd2,fd1,fd3,fd4]] # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection(  mcfs, gd, warn = False)
 
 def cmssm_mcmh_mh125_input() :
     # output / global options
     gd = cmssm_mcmh_mh125_histo_dict()
-    gd["StartEntry"] = 0
-    gd["EndEntry"]   = 50000
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
 
     # input files: 1 dict per file
     fd = {
@@ -219,8 +224,35 @@ def cmssm_combine_sampling_input() :
              "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm-pre-Gino-fix-last/dm_June2012-cmssm-mh125-bsmm-pre-Gino-fix-last.root", 
              "Chi2TreeName"      : "tree",
          }
+    
+    fd8 = {
+             "FileName"          : "%s/cmssm_SuFla_no_bug_selected.root" % base_directory(),
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "tree",
+         }
+    fd9= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_selected_the_rest.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "chi2tree",
+         }
+    fd10={
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_selected_1000.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "chi2tree",
+         }
+    fd11={
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_selected_1.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "chi2tree",
+         }
+    fd13={
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-cmssm/dm_ab_cmssm_SuFla_triangle.root",
+    #         "FileName"          : "/vols/cms03/kjd110/May2012-cmssm-mh125/dm_cmssm_mh125_May2012.root" ,
+             "Chi2TreeName"      : "tree",
+         }
 #    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6 ]] # dont warn us on missing attributes as they're handled by MCFC
-    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6,fd7 ]] 
+#    mcfs= [MCFile( fd,warn = False ) for fd in [fd1, fd2, fd3, fd4, fd5, fd6,fd7 ]] 
+    mcfs= [MCFile( fd,warn = False ) for fd in [fd8, fd9, fd10, fd11,  fd13 ]] 
     return MCFileCollection(  mcfs, gd, warn = False)
 
 def cmssm_mc8_all_input() :
@@ -312,8 +344,26 @@ def nuhm1_combine_sampling_input() :
              "FileName"          : "/vols/cms03/kjd110/June-2012-nuhm1-mh125-bsmm-pre-Gino-fix-last/dm_June-2012-nuhm1-mh125-bsmm-pre-Gino-fix-last.root",
              "Chi2TreeName"      : "tree",
          }
+    ############################################################################################################# After -Gino's fix
+    fd21= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_lowtanb_lowMA.root" ,
+             "Chi2TreeName"      : "tree",
+         }
+    fd22= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_selected_the_rest.root",
+             "Chi2TreeName"      : "chi2tree",
+         }
+    fd23= {
+             "FileName"          : "/vols/cms03/kjd110/dm-ab-output-SuFla-resampling-nuhm1/dm_ab_nuhm1_SuFla_lowtanb.root",
+             "Chi2TreeName"      : "tree",
+         }
+    fd24= {
+             "FileName"          : "%s/nuhm1_from_cmssm.root" % base_directory(),
+             "Chi2TreeName"      : "chi2tree",
+         }
 #    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd9,fd10]]
-    mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd11]]
+    #mcf = [MCFile( fd, warn = False ) for fd in [fd1,fd2,fd3,fd4,fd5,fd6,fd7,fd8,fd11]]
+    mcf = [MCFile( fd, warn = False ) for fd in [fd21,fd22,fd23,fd24]]
     return MCFileCollection(  mcf , gd, warn = False)
 
 def nuhm1_mcmh_mh125_input() :
@@ -421,9 +471,7 @@ def nuhm1_mcmh_mc7_input() :
 ###############
 def cmssm_test_file_histo_dict() :
     return {
-        "FileName"          : "%s/recalc_out_temp_ssi.root" % base_directory(),
-        #"FileName"          : "%s/recalc_out.root" % base_directory(),
-        #"Chi2TreeName"      : "chi2tree",
+        "FileName"          : "%s/recalc_out.root" % base_directory(),
         "Chi2TreeName"      : "tree",
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
@@ -434,8 +482,8 @@ def cmssm_test_file_histo_dict() :
         "PredictionIndex"   : 10,
         "SpectrumIndex"     : 117,
         "Inputs"            : 10, # FIXME: check this number is right!!!
-    #    "LHoodFile"         : "models/mc8-all.lhood" ,
-    #    "ModelFile"         : "models/mc8.model" ,
+#        "LHoodFile"         : "models/mc8-all.lhood" ,
+#        "ModelFile"         : "models/mc8.model" ,
 
 #        "LHoodFile"         : "models/test.lhood" ,
         "ModelFile"         : "models/test.model" ,
@@ -689,7 +737,7 @@ def cmssm_mc8_all_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 50, 
+        "MaxChi2"           : 45, 
         "MinContrib"        : 0,
     #    "MaxMADiff"         : 0.4,
      }
@@ -715,7 +763,7 @@ def cmssm_combine_sampling_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 100,
+        "MaxChi2"           : 1e9,
         "MinContrib"        : 0,
     #    "MaxMADiff"         : 0.4,
      }
@@ -766,7 +814,7 @@ def nuhm1_combine_sampling_histo_dict() :
         "EntryDirectory"    : "entry_histograms",
         "DataDirectory"     : "data_histograms",
         "MinChi2"           : 0,
-        "MaxChi2"           : 100 ,
+        "MaxChi2"           : 1e9 ,
         "MinContrib"        : 0,
     #    "MaxMADiff"         : 0.45,
 #       "SurgicalAmputation": True,

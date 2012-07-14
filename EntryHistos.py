@@ -17,7 +17,7 @@ def print_spaces( p, s ) :
 def main( argv=None ) :
     mcfile_list = files.histo_files()
     for mcf in mcfile_list :
-        print mcf.FileName # FIXME: nicer info 
+        print "Processing file: "mcf.FileName  
         spaces = plots.get_plots(mcf)
 
         # bit of output

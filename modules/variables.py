@@ -55,6 +55,7 @@ def mc_variables() :
             "BR(b->sg)"    : MCV( b["BR(b->sg)"],     index_offset=29, offset_relative_to="PredictionIndex" ),
             "mu"           : MCV( b["mu"       ],     index_offset=32, offset_relative_to="PredictionIndex" ),
             "sigma_pp^SI"  : MCV( b["sigma_pp^SI"],   index_offset=33, offset_relative_to="PredictionIndex" ),
+            "KOsigma_pp^SI"  : MCV( b["KOsigma_pp^SI"],   index_offset=64, offset_relative_to="PredictionIndex" ),
             "mA0^2"        : MCV( b["mA0^2"],         index_offset=35, offset_relative_to="PredictionIndex" ),
             # Spectrum
             "chi1"         : MCV( b["chi1"],          index_offset=0,  offset_relative_to="SpectrumIndex" ),
@@ -109,7 +110,8 @@ def base_variables() :
         "R(b->sg)"     : Var( "R(b->sg)",      r"$R(b\rightarrow s\gamma)$"          ),
         "R(D_ms)"      : Var( "R(D_ms)",       r"$R(\Delta_{ms}$"                    ),
         "Bsmumu"       : Var( "Bsmumu",        r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})$"),
-        "BsmumuRatio"  : Var( "BsmumuRatio", r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
+#        "BsmumuRatio"  : Var( "BsmumuRatio", r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
+        "BsmumuRatio"  : Var( "BsmumuRatio", r"$\sigmaBR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
         "R(B->taunu)"  : Var( "R(B->taunu)",   r"$R(B\rightarrow\tau\nu)$"           ),
         "R(B->Xsll)"   : Var( "R(B->Xsll)",    r"$R(B\rightarrow X_{s}\ell\ell$"     ),
         "R(K->lnu)"    : Var( "R(K->lnu)",     r"$R(K\rightarrow\ell\nu)$",          ),
@@ -138,6 +140,7 @@ def base_variables() :
         "D_0(K*g)"     : Var( "D_0(K*g)",      r"$\Delta_{0}(K^{*}\gamma$",          ),
         "BR(b->sg)"    : Var( "BR(b->sg)",     r"$BR(b\rightarrow s\gamma)$",        ),
         "sigma_pp^SI"  : Var( "sigma_pp^SI",   r"$\sigma_{p}^{SI}$" ),
+        "KOsigma_pp^SI"  : Var( "KOsigma_pp^SI",   r"$\sigma_{p}^{SI}$" ),
         "sigma_pp^SI_cm-2"  : Var( "sigma_pp^SI_cm-2",   r"$\sigma_{p}^{SI} [cm^{-2}] $" ),
         "mu"           : Var( "mu"   ,         r"$\mu$"                        ),
         "mA0^2"        : Var( "mA0^2",         r"$m_{A_{0}}^2 %s^{2} $" %GeVc2 ),
@@ -190,3 +193,18 @@ def get_bsmumu_ratio(vals):
 def get_sigma_pp_si_cm(vals):
     ssi=vals[0]
     return (ssi*1e-36)
+
+
+#def x2_from_ssi_mchi_lhood(mchi,ssi ):
+#    return 1
+#
+#
+#def get_sigma_pp_si_cm_KO(vals):
+#    mchi=vals[0]
+##    ssiMicr=vals[1]
+#    ssiKOs=vals[1:21]
+#    ZSigPiNs=[0,0, 0.2,-0.,2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
+#               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
+#    X2s=[Z**2 + x2_from_ssi_mchi_lhood(mchi,ssi ) for Z,ssi in zip(ZSigPiNs, ssiKOs ) ]
+#    ssiKO=ssiKOs[ X2s.index(min(X2s))  ]
+#    return (ssiKO*1e-36)
