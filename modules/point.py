@@ -31,6 +31,16 @@ def get_coor_entry(vars,mcf) :
     else :
         return -1
 
+def print_bin_edges(hist,bin,vars):
+    axes=['X','Y']
+    nX,nY,nZ=r.Long(0),r.Long(0),r.Long(0)
+    hist.GetBinXYZ(bin,nX,nY,nZ)
+    print "The bin edges are:"
+    for var,axis in zip(vars,axes):
+        low_edge=eval("hist.Get%saxis().GetBinLowEdge(n%s)" % (axis,axis) )
+        up_edge =eval("hist.Get%saxis().GetBinUpEdge(n%s)" % (axis,axis) )
+        print low_edge, "<", var, "<", up_edge
+
 def get_entry_from_histo(vars,order,name,mcf) :
     f = r.TFile.Open(mcf.FileName)
     hist = f.Get(name).Clone()
@@ -42,6 +52,7 @@ def get_entry_from_histo(vars,order,name,mcf) :
 
     hBin = hist.FindBin( *vals )
     n = hist.GetBinContent(hBin)
+    print_bin_edges(hist,hBin,order)
     return int(n)
 
 def hist_exists(name, mcf) :
@@ -101,8 +112,16 @@ def get_best_fit_entry(mcf):
     f.Close()
     return n
 
-def print_chi2(chain):
-    print "\nTotal X^2 = %f" % chain.treeVars["predictions"][ 0 ]
+def print_chi2(chain,n,mcf):
+    chi2=chain.treeVars["predictions"][ 0 ]
+#    print "\nTotal X^2 = %f" % chain.treeVars["predictions"][ 0 ]
+    n_bf=get_best_fit_entry(mcf)
+    chain.GetEntry(n_bf)
+    chi2_bf=chain.treeVars["predictions"][ 0 ]
+    print "\nTotal X^2 = %f, DX^2 = %f" % (chi2 ,(chi2-chi2_bf))
+
+    chain.GetEntry(n)
+
 
 def print_n(n):
     print "Found entry number: %d" % n
@@ -154,8 +173,10 @@ def get_prediction(chain,mcf,shortname):
 
 def print_prediction(chain,mcf,shortname):
     p=get_prediction(chain,mcf,shortname)
-    print "{:11.2f} {!r}". format(p    , shortname) 
-
+    if p > 0.0001:
+        print "{:11.2f} {!r}". format(p    , shortname) 
+    else:
+        print "{:11.4g} {!r}". format(p    , shortname)
 
 def print_spectrum(chain,mcf):
     spectrum_shortnames=[
@@ -208,22 +229,38 @@ def print_mu(chain,mcf):
 
 def print_bsmmm(chain,mcf):
     print "\nbsmm:\n"
-    shortname= "Bsmumu"
-    p=get_prediction(chain,mcf,shortname)
-    print "{:11.4g} {!r}". format(p    , shortname) 
-    shortname= "sigma_pp^SI"
-    p=get_prediction(chain,mcf,shortname)
-    print "{:11.4g} {!r}". format(p    , shortname) 
+    print_prediction(chain,mcf,"Bsmumu")
+
+def print_sigma_si(chain,mcf):
+    print "\nsigma^SI from MicroOMEGAs [pb]:\n"
+    print_prediction(chain,mcf,"sigma_pp^SI")
+    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 50 +- Z*14:\n"
+    import variables as v
+    MCVdict=v.mc_variables()
+    index = MCVdict["KOsigma_pp^SI"].get_index(mcf)
+#    ZSigPiNs=[0, 0.2,-0.2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
+#               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
+    Zs=[ 0.2, 0.4, 0.6, 0.8, 1.0,  1.33, 1.66, 2.0, 2.5, 3.0]
+    ZSigPiNs=[0.]+Zs+[-Z for Z in Zs]
+    print "Z    :   ssi"
+    for i ,Z in enumerate(ZSigPiNs):
+        prediction=chain.treeVars["predictions"][index+i]
+        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
+    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 64 +- Z*8:\n"
+    for i ,Z in enumerate(ZSigPiNs):
+        prediction=chain.treeVars["predictions"][index+i+21]
+        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
 
 def print_info(n,mcf) :
     chain = MCAnalysisChain( mcf )
     chain.GetEntry(n)
     print_n(n)
     print_afterburner_coordinates(chain, mcf)
-    print_chi2(chain)
+    print_chi2(chain,n,mcf)
     print_parameters(chain,mcf)
     print_mu(chain,mcf)
     print_bsmmm(chain,mcf)
+    print_sigma_si(chain,mcf)
     print_spectrum(chain,mcf) 
     print_chi2_breakdown(chain,mcf)
     print_ma_info(chain,mcf)
