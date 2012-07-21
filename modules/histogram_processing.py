@@ -145,23 +145,44 @@ def get_modified_data_chi2(chain,KOhack):
     else  : chi2= chain.treeVars["contributions"][0]
     return chi2 
 
-def get_values_from_chain(chain,plot,vars,s,KOhack):
-    values=[]
-    for var_name in plot.get_short_names():
-       var = vars[var_name]
-       if (var.__class__.__name__ == "MCVariable") and not KOhack.get_hack_applied():
-           index = var.get_index(plot.mcf)
-           values.append( chain.treeVars["predictions"][ index ] )
-       elif (var.__class__.__name__ == "DerivedMCVariable") and not KOhack.get_hack_applied() :
-           input_vars_sns = var.get_input_vars()
-           input_mcvs = [vars[mcvsn] for mcvsn in input_vars_sns  ]
-           input_args = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
-           values.append(var.function(input_args) )
-       elif   KOhack.get_hack_applied():
-           mneu1=chain.treeVars["predictions"][KOhack.mneu1_index]
-           KO_ssi=KOhack.df*chain.treeVars["predictions"][s+KOhack.KOssi_first_index ] 
-           values=[mneu1,KO_ssi]
-    return values
+def get_values_list_from_chain_and_histo(chain,plot,vars,s,KOhack,histo):
+    values_list=[]
+    if not KOhack.get_hack_applied():
+        values=[]
+        for var_name in plot.get_short_names():
+            var = vars[var_name]
+            if (var.__class__.__name__ == "MCVariable") and not KOhack.get_hack_applied():
+                index = var.get_index(plot.mcf)
+                values.append( chain.treeVars["predictions"][ index ] )
+            elif (var.__class__.__name__ == "DerivedMCVariable") and not KOhack.get_hack_applied() :
+                input_vars_sns = var.get_input_vars()
+                input_mcvs = [vars[mcvsn] for mcvsn in input_vars_sns  ]
+                input_args = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
+                values.append(var.function(input_args) )
+        values_list.append(values)
+    elif  KOhack.get_hack_applied():
+        mneu1=chain.treeVars["predictions"][KOhack.mneu1_index]
+        KO_ssi=KOhack.df*chain.treeVars["predictions"][s+KOhack.KOssi_first_index ] 
+        values=[mneu1,KO_ssi]
+    return values_list
+
+#def get_values_from_chain(chain,plot,vars,s,KOhack):
+#    values=[]
+#    for var_name in plot.get_short_names():
+#       var = vars[var_name]
+#       if (var.__class__.__name__ == "MCVariable") and not KOhack.get_hack_applied():
+#           index = var.get_index(plot.mcf)
+#           values.append( chain.treeVars["predictions"][ index ] )
+#       elif (var.__class__.__name__ == "DerivedMCVariable") and not KOhack.get_hack_applied() :
+#           input_vars_sns = var.get_input_vars()
+#           input_mcvs = [vars[mcvsn] for mcvsn in input_vars_sns  ]
+#           input_args = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
+#           values.append(var.function(input_args) )
+#       elif   KOhack.get_hack_applied():
+#           mneu1=chain.treeVars["predictions"][KOhack.mneu1_index]
+#           KO_ssi=KOhack.df*chain.treeVars["predictions"][s+KOhack.KOssi_first_index ] 
+#           values=[mneu1,KO_ssi]
+#    return values
 
 def get_dimension_factor(plot):
     df=1
@@ -205,12 +226,17 @@ def calculate_entry_histograms( plots, chain ) :
         stdout.flush()
         chain.GetEntry(entry)
         for h, c, plot in zip( histos, chi2histos, plots ) :
-            steps = 1
-            if KOhack.get_hack_applied() and check_entry_KO_hack(plot):
-                steps = 21
-            for s in range(0,steps):
-                vals = get_values_from_chain(chain,plot,vars,s,KOhack) 
+#            steps = 1
+#            if KOhack.get_hack_applied() and check_entry_KO_hack(plot):
+#                steps = 21
+#            for s in range(0,steps):
+#                vals = get_values_from_chain(chain,plot,vars,s,KOhack) 
+            vals_list = get_values_list_from_chain_and_histo(chain,plot,vars,s,KOhack,h)
+            for vals in vals_list:
+                chi2 = get_modified_entry_chi2(vals,chain,KOhack,s)
+#                fill_entry_histo(vals,chi2,entry,plot,h,c)
                 nbins = plot.bins
+#  make this a funtion: fill_entry_histo(vals,chi2,plot)
                 ibin = h.FindBin(*vals)
                 max_bin = h.FindBin(*plot.max_vals)
                 if ibin != 0 and ibin < max_bin :
@@ -221,6 +247,15 @@ def calculate_entry_histograms( plots, chain ) :
 
     print
     return histos
+
+def fill_entry_histo(vals,chi2,entry,plot,entry_histo,chi2_histo):
+    ibin = entry_histo.FindBin(*vals)
+    max_bin = entry_histo.FindBin(*plot.max_vals)
+    if ibin != 0 and ibin < max_bin :
+#        chi2 = get_modified_entry_chi2(vals,chain,KOhack,s)
+        if chi2 < chi2_histo.GetBinContent(ibin) :
+            chi2_histo.SetBinContent(ibin, chi2)
+            entry_histo.SetBinContent(ibin, entry)
 
 def count_ndof( c, min_contrib, inputs ) :
     count = 0
