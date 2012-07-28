@@ -61,6 +61,11 @@ def good_point( point, mcfc, verbose = 0) :
             if verbose > 0 : problem += "\t! Not in bugged region \n"
 
     # The so called surgical amputation: removing points from " the infamous region C  "
+    if getattr( mcfc, "SelectRegionC", False ) and point[2] < (600+2.7*point[1]) :
+        good = False
+        if verbose > 0 : problem += "\t! Point not in region C\n"
+
+    # The so called surgical amputation: removing points from " the infamous region C  "
     if getattr( mcfc, "SurgicalAmputation", False ) and point[2] > (600+2.7*point[1]) :
         good = False
         if verbose > 0 : problem += "\t! Apply surgical amputation of point in region C\n"
