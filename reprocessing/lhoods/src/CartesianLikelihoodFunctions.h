@@ -20,6 +20,8 @@ class CartesianLikelihoodFunctions
     double CHI2(double,double,Coords&);
     double CL(double,double,Coords&);
     double XenonMC6(double,double,Coords&);
+    double XenonMC8(double,double,Coords&);
+    double XenonMC8Modified(double,double,Coords&);
     double BsmmMC6(double,double,Coords&);
     double MAcmssmMC6(double,double,Coords&);
     double MAcmssmMC6_old(double,double,Coords&);

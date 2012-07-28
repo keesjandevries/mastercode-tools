@@ -41,6 +41,18 @@ def get_lhood_dict() :
                                   "name"   : "BR(B_s->mumu) LHCb+CMS [MC7]",
                                   "vars"   : [ "Bsmumu" ],
                               },
+          "Xenon2012LogUnc"  :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/xenon2012_contour.csv",12, 1.0, 2.7,1 ],
+                                  "name"   :"Xenon 2012 [MC8] with log unc on ssi",
+                                  "vars"   : [ "neu1", "sigma_pp^SI" ],
+                              },
+          "Xenon2012"     :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/xenon2012_contour.csv",11, 1.0, 2.7,1 ],
+                                  "name"   :"Xenon 2012 [MC8]",
+                                  "vars"   : [ "neu1", "sigma_pp^SI" ],
+                              },
           "Xenon2011"     :   {
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc6/xenon_contour.csv", 1, 1.2, 3.2, 1 ],
