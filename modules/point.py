@@ -95,7 +95,7 @@ def get_afterburner_command( chain, mfc) :
     return "%s 0 %s" % ( AB_BINARY, " ".join( input_strings ) )
     
 def get_input_coordinates( chain, mfc ) :
-    return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+1) ]
+    return [chain.treeVars["predictions"][ input ]   for input in range(1,mfc.Inputs+5) ]
 
 def get_best_fit_entry(mcf):
     f=r.TFile(mcf.FileName)
@@ -119,8 +119,11 @@ def print_chi2(chain,n,mcf):
     chain.GetEntry(n_bf)
     chi2_bf=chain.treeVars["predictions"][ 0 ]
     print "\nTotal X^2 = %f, DX^2 = %f" % (chi2 ,(chi2-chi2_bf))
-
     chain.GetEntry(n)
+    p_value, n_dof = get_p_value_n_dof(chain,mcf)
+    perc_p_value = p_value*100.
+#    print "N_dof = ", n_dof, "p-value = ", p_value 
+    print "N_dof = {:d}, p-value = {:2.1f} ".format(n_dof,perc_p_value)
 
 
 def print_n(n):
@@ -153,6 +156,32 @@ def print_chi2_breakdown(chain,mcf):
         chi2=chain.treeVars["lhoods"][i]
         print "{:11.2f} {:16} {:16}". format( chi2, lhood[0], lhood[1] )
 
+def get_p_value_n_dof(chain,mcf):
+    import models
+    import variables as v
+    model  = models.get_model_from_file(mcf)
+    lhoods = models.get_lhood_names(mcf)
+    MCVdict=v.mc_variables()
+    chi2_s=[]
+    for constraint in model:
+        sn=constraint.short_name
+        chi2_s.append(get_contribution(chain,mcf,sn))
+
+    for i, lhood in enumerate(lhoods.items()):
+        chi2_s.append(chain.treeVars["lhoods"][i])
+
+    count=0
+    for chi2 in chi2_s:
+        if chi2 > 0 : count += 1
+
+    n_dof = count - mcf.Inputs
+    chi2_tot = chain.treeVars["predictions"][0]
+
+    p_value= r.TMath.Prob(chi2_tot, n_dof)
+
+    return p_value, n_dof
+
+
 def print_ma_info(chain,mcf):
     from math import sqrt
     MA =get_prediction(chain,mcf,"mA0")
@@ -169,6 +198,13 @@ def get_prediction(chain,mcf,shortname):
     index = MCVdict[shortname].get_index(mcf)
     prediction=chain.treeVars["predictions"][index]
     return prediction
+
+def get_contribution(chain,mcf,shortname):
+    import variables as v
+    MCVdict=v.mc_variables()
+    index = MCVdict[shortname].get_index(mcf)
+    contribution=chain.treeVars["contributions"][index]
+    return contribution
 
 
 def print_prediction(chain,mcf,shortname):
@@ -234,22 +270,28 @@ def print_bsmmm(chain,mcf):
 def print_sigma_si(chain,mcf):
     print "\nsigma^SI from MicroOMEGAs [pb]:\n"
     print_prediction(chain,mcf,"sigma_pp^SI")
-    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 50 +- Z*14:\n"
-    import variables as v
-    MCVdict=v.mc_variables()
-    index = MCVdict["KOsigma_pp^SI"].get_index(mcf)
-#    ZSigPiNs=[0, 0.2,-0.2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
-#               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
-    Zs=[ 0.2, 0.4, 0.6, 0.8, 1.0,  1.33, 1.66, 2.0, 2.5, 3.0]
-    ZSigPiNs=[0.]+Zs+[-Z for Z in Zs]
-    print "Z    :   ssi"
-    for i ,Z in enumerate(ZSigPiNs):
-        prediction=chain.treeVars["predictions"][index+i]
-        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
-    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 64 +- Z*8:\n"
-    for i ,Z in enumerate(ZSigPiNs):
-        prediction=chain.treeVars["predictions"][index+i+21]
-        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
+    
+#    print "\nsigma^SI from modified dmtool [pb]:\n"
+#    print_prediction(chain,mcf,"KOsigma_pp^SI_cen50")
+#    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_14")
+#    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_7")
+    
+#    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 50 +- Z*14:\n"
+#    import variables as v
+#    MCVdict=v.mc_variables()
+#    index = MCVdict["KOsigma_pp^SI"].get_index(mcf)
+##    ZSigPiNs=[0, 0.2,-0.2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
+##               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
+#    Zs=[ 0.2, 0.4, 0.6, 0.8, 1.0,  1.33, 1.66, 2.0, 2.5, 3.0]
+#    ZSigPiNs=[0.]+Zs+[-Z for Z in Zs]
+#    print "Z    :   ssi"
+#    for i ,Z in enumerate(ZSigPiNs):
+#        prediction=chain.treeVars["predictions"][index+i]
+#        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
+#    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 64 +- Z*8:\n"
+#    for i ,Z in enumerate(ZSigPiNs):
+#        prediction=chain.treeVars["predictions"][index+i+21]
+#        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
 
 def print_info(n,mcf) :
     chain = MCAnalysisChain( mcf )
