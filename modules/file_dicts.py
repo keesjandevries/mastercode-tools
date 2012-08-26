@@ -583,10 +583,11 @@ def nuhm1_mcmh_mc7_input() :
 ###############
 def cmssm_test_file_histo_dict() :
     return {
-        "FileName"          : "%s/recalc_out.root" % base_directory(),
+#        "FileName"          : "%s/recalc_out.root" % base_directory(),
 #        "FileName"          : "%s/recalc_out_KO_mc8.root" % base_directory(),
 #        "FileName"          : "%s/recalc_out_KO_mc8_ssiplot.root" % base_directory(),
 #        "FileName"          : "%s/recalc_out_KO_mc7.root" % base_directory(),
+        "FileName"          : "%s/recalc_out_KO.root" % base_directory(),
         "Chi2TreeName"      : "tree",
         "Chi2BranchName"    : "vars",
         "ContribTreeName"   : "contribtree",
@@ -595,9 +596,9 @@ def cmssm_test_file_histo_dict() :
         "LHoodBranchName"   : "vars",
         "BestFitEntryName"  : "BestFitEntry",
         "PredictionIndex"   : 10,
-#        "SpectrumIndex"     : 124,
+        "SpectrumIndex"     : 124,
 #        "SpectrumIndex"     : 122,
-        "SpectrumIndex"     : 117,
+#        "SpectrumIndex"     : 117,
 #        "SpectrumIndex"     : 74,
         "Inputs"            :  7, # FIXME: check this number is right!!!
 #        "LHoodFile"         : "models/mc8-all.lhood" ,
