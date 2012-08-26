@@ -271,10 +271,10 @@ def print_sigma_si(chain,mcf):
     print "\nsigma^SI from MicroOMEGAs [pb]:\n"
     print_prediction(chain,mcf,"sigma_pp^SI")
     
-#    print "\nsigma^SI from modified dmtool [pb]:\n"
-#    print_prediction(chain,mcf,"KOsigma_pp^SI_cen50")
-#    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_14")
-#    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_7")
+    print "\nsigma^SI from modified dmtool [pb]:\n"
+    print_prediction(chain,mcf,"KOsigma_pp^SI_cen50")
+    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_14")
+    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_7")
     
 #    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 50 +- Z*14:\n"
 #    import variables as v
