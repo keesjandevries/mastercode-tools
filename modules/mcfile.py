@@ -13,7 +13,7 @@ class MCFile() :
 
         # add if available
         opt_attr = [ "PredictionIndex", "SpectrumIndex", "Inputs", 
-                     "EntryDirectory", "DataDirectory","LHoodFile","ModelFile" ]
+                     "EntryDirectory", "DataDirectory","SmoothDirectory","LHoodFile","ModelFile" ]
         for key in opt_attr :
             setattr( self, key, d.get(key,None) )
 

@@ -10,6 +10,7 @@ from operator import mul
 from modules import variables as v
 from modules import lhood_dict 
 from modules.lhood_module import LHood
+from config.smooth_coordinates import get_smooth_coordinates_dict as sm_cor_dic 
 
 def histo_call_count() :
     c = 0
@@ -268,6 +269,7 @@ def calculate_entry_histograms( plots, chain ) :
 
         if check_entry_KO_hack(p):
             KOhack.init_hack(p)
+        else : KOhack.hack_applied=False
 #            KOhack.noxenon2011=p.noxenon2011
 #            KOhack.df=get_dimension_factor(p)
 
@@ -510,6 +512,25 @@ def get_modified_entry_chi2(values,chain,KOhack):
     return chi2 
         
 
+
+def plot_and_save_smooth_spline(dchi_histos,mcf,spaces):
+    hd={}
+    for hist,space in zip(dchi_histos,spaces):
+        if len(space.short_names)==1:
+            sn=space.short_names[0]
+            print sn
+            s_hist = hist 
+            for coord in sm_cor_dic()[mcf.FileName][sn]:
+                xmin, xmax, smooth = coord
+                s_hist.GetXaxis().SetRangeUser(xmin,xmax)
+                s_hist.Smooth(smooth,"R")
+                s_hist.GetXaxis().SetRange(0,0)
+            perform_zero_offset(s_hist)
+            hd[sn]=s_hist
+    save_hdict_to_root_file( hd, mcf.FileName, mcf.SmoothDirectory ) 
+
+    
+
 def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts ) :
     axes = [ "X", "Y", "Z" ]
     chain = MCAnalysisChain( mcf )
@@ -520,8 +541,7 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
 #############################################
         if check_entry_KO_hack(p):
             KOhack.init_hack(p)
-#            KOhack.noxenon2011=p.noxenon2011
-#            KOhack.df=get_dimension_factor(p)
+        else : KOhack.hack_applied=False
 #############################################
             
         histo_cont = {}
@@ -540,13 +560,16 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
             for bin in range( firstbin, lastbin + 1 ) :
                 histo_cont[mode].SetBinContent( bin, base_val )
         for c in contribs : # contribs is a list of Contribution objects
-            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_dX_" + c.short_name, title, *th_arg_list )' % h_dim )#fixme initialisation for modes
+            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_dX_" + c.short_name, title, *th_arg_list )' % h_dim )#FIXME initialisation for modes
             for bin in range( firstbin, lastbin + 1 ) :
                 contrib_cont[c.short_name].SetBinContent( bin, 0.0 )
-        for p in predicts : # predicts is a list of Contribution objects
-            predict_cont[p.short_name] = eval( 'r.TH%dD( h.GetName() + "_pred_" + p.short_name, title, *th_arg_list )' % h_dim )#fixme initialisation for modes
+#        for p in predicts : # predicts is a list of Contribution objects
+        for pred in predicts : # predicts is a list of Contribution objects
+            #predict_cont[p.short_name] = eval( 'r.TH%dD( h.GetName() + "_pred_" + p.short_name, title, *th_arg_list )' % h_dim )#FIXME initialisation for modes
+            hname = histo_name( p.short_names, entry_histo_prefix )+ "_pred_" + pred.short_name
+            predict_cont[pred.short_name] = initialize_histo( p,hname,data =True )
             for bin in range( firstbin, lastbin + 1 ) :
-                predict_cont[p.short_name].SetBinContent( bin, 0.0 )
+                predict_cont[pred.short_name].SetBinContent( bin, 0.0 )
 
         prog = ProgressBar(0, (lastbin-firstbin)+1, 77, mode='fixed', char='#')
         for i in range( firstbin, lastbin+1 ) :
@@ -562,7 +585,8 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
                      KOhack.set_ssi_bin_centre(h,i)
 #############################################
                 fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf, KOhack )
-        perform_zero_offset( histo_cont["dchi"],firstbin,lastbin )
+#        perform_zero_offset( histo_cont["dchi"],firstbin,lastbin )
+        perform_zero_offset( histo_cont["dchi"] )
         print
         save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
         save_hdict_to_root_file( contrib_cont, mcf.FileName, mcf.DataDirectory)
@@ -583,6 +607,21 @@ def get_entry_hists( mcf, plots ) :
     f.Close()
     return hl
 
+def get_dchi_hists( mcf, plots ) :
+    hl = []
+    dchi_hist_dict = mcf.DataDirectory
+    hnames = []
+    for plot in plots :
+        hist_name =  histo_name( plot.short_names, entry_histo_prefix )+"_dchi"
+        hnames.append( "%s/%s" % ( dchi_hist_dict, hist_name ) )
+    f = r.TFile.Open( mcf.FileName )
+    r.gROOT.cd()
+    for hn in hnames :
+        assert f.Get(hn), hn + " was not found"
+        hl.append( f.Get( hn ).Clone()) 
+    f.Close()
+    return hl
+
 def get_hist_minimum_values( hl ) :
     mins = []
     for h in hl :
@@ -595,7 +634,8 @@ def get_hist_minimum_values( hl ) :
         mins.append(min_val)
     return mins
 
-def perform_zero_offset( h,firstbin,lastbin ) :
+#def perform_zero_offset( h,firstbin,lastbin ) :
+def perform_zero_offset( h ) :
     axes = ["X", "Y", "Z"]
     h_dim = get_histogram_dimension(h)
     axes_nbins = []
@@ -605,7 +645,7 @@ def perform_zero_offset( h,firstbin,lastbin ) :
     min_val = 1e9
     for bin in range(first_bin, last_bin+1) :
         c = h.GetBinContent(bin)
-        if c < min_val and c > 0 : min_val = c
+        if c < min_val and c >= 0 : min_val = c
     for bin in range(first_bin, last_bin+1) :
         content = h.GetBinContent(bin)
         h.SetBinContent( bin, content - min_val )
