@@ -6,7 +6,7 @@ class MCSpace( object ) : # file specific object version of MCVariable
         # MCSpace based on Variable instead of MCVariable. Hence the fact that mcf is now an attribute, and an MCSPace has no more indicis
         assert len(Vars) == len(options["nbins"]), \
             "Wrong number of Variables or Options to make a space"
-        self.log = options.get( 'logaxes' ,[False]*len(Vars)) # FIXME
+        self.log = options.get( 'logaxes' ,[False]*len(Vars)) 
 ##########################################
         self.KOhack      = options.get('KOhack',False)
         self.xenon_lhood_name   = options.get('xenon_lhood',None)
