@@ -166,29 +166,30 @@ def get_modified_data_chi2(chain,KOhack):
 
 def get_values_list_from_chain_and_histo(chain,plot,vars,s,KOhack,histo):
     values_list=[]
-    if not KOhack.get_hack_applied():
+    if not check_entry_KO_hack(plot,KOhack):
         values=[]
         for var_name in plot.get_short_names():
             var = vars[var_name]
-            if (var.__class__.__name__ == "MCVariable") and not KOhack.get_hack_applied():
+            if (var.__class__.__name__ == "MCVariable") :
                 index = var.get_index(plot.mcf)
                 values.append( chain.treeVars["predictions"][ index ] )
-            elif (var.__class__.__name__ == "DerivedMCVariable") and not KOhack.get_hack_applied() :
+            elif (var.__class__.__name__ == "DerivedMCVariable") :
                 input_vars_sns = var.get_input_vars()
                 input_mcvs = [vars[mcvsn] for mcvsn in input_vars_sns  ]
                 input_args = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
                 values.append(var.function(input_args) )
         values_list.append(values)
-    elif  KOhack.get_hack_applied():
+
+    elif  check_entry_KO_hack(plot,KOhack):
         # values from chain
         mneu1=chain.treeVars["predictions"][KOhack.mneu1_index]
         KO_ssi_c=KOhack.df*chain.treeVars["predictions"][KOhack.KOssi_cen50_index ] 
         KO_ssi_u_14 =KOhack.df*chain.treeVars["predictions"][KOhack.KOssi_unc50_14_index ] 
         KO_ssi_u_7  =KOhack.df*chain.treeVars["predictions"][KOhack.KOssi_unc50_7_index ] 
-#        print "central: ", KO_ssi_c , "  uncertainty:", KO_ssi_u
         # values form plot
         bin_centres = KOhack.bin_centres[1]
 
+        # return list of(mneu1, bin centre)'s, with bin centres within 2 (asymmetric) sigma
         for b_c in bin_centres:
             if( (b_c - KO_ssi_c) < 2*KO_ssi_u_14)  and ( (KO_ssi_c - b_c ) < 2* KO_ssi_u_7) :
                 values_list.append((mneu1,b_c))
@@ -202,8 +203,9 @@ def get_dimension_factor(plot):
             df=1.e-36
     return df
 
-def check_entry_KO_hack(plot):
+def check_entry_KO_hack(plot,KOhack):
     hack=plot.KOhack
+    KOhack.hack_applied=hack
     return hack
 
 def calculate_entry_histograms( plots, chain ) :
@@ -224,9 +226,8 @@ def calculate_entry_histograms( plots, chain ) :
         histos.append(entryhisto)
         chi2histos.append(chi2histo)
 
-        if check_entry_KO_hack(p):
+        if check_entry_KO_hack(p,KOhack):
             KOhack.init_hack(p)
-        else : KOhack.hack_applied=False
 
     nentries = chain.GetEntries()
     prog = ProgressBar(0, nentries+1, 77, mode='fixed', char='#')
@@ -290,11 +291,8 @@ class KOhack_class(object):
         self.df             = 1 #dimention factor, to go to cm-2 df=10^-36
         # the rest only gets initiated upon calling init_hack 
         self.mneu1_index    = None
-        self.bin_range      = None
-        self.ssi_bin_range  = None
         self.lhood          = None
         self.lhood_name     = None
-        self.KOssi_histo_index = None
         self.ssi_axis       = None
         self.xenon_ssi_sn   = None
         self.xenon_ssi_index= None
@@ -325,7 +323,6 @@ class KOhack_class(object):
     def init_var_indices(self):
         vars = v.mc_variables()
         # one will need indices: first   of KO's (to find the other 21); m_neutralino; ssi with whith the normal X^2 was calculated
-#        self.KOssi_first_index=vars["KOsigma_pp^SI"].get_index(self.mcf)
         self.KOssi_cen50_index      = vars["KOsigma_pp^SI_cen50"].get_index(self.mcf)
         self.KOssi_unc50_14_index   = vars["KOsigma_pp^SI_unc50_14"].get_index(self.mcf)
         self.KOssi_unc50_7_index    = vars["KOsigma_pp^SI_unc50_7"].get_index(self.mcf)
@@ -346,13 +343,6 @@ class KOhack_class(object):
         return self.hack_applied
 
 ################## DataHistos - functions #########################
-    def set_ssi_bin_range(self,histo, i_bin):
-        assert self.ssi_axis is not None
-        nX,nY,nZ=r.Long(0),r.Long(0),r.Long(0)
-        histo.GetBinXYZ(i_bin,nX,nY,nZ)
-        low_ssi=eval("histo.Get%saxis().GetBinLowEdge(n%s)" % (self.ssi_axis,self.ssi_axis) )
-        up_ssi =eval("histo.Get%saxis().GetBinUpEdge(n%s)" % (self.ssi_axis,self.ssi_axis) )
-        self.bin_range= [low_ssi,up_ssi]
 
     def set_ssi_bin_centre(self,histo, i_bin):
         assert self.ssi_axis is not None
@@ -426,9 +416,8 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
     KOhack=KOhack_class(mcf)
     for p , h in zip(plots,entry_hists) :
 #############################################
-        if check_entry_KO_hack(p):
+        if check_entry_KO_hack(p,KOhack):
             KOhack.init_hack(p)
-        else : KOhack.hack_applied=False
 #############################################
             
         histo_cont = {}
@@ -446,12 +435,13 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
                 base_val = 0.0
             for bin in range( firstbin, lastbin + 1 ) :
                 histo_cont[mode].SetBinContent( bin, base_val )
+
         for c in contribs : # contribs is a list of Contribution objects
             hname = histo_name( p.short_names, entry_histo_prefix )+ "_dX_" + c.short_name
             contrib_cont[c.short_name] = initialize_histo( p,hname,data =True )
-#            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_dX_" + c.short_name, title, *th_arg_list )' % h_dim )#FIXME initialisation for modes
             for bin in range( firstbin, lastbin + 1 ) :
                 contrib_cont[c.short_name].SetBinContent( bin, 0.0 )
+
         for pred in predicts : # predicts is a list of Contribution objects
             hname = histo_name( p.short_names, entry_histo_prefix )+ "_pred_" + pred.short_name
             predict_cont[pred.short_name] = initialize_histo( p,hname,data =True )
@@ -467,12 +457,10 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
             if entry > 0 :
                 chain.GetEntry(entry)
 #############################################
-                if KOhack.get_hack_applied(): 
-#                     KOhack.set_ssi_bin_range(h,i)
+                if check_entry_KO_hack(p,KOhack): 
                      KOhack.set_ssi_bin_centre(h,i)
 #############################################
                 fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf, KOhack )
-#        perform_zero_offset( histo_cont["dchi"],firstbin,lastbin )
         perform_zero_offset( histo_cont["dchi"] )
         print
         save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
@@ -521,7 +509,6 @@ def get_hist_minimum_values( hl ) :
         mins.append(min_val)
     return mins
 
-#def perform_zero_offset( h,firstbin,lastbin ) :
 def perform_zero_offset( h ) :
     axes = ["X", "Y", "Z"]
     h_dim = get_histogram_dimension(h)
