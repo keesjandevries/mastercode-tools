@@ -128,29 +128,6 @@ def initialize_histo( space,hname,entry=False, data=False,chi2=False ) :
     dim = space.dimension
 
     #initialise bins
-#    bins = [ array('d',[0.0] * (abins+1)) for abins in space.nbins ]
-#    # bins wil  be filled with begin_value, ..... , end_value [total nbins+1 values], they mark the bin edges.
-#
-##    print "***"
-##    for index, min_val, max_val, nbins, name, log in zip( obj.indices,
-##            obj.min_vals, obj.max_vals, obj.nbins, obj.names,
-##            obj.log ) :
-##        print index, min_val, max_val, nbins, name, log
-##    print "***"
-#
-#    for i,log in enumerate(space.log) :
-#        if log :
-#            logmin = r.TMath.Log10( space.min_vals[i] )
-#            logmax = r.TMath.Log10( space.max_vals[i] )
-#            binwidth = (logmax - logmin) / float(space.nbins[i])
-#            for c, b in enumerate( bins[i] ) :
-#                bins[i][c] = r.TMath.Power( 10, logmin+c*binwidth)
-#        else :
-#            bmin = space.min_vals[i]
-#            bmax = space.max_vals[i]
-#            binwidth = float(bmax-bmin) / float(space.nbins[i])
-#            for c in range(len( bins[i] )) :
-#                bins[i][c] = bmin + binwidth*c
     bins= get_bin_edges(space)
 
     title_f = ";%s" * dim
@@ -172,7 +149,6 @@ def initialize_histo( space,hname,entry=False, data=False,chi2=False ) :
         histo = None
         content = None
 
-
     up_bin = [ abin + 1 for abin in space.nbins ]
 
     first_bin, last_bin = get_histogram_bin_range(histo)
@@ -184,7 +160,6 @@ def initialize_histo( space,hname,entry=False, data=False,chi2=False ) :
 
 
 def get_modified_data_chi2(chain,KOhack):
-    #if  KOhack.get_hack_applied(): chi2 = KOhack.get_bin_KO_chi2(chain,KOhack)) 
     if  KOhack.get_hack_applied(): chi2 = KOhack.get_KO_chi2(chain,KOhack.bin_centre) 
     else  : chi2= chain.treeVars["contributions"][0]
     return chi2 
@@ -215,28 +190,10 @@ def get_values_list_from_chain_and_histo(chain,plot,vars,s,KOhack,histo):
         bin_centres = KOhack.bin_centres[1]
 
         for b_c in bin_centres:
-            #if ( (b_c > KO_ssi_c) and abs((b_c-KO_ssi_c)/KO_ssi_u_14) < 2) or ( (b_c < KO_ssi_c) and abs((b_c-KO_ssi_c)/KO_ssi_u_7) < 2) :
             if( (b_c - KO_ssi_c) < 2*KO_ssi_u_14)  and ( (KO_ssi_c - b_c ) < 2* KO_ssi_u_7) :
                 values_list.append((mneu1,b_c))
     return values_list
 
-#def get_values_from_chain(chain,plot,vars,s,KOhack):
-#    values=[]
-#    for var_name in plot.get_short_names():
-#       var = vars[var_name]
-#       if (var.__class__.__name__ == "MCVariable") and not KOhack.get_hack_applied():
-#           index = var.get_index(plot.mcf)
-#           values.append( chain.treeVars["predictions"][ index ] )
-#       elif (var.__class__.__name__ == "DerivedMCVariable") and not KOhack.get_hack_applied() :
-#           input_vars_sns = var.get_input_vars()
-#           input_mcvs = [vars[mcvsn] for mcvsn in input_vars_sns  ]
-#           input_args = [chain.treeVars["predictions"][ mcv.get_index(plot.mcf)] for mcv in input_mcvs   ]
-#           values.append(var.function(input_args) )
-#       elif   KOhack.get_hack_applied():
-#           mneu1=chain.treeVars["predictions"][KOhack.mneu1_index]
-#           KO_ssi=KOhack.df*chain.treeVars["predictions"][s+KOhack.KOssi_first_index ] 
-#           values=[mneu1,KO_ssi]
-#    return values
 
 def get_dimension_factor(plot):
     df=1
@@ -270,8 +227,6 @@ def calculate_entry_histograms( plots, chain ) :
         if check_entry_KO_hack(p):
             KOhack.init_hack(p)
         else : KOhack.hack_applied=False
-#            KOhack.noxenon2011=p.noxenon2011
-#            KOhack.df=get_dimension_factor(p)
 
     nentries = chain.GetEntries()
     prog = ProgressBar(0, nentries+1, 77, mode='fixed', char='#')
@@ -281,20 +236,9 @@ def calculate_entry_histograms( plots, chain ) :
         stdout.flush()
         chain.GetEntry(entry)
         for h, c, plot in zip( histos, chi2histos, plots ) :
-#            steps = 1
-#            if KOhack.get_hack_applied() and check_entry_KO_hack(plot):
-#                steps = 21
-#            for s in range(0,steps):
-#                vals = get_values_from_chain(chain,plot,vars,s,KOhack) 
             vals_list = get_values_list_from_chain_and_histo(chain,plot,vars,s,KOhack,h)
-
-#            for vals in vals_list:
-#                print vals
             for vals in vals_list:
-#                chi2 = get_modified_entry_chi2(vals,chain,KOhack,s)
-#                fill_entry_histo(vals,chi2,entry,plot,h,c)
                 nbins = plot.bins
-#  make this a funtion: fill_entry_histo(vals,chi2,plot)
                 ibin = h.FindBin(*vals)
                 max_bin = h.FindBin(*plot.max_vals)
                 if ibin != 0 and ibin < max_bin :
@@ -306,14 +250,6 @@ def calculate_entry_histograms( plots, chain ) :
     print
     return histos
 
-#def fill_entry_histo(vals,chi2,entry,plot,entry_histo,chi2_histo):
-#    ibin = entry_histo.FindBin(*vals)
-#    max_bin = entry_histo.FindBin(*plot.max_vals)
-#    if ibin != 0 and ibin < max_bin :
-##        chi2 = get_modified_entry_chi2(vals,chain,KOhack,s)
-#        if chi2 < chi2_histo.GetBinContent(ibin) :
-#            chi2_histo.SetBinContent(ibin, chi2)
-#            entry_histo.SetBinContent(ibin, entry)
 
 def count_ndof( c, min_contrib, inputs ) :
     count = 0
@@ -322,21 +258,6 @@ def count_ndof( c, min_contrib, inputs ) :
             count += 1
     count -= inputs
     return count
-
-#def check_chi_mode(mode):
-#    if mode == "chi2" or mode == "dchi":
-#        return 0
-#
-#    # If one specifies dchi_i , then the dX^2 contibution of constraint i is given!
-#    m=mode.split("_")
-#    if len(m) == 2 and m[0]=="dchi":
-#        i= int(m[1])
-#        return i
-#
-#    else:
-#        return -1
-
-
 
 
 def fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , bin , chain, mcf, KOhack ):
@@ -366,11 +287,9 @@ class KOhack_class(object):
     def __init__(self,mcf):
         self.mcf            = mcf
         self.hack_applied   = False
-#        self.noxenon2011    = False
         self.df             = 1 #dimention factor, to go to cm-2 df=10^-36
         # the rest only gets initiated upon calling init_hack 
         self.mneu1_index    = None
-#        self.KOssi_first_index=None
         self.bin_range      = None
         self.ssi_bin_range  = None
         self.lhood          = None
@@ -387,23 +306,12 @@ class KOhack_class(object):
     def init_hack(self,space=None):
         self.ssi_axis = 'Y' # FIXME:this is now hard coded!!!
         self.hack_applied=True
-#        self.init_xenon2012_lhood() 
-#        self.init_var_indices()
         if not space == None:
             self.init_lhood(space)
             self.init_var_indices()
-#            KOhack.noxenon2011  =   space.noxenon2011
             self.df=get_dimension_factor(space)
             self.bin_centres=get_bin_centres(space)
-#            print KOhack.bin_centres[1]
 
-#    def init_xenon2012_lhood(self):
-#        from modules.lhood_dict import get_lhood_dict
-#        from modules.lhood_module import LHood
-#        xenon2011_dict=get_lhood_dict()["Xenon2011"]
-#        self.lhood = LHood(None,xenon2011_dict)
-#        self.xenon_ssi_sn = xenon2011_dict["vars"][1]
-#        print self.xenon_ssi_sn
     def init_lhood(self,space):
         from modules.lhood_dict import get_lhood_dict
         from modules.lhood_module import LHood
@@ -412,8 +320,6 @@ class KOhack_class(object):
             xenon_dict=get_lhood_dict()[self.lhood_name]
             self.lhood = LHood(None,xenon_dict)
             self.xenon_ssi_sn = xenon_dict["vars"][1]
-#        else :
-#            self.noxenon2011 = True
         print self.xenon_ssi_sn
 
     def init_var_indices(self):
@@ -453,7 +359,6 @@ class KOhack_class(object):
         nX,nY,nZ=r.Long(0),r.Long(0),r.Long(0)
         histo.GetBinXYZ(i_bin,nX,nY,nZ)
         centre_ssi=eval("histo.Get%saxis().GetBinCenter(n%s)" % (self.ssi_axis,self.ssi_axis) )
-#        up_ssi =eval("histo.Get%saxis().GetBinUpEdge(n%s)" % (self.ssi_axis,self.ssi_axis) )
         self.bin_centre=centre_ssi
 
     def get_KO_chi2(self,chain,ssi_b_c_plot  ):
@@ -467,7 +372,6 @@ class KOhack_class(object):
         if self.lhood_name is not None:
             xenon_ssi   = chain.treeVars["predictions"][self.xenon_ssi_index]
 
-#        if self.noxenon2011:
         if self.lhood_name is None:
             chi2= self.get_asym_gauss_chi2(KO_ssi_c,ssi_b_c,KO_ssi_u_14,KO_ssi_u_7) + old_tot_chi2
         else:
@@ -485,23 +389,6 @@ class KOhack_class(object):
         assert unc is not 0
         return ((cent-meas)/unc)**2
 
-#    def get_bin_KO_chi2(self,chain):
-#        # USE UNIT OF PLOT. if [cm^-2] then df=1e-36
-#        KO_ssis  = [self.df*chain.treeVars["predictions"][i+self.KOssi_first_index ]  for i in range(0,20)]
-#
-#        #work out which of these lie in the bin
-#        ssi_i_s_in_bin=[]
-#        for i, ssi in enumerate(KO_ssis):
-#            if ssi > self.bin_range[0] and ssi < self.bin_range[1]:
-#                ssi_i_s_in_bin.append(i)
-#
-#        # calculate their X^2. The minimum gets assigned to this bin
-#        X2s_in_bin= [self.get_KO_chi2(chain, ssi_i)  for ssi_i in ssi_i_s_in_bin ]
-#        if len(X2s_in_bin)==0:
-#            chi2=1e9
-#        else:
-#            chi2=min(X2s_in_bin)
-#        return chi2
 
 
 def get_modified_entry_chi2(values,chain,KOhack):
@@ -560,12 +447,12 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
             for bin in range( firstbin, lastbin + 1 ) :
                 histo_cont[mode].SetBinContent( bin, base_val )
         for c in contribs : # contribs is a list of Contribution objects
-            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_dX_" + c.short_name, title, *th_arg_list )' % h_dim )#FIXME initialisation for modes
+            hname = histo_name( p.short_names, entry_histo_prefix )+ "_dX_" + c.short_name
+            contrib_cont[c.short_name] = initialize_histo( p,hname,data =True )
+#            contrib_cont[c.short_name] = eval( 'r.TH%dD( h.GetName() + "_dX_" + c.short_name, title, *th_arg_list )' % h_dim )#FIXME initialisation for modes
             for bin in range( firstbin, lastbin + 1 ) :
                 contrib_cont[c.short_name].SetBinContent( bin, 0.0 )
-#        for p in predicts : # predicts is a list of Contribution objects
         for pred in predicts : # predicts is a list of Contribution objects
-            #predict_cont[p.short_name] = eval( 'r.TH%dD( h.GetName() + "_pred_" + p.short_name, title, *th_arg_list )' % h_dim )#FIXME initialisation for modes
             hname = histo_name( p.short_names, entry_histo_prefix )+ "_pred_" + pred.short_name
             predict_cont[pred.short_name] = initialize_histo( p,hname,data =True )
             for bin in range( firstbin, lastbin + 1 ) :

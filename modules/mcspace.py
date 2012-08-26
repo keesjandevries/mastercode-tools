@@ -9,7 +9,6 @@ class MCSpace( object ) : # file specific object version of MCVariable
         self.log = options.get( 'logaxes' ,[False]*len(Vars)) # FIXME
 ##########################################
         self.KOhack      = options.get('KOhack',False)
-#        self.noxenon2011 = options.get('noxenon2011',False)
         self.xenon_lhood_name   = options.get('xenon_lhood',None)
 ##########################################
         self.dimension   = len(Vars)
