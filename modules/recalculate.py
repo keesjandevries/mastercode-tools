@@ -24,6 +24,13 @@ def good_point( point, mcfc, verbose = 0) :
         if verbose > 0 : problem += "\t! Gravitino LSP (mSUGRA)\n"
 
 
+    #16/08/2012: cut on tanb for long lived stau's  
+    if getattr( mcfc, "LongLivedStuaTanbCut", False ): 
+        tanb = point[4]
+        if not tanb < 41.:
+            good = False
+            if verbose > 0 : problem += "\t! Cut away tanb > 41. \n"
+
     #June 2012: make the cut for resampling the SuFla buggy points, see mail (Final (?) reprocessing? II)
     if getattr( mcfc, "SelectSuFlaBugPoints", False ): 
         MA = point[mcfc.SpectrumIndex+24]
