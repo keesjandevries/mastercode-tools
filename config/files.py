@@ -13,27 +13,59 @@ def recalc_files() :
 #    d = files.nuhm1_SuFla_lowtanb_input()
 #    d = files.nuhm1_SuFla_no_bug_selected_input()
 # TEST
-    d = files.cmssm_test_input_files()
+#    d = files.cmssm_test_input_files()
 #    d = files.nuhm1_test_input()
 #    d = files.nuhm1_test_input_files()
 # NUHM1
 #    d = files.nuhm1_mcmh_mc7_input()
 #    d = files.nuhm1_mcmh_mh125_input()
-#    d = files.nuhm1_bsmm2012_input()
 #    d = files.nuhm1_mc8_drop_atlas_input()
 #    d = files.nuhm1_mc8_drop_bsmm_input()
 #    d = files.nuhm1_mc8_drop_mh_input()
+#    d = files.nuhm1_mc8_all_Xenon2012LogUnc_input()
+#    d = files.nuhm1_mc8_region_c_input()
 #    d = files.nuhm1_mc8_all_input()
 #CMSSM
+#    d = files.cmssm_pre_lhc_input()
 #    d = files.cmssm_mcmh_mc7_input()
 #    d = files.cmssm_mcmh_mh125_input()
 #    d = files.cmssm_mc8_drop_atlas_input()
 #    d = files.cmssm_mc8_drop_bsmm_input()
 #    d = files.cmssm_mc8_drop_mh_input()
+#    d = files.cmssm_mc8_all_Xenon2012LogUnc_input()
 #    d = files.cmssm_mc8_all_input()
     return d
 
 def histo_files() :
+# TEST
+#    d = files.cmssm_test_file_histo()
+#    d = files.nuhm1_test_file_histo()
+##    d = files.nuhm1_test_histo()
+# NUHM1
+#    d = files.nuhm1_pre_lhc_histo()
+#    d = files.nuhm1_mcmh_mc7_histo()
+#    d = files.nuhm1_mcmh_mh125_histo()
+#    d = files.nuhm1_mc8_all_histo()
+#    d = files.nuhm1_mc8_region_c_histo()
+#    d = files.nuhm1_mc8_all_Xenon2012LogUnc_histo()
+#    d = files.nuhm1_mc8_drop_mh_histo()
+#    d = files.nuhm1_mc8_drop_atlas_histo()
+#    d = files.nuhm1_mc8_drop_bsmm_histo()
+#    d = files.nuhm1_mc8_drop_Xenon2012_histo()
+#CMSSM
+#    d = files.cmssm_pre_lhc_histo()
+#    d = files.cmssm_mcmh_mc7_histo()
+#    d = files.cmssm_mcmh_mh125_histo()
+#    d = files.cmssm_mc8_all_histo()
+#    d = files.cmssm_mc8_all_Xenon2012LogUnc_histo()
+#    d = files.cmssm_mc8_drop_mh_histo()
+#    d = files.cmssm_mc8_drop_atlas_histo()
+#    d = files.cmssm_mc8_drop_bsmm_histo()
+#    d = files.cmssm_mc8_drop_Xenon2012_histo()
+    return d
+
+
+def point_files() :
 # TEST
 #    d = files.cmssm_test_file_histo()
 #    d = files.nuhm1_test_file_histo()
@@ -46,6 +78,7 @@ def histo_files() :
 #    d = files.nuhm1_mc8_drop_mh_histo()
 #    d = files.nuhm1_mc8_drop_atlas_histo()
 #    d = files.nuhm1_mc8_drop_bsmm_histo()
+#    d = files.nuhm1_mc8_drop_Xenon2012_histo()
 #CMSSM
 #    d = files.cmssm_pre_lhc_histo()
 #    d = files.cmssm_mcmh_mc7_histo()
@@ -53,28 +86,7 @@ def histo_files() :
 #    d = files.cmssm_mc8_all_histo()
 #    d = files.cmssm_mc8_drop_mh_histo()
 #    d = files.cmssm_mc8_drop_atlas_histo()
-    d = files.cmssm_mc8_drop_bsmm_histo()
-    return d
-
-
-def point_files() :
-# TEST
-#    d = files.cmssm_test_file_histo()
-#    d = files.nuhm1_test_file_histo()
-#    d = files.nuhm1_test_histo()
-# NUHM1
-#    d = files.nuhm1_mcmh_mc7_histo()
-#    d = files.nuhm1_mcmh_mh125_histo()
-#    d = files.nuhm1_bsmm2012_histo()
-#    d = files.nuhm1_mc8_all_histo()
-#    d = files.nuhm1_mc8_drop_atlas_histo()
-#    d = files.nuhm1_mc8_drop_bsmm_histo()
-#CMSSM
-#    d = files.cmssm_mcmh_mc7_histo()
-#    d = files.cmssm_mcmh_mh125_histo()
-    d = files.cmssm_mc8_all_histo()
-#    d = files.cmssm_mc8_drop_mh_histo()
-#    d = files.cmssm_mc8_drop_atlas_histo()
 #    d = files.cmssm_mc8_drop_bsmm_histo()
+#    d = files.cmssm_mc8_drop_Xenon2012_histo()
     return d
 
