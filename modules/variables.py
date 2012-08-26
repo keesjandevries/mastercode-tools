@@ -91,7 +91,8 @@ def mc_variables() :
             "ssmH0"        : MCV( b["ssmH0"],         index_offset=31, offset_relative_to="SpectrumIndex" ),
             "ssmA0"        : MCV( b["ssmA0"],         index_offset=32, offset_relative_to="SpectrumIndex" ),
             "ssmH+-"       : MCV( b["ssmH+-"],        index_offset=33, offset_relative_to="SpectrumIndex" ),
-            "BsmumuRatio"  : DMCV(b["BsmumuRatio"], f["BsmumuRatio"] ,["Bsmumu"] ),
+            "BsmumuRatio"  : DMCV(b["BsmumuRatio"],     f["BsmumuRatio"] ,  ["Bsmumu"] ),
+            "Dm_stau1_neu1": DMCV(b["Dm_stau1_neu1"],   f["Dm_stau1_neu1"] ,["stau_1","neu1"] ),
 #            "BsmumuRatio"  : DMCV(b["BsmumuRatio"], ["Bsmumu"] ),
             "sigma_pp^SI_cm-2"  : DMCV(b["sigma_pp^SI_cm-2"], f["sigma_pp^SI_cm-2"],["sigma_pp^SI"]   )
     }
@@ -113,7 +114,8 @@ def base_variables() :
         "R(b->sg)"     : Var( "R(b->sg)",      r"$R(b\rightarrow s\gamma)$"          ),
         "R(D_ms)"      : Var( "R(D_ms)",       r"$R(\Delta_{ms}$"                    ),
         "Bsmumu"       : Var( "Bsmumu",        r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})$"),
-        "BsmumuRatio"  : Var( "BsmumuRatio", r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
+        "BsmumuRatio"  : Var( "BsmumuRatio",   r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
+        "Dm_stau1_neu1": Var( "Dm_stau1_neu1", r"$m_{\tilde{\tau}_{1}} - m_{\tilde{\chi}^{0}_{1}} %s $"%GeV),
         "R(B->taunu)"  : Var( "R(B->taunu)",   r"$R(B\rightarrow\tau\nu)$"           ),
         "R(B->Xsll)"   : Var( "R(B->Xsll)",    r"$R(B\rightarrow X_{s}\ell\ell$"     ),
         "R(K->lnu)"    : Var( "R(K->lnu)",     r"$R(K\rightarrow\ell\nu)$",          ),
@@ -129,7 +131,7 @@ def base_variables() :
         "Ab16"         : Var( "Ab16",          r"$A_{b}$",                           ),
         "Ac17"         : Var( "Ac17",          r"$A_{c}$",                           ),
         "Al(SLD)"      : Var( "Al(SLD)",       r"$A_{\ell} (SLD)$",                  ),
-        "m_h^0"        : Var( "m_h^0",         r"$M_{h^{0}} [GeV/c^{2}]$",           ),
+        "m_h^0"        : Var( "m_h^0",         r"$M_{h} [GeV]$",           ),
         "Oh^2"         : Var( "Oh^2",          r"$\Omega h^{2}$",                    ),
         "Al(P_tau)"    : Var( "Al(P_tau)",     r"$A\ell (P_{\tau})$",                ),
         "Al_fb"        : Var( "Al_fb",         r"$A\ell FB$",                        ),
@@ -148,7 +150,7 @@ def base_variables() :
         "KOsigma_pp^SI_unc50_7"   : Var( "KOsigma_pp^SI_unc50_7",   r"$\sigma_{p}^{SI}$" ),
         "sigma_pp^SI_cm-2"  : Var( "sigma_pp^SI_cm-2",   r"$\sigma_{p}^{SI} [cm^{2}] $" ),
         "mu"           : Var( "mu"   ,         r"$\mu$"                        ),
-        "mA0^2"        : Var( "mA0^2",         r"$m_{A_{0}}^2 %s^{2} $" %GeV ),
+        "mA0^2"        : Var( "mA0^2",         r"$M_{A}^2 %s^{2} $" %GeV ),
         "chi1"         : Var( "chi1",          r"$m_{\tilde{\chi}^{\pm}_{1}} %s$"%GeV ),
         "chi2"         : Var( "chi2",          r"$m_{\tilde{\chi}^{\pm}_{2}} %s$"%GeV ),
         "neu1"         : Var( "neu1",          r"$m_{\tilde{\chi}^{0}_{1}} %s$"%GeV ),
@@ -165,9 +167,9 @@ def base_variables() :
         "stau_2"       : Var( "stau_2",        r"$m_{\tilde{\tau}_{2}} %s$"%GeV ),
         "snu_tau"      : Var( "snu_tau",       r"$m_{\tilde{\nu}_{\tau}} %s$"%GeV ),
 #        "squark_r"     : Var( "squark_r",      r"$m_{\tilde{q}_{r}} %s \textrm{(average)}$"%GeV ), FIXME: \textrm is not accepted
-        "squark_r"     : Var( "squark_r",      r"$m_{\tilde{q}_{r,ave}} %s}$"%GeV ), 
+        "squark_r"     : Var( "squark_r",      r"$m_{\tilde{q}_{R}} %s}$"%GeV ), 
 #        "squark_l"     : Var( "squark_l",      r"$m_{\tilde{q}_{l}} %s \textrm{(average)}$"%GeV ), FIXME: same
-        "squark_l"     : Var( "squark_l",      r"$m_{\tilde{q}_{l,ave}} %s}$"%GeV ),
+        "squark_l"     : Var( "squark_l",      r"$m_{\tilde{q}_{L}} %s}$"%GeV ),
         "stop1"        : Var( "stop1",         r"$m_{\tilde{t}_{1}} %s$"%GeV ),
         "stop2"        : Var( "stop2",         r"$m_{\tilde{t}_{2}} %s$"%GeV ),
         "sbottom1"     : Var( "sbottom1",      r"$m_{\tilde{b}_{1}} %s$"%GeV ),
@@ -175,7 +177,7 @@ def base_variables() :
         "gluino"       : Var( "gluino",        r"$m_{\tilde{g}} %s$"%GeV ),
         "mh0"          : Var( "mh0",           r"$m_{h^{0}} %s$"%GeV ),
         "mH0"          : Var( "mH0",           r"$m_{H^{0}} %s$"%GeV ),
-        "mA0"          : Var( "mA0",           r"$m_{A^{0}} %s$"%GeV ),
+        "mA0"          : Var( "mA0",           r"$M_{A} %s$"%GeV ),
         "mH+-"         : Var( "mH+-",          r"$m_{H^{\pm}} %s$"%GeV ),
         "ssmh0"        : Var( "ssmh0",           r"$m_{h^{0}} %s$"%GeV ),
         "ssmH0"        : Var( "ssmH0",           r"$m_{H^{0}} %s$"%GeV ),
@@ -186,9 +188,15 @@ def base_variables() :
 def get_variables_funtions():
     function_dict= {
        "BsmumuRatio" :  get_bsmumu_ratio,
+       "Dm_stau1_neu1" :  get_delta_mstau1_mneu1,
        "sigma_pp^SI_cm-2" : get_sigma_pp_si_cm
     }
     return function_dict
+
+def get_delta_mstau1_mneu1(vals):
+    mstau1=vals[0]
+    mneu1 =vals[1]
+    return mstau1-mneu1
 
 def get_bsmumu_ratio(vals):
     bsmm=vals[0]
