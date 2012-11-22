@@ -307,6 +307,48 @@ def cmssm_mc8_all_Xenon2012LogUnc_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
+def cmssm_mc8_Nov12_bsmm_no_g2_input() :
+    # output / global options
+    gd = cmssm_mc8_Nov12_bsmm_no_g2_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+             "FileName"          : "%s/cmssm_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def cmssm_mc8_HCP12_bsmm_input() :
+    # output / global options
+    gd = cmssm_mc8_HCP12_bsmm_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+             "FileName"          : "%s/cmssm_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def cmssm_mc8_Nov12_bsmm_input() :
+    # output / global options
+    gd = cmssm_mc8_Nov12_bsmm_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+             "FileName"          : "%s/cmssm_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
 def cmssm_mc8_all_input() :
     # output / global options
     gd = cmssm_mc8_all_histo_dict()
@@ -319,22 +361,6 @@ def cmssm_mc8_all_input() :
              "Chi2TreeName"      : "tree",
          }
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-#    fd2= { 
-#             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012_cmssm_mh125_bsmm_medium01.root" ,  
-#             "Chi2TreeName"      : "tree",
-#         }
-#    mcf2= MCFile( fd2,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-#    fd3= {
-#             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125-bsmm/dm_June2012_cmssm_mh125_bsmm_medium02.root" ,  
-#             "Chi2TreeName"      : "tree",
-#         }
-#    mcf3= MCFile( fd3,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-#    fd4= {
-#             "FileName"          : "/vols/cms03/kjd110/June2012-cmssm-mh125/dm_June2012_cmssm_mh125_short.root" ,  
-#             "Chi2TreeName"      : "tree",
-#         }
-#    mcf4= MCFile( fd4,warn = False ) # dont warn us on missing attributes as they're handled by MCFC
-#    return MCFileCollection( [ mcf,mcf2,mcf3,mcf4 ], gd, warn = False)
     return MCFileCollection( [ mcf ], gd, warn = False)
 
 def cmssm_mc8_drop_Xenon2012_input() :
@@ -479,6 +505,18 @@ def nuhm1_mc8_all_Xenon2012LogUnc_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
+def nuhm1_mc8_region_c_char_nlsp_input() :
+    gd = nuhm1_mc8_region_c_char_nlsp_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 1      
+    fd = {
+             "FileName"          : "%s/nuhm1_mc8_region_c.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+
 def nuhm1_mc8_region_c_input() :
     gd = nuhm1_mc8_region_c_histo_dict()
 #    gd["StartEntry"] = 0      
@@ -492,6 +530,40 @@ def nuhm1_mc8_region_c_input() :
 
 def nuhm1_mc8_all_input() :
     gd = nuhm1_mc8_all_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 208295 
+    fd = {
+             "FileName"          : "%s/nuhm1_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+
+def nuhm1_mc8_Nov12_bsmm_no_g2_input() :
+    gd = nuhm1_mc8_Nov12_bsmm_no_g2_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 208295 
+    fd = {
+             "FileName"          : "%s/nuhm1_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_mc8_HCP12_bsmm_input() :
+    gd = nuhm1_mc8_HCP12_bsmm_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 208295 
+    fd = {
+             "FileName"          : "%s/nuhm1_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_mc8_Nov12_bsmm_input() :
+    gd = nuhm1_mc8_Nov12_bsmm_histo_dict()
 #    gd["StartEntry"] = 0      
 #    gd["EndEntry"]   = 208295 
     fd = {
@@ -889,6 +961,87 @@ def cmssm_mc8_all_Xenon2012LogUnc_histo_dict() :
 def cmssm_mc8_all_Xenon2012LogUnc_histo() :
     return [MCFile(cmssm_mc8_all_Xenon2012LogUnc_histo_dict() )]
 
+def cmssm_mc8_Nov12_bsmm_no_g2_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_mc8_Nov12_bsmm_no_g2.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8_bsmm_no_g2_12.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+#        "LongLivedStuaTanbCut": True,
+    #    "MaxMADiff"         : 0.4,
+     }
+def cmssm_mc8_Nov12_bsmm_no_g2_histo() :
+    return [MCFile(cmssm_mc8_Nov12_bsmm_no_g2_histo_dict() )]
+
+def cmssm_mc8_HCP12_bsmm_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_mc8_HCP12_bsmm.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-HCP12.lhood" ,
+        "ModelFile"         : "models/mc8.model",
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+#        "LongLivedStuaTanbCut": True,
+    #    "MaxMADiff"         : 0.4,
+     }
+def cmssm_mc8_HCP12_bsmm_histo() :
+    return [MCFile(cmssm_mc8_HCP12_bsmm_histo_dict() )]
+
+def cmssm_mc8_Nov12_bsmm_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_mc8_Nov12_bsmm.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8_bsmm12.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+#        "LongLivedStuaTanbCut": True,
+    #    "MaxMADiff"         : 0.4,
+     }
+def cmssm_mc8_Nov12_bsmm_histo() :
+    return [MCFile(cmssm_mc8_Nov12_bsmm_histo_dict() )]
+
 def cmssm_mc8_all_histo_dict() :
     return {
         "FileName"          : "%s/cmssm_mc8_all.root" % base_directory(),
@@ -1194,6 +1347,90 @@ def nuhm1_mc8_all_Xenon2012LogUnc_histo_dict() :
 def nuhm1_mc8_all_Xenon2012LogUnc_histo() :
     return [MCFile(nuhm1_mc8_all_Xenon2012LogUnc_histo_dict() )]
 
+def nuhm1_mc8_Nov12_bsmm_no_g2_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_mc8_Nov12_bsmm_no_g2.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+#        "SpectrumIndex"     : 126,
+        "Inputs"            : 8, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8_bsmm_no_g2_12.model",
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+#        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+     }
+def nuhm1_mc8_Nov12_bsmm_no_g2_histo() :
+    return [MCFile(nuhm1_mc8_Nov12_bsmm_no_g2_histo_dict() )]
+
+def nuhm1_mc8_HCP12_bsmm_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_mc8_HCP12_bsmm.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+#        "SpectrumIndex"     : 126,
+        "Inputs"            : 8, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-HCP12.lhood" ,
+        "ModelFile"         : "models/mc8.model",
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+#        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+     }
+def nuhm1_mc8_HCP12_bsmm_histo() :
+    return [MCFile(nuhm1_mc8_HCP12_bsmm_histo_dict() )]
+
+def nuhm1_mc8_Nov12_bsmm_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_mc8_Nov12_bsmm.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+#        "SpectrumIndex"     : 126,
+        "Inputs"            : 8, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8_bsmm12.model",
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+#        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+     }
+def nuhm1_mc8_Nov12_bsmm_histo() :
+    return [MCFile(nuhm1_mc8_Nov12_bsmm_histo_dict() )]
+
 def nuhm1_mc8_all_histo_dict() :
     return {
         "FileName"          : "%s/nuhm1_mc8_all.root" % base_directory(),
@@ -1221,6 +1458,36 @@ def nuhm1_mc8_all_histo_dict() :
      }
 def nuhm1_mc8_all_histo() :
     return [MCFile(nuhm1_mc8_all_histo_dict() )]
+
+def nuhm1_mc8_region_c_char_nlsp_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_mc8_region_c_char_nlsp.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+#        "SpectrumIndex"     : 126,
+        "Inputs"            : 8, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+#        "MaxChi2"           : 1e9,
+        "SelectRegionC"     : True,
+        "CharginoNLSPCut"   : True, 
+        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+     }
+def nuhm1_mc8_region_c_char_nlsp_histo() :
+    return [MCFile(nuhm1_mc8_region_c_char_nlsp_histo_dict() )]
 
 def nuhm1_mc8_region_c_histo_dict() :
     return {
