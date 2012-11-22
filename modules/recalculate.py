@@ -31,6 +31,76 @@ def good_point( point, mcfc, verbose = 0) :
             good = False
             if verbose > 0 : problem += "\t! Cut away tanb > 41. \n"
 
+    #10/09/2012 
+    if getattr( mcfc, "CharginoNLSPCut", False ): 
+        index_offset=mcfc.SpectrumIndex
+#        spectrum=[abs(m) for m in (point[spi:spi+1]+point[spi+3:spi+21])]
+#        m_nlsp=min(spectrum)
+#        m_stau=point[spi+12]
+#        m_char=point[spi]
+        chi1     =  abs(point[index_offset+0 ])  
+#       chi2     =  abs(point[index_offset+1 ])  
+#       neu1     =  abs(point[index_offset+2 ])  
+        neu2     =  abs(point[index_offset+3 ])  
+        neu3     =  abs(point[index_offset+4 ])  
+        neu4     =  abs(point[index_offset+5 ])  
+        sel_r    =  abs(point[index_offset+6 ])  
+        sel_l    =  abs(point[index_offset+7 ])  
+        snu_e    =  abs(point[index_offset+8 ])  
+        smu_r    =  abs(point[index_offset+9 ])  
+        smu_l    =  abs(point[index_offset+10])
+        snu_mu   =  abs(point[index_offset+11])
+        stau_1   =  abs(point[index_offset+12])
+#       stau_2   =  abs(point[index_offset+13])
+        snu_tau  =  abs(point[index_offset+14])
+        squark_r =  abs(point[index_offset+15])
+        squark_l =  abs(point[index_offset+16])
+        stop1    =  abs(point[index_offset+17])
+#       stop2    =  abs(point[index_offset+18])
+        sbottom1 =  abs(point[index_offset+19])
+#       sbottom2 =  abs(point[index_offset+20])
+        gluino   =  abs(point[index_offset+21])
+#       mh0      =  abs(point[index_offset+22])
+        mH0      =  abs(point[index_offset+23])
+        mA0      =  abs(point[index_offset+24])
+        mH       =  abs(point[index_offset+25])
+        spectrum=[
+        chi1     ,  
+#       chi2     ,  
+#       neu1     ,  
+        neu2     ,  
+        neu3     ,  
+        neu4     ,  
+        sel_r    ,  
+        sel_l    ,  
+        snu_e    ,  
+        smu_r    ,  
+        smu_l    ,
+        snu_mu   ,
+        stau_1   ,
+#       stau_2   ,
+        snu_tau  ,
+        squark_r ,
+        squark_l ,
+        stop1    ,
+#       stop2    ,
+        sbottom1 ,
+#       sbottom2 ,
+        gluino   ,
+#       mh0      ,
+        mH0      ,
+        mA0      ,
+        mH       ,
+                        ]
+        abs_spectrum=[abs(m) for m in spectrum]
+        m_nlsp = min(abs_spectrum)
+#        print  abs_spectrum
+#        if not m_nlsp==stau_1  :
+        if not m_nlsp==neu2    :
+#            print abs_spectrum
+            good = False
+            if verbose > 0 : problem += "\t! Cut away Chargino is not LSP \n"
+
     #June 2012: make the cut for resampling the SuFla buggy points, see mail (Final (?) reprocessing? II)
     if getattr( mcfc, "SelectSuFlaBugPoints", False ): 
         MA = point[mcfc.SpectrumIndex+24]
@@ -162,6 +232,8 @@ def recalc_to_file( collection, output_file = "" ) :
     MCVdict=v.mc_variables()
 
     chain = MCRecalcChain( collection )
+    if chain == None:
+        return
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)
@@ -178,7 +250,7 @@ def recalc_to_file( collection, output_file = "" ) :
     contribvars = array('d',[0.0]*nTotVars)
     contribtree = r.TTree( 'contribtree', 'chi2 contributions')
     varsOutName = "vars[%d]/D" % ( nTotVars )
-    contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
+#    contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
 
     # same with lhood
@@ -186,7 +258,7 @@ def recalc_to_file( collection, output_file = "" ) :
     lhoodvars = array('d',[0.0]*nLHoods)
     lhoodtree = r.TTree( 'lhoodtree', 'lhood contributions')
     varsOutName = "vars[%d]/D" % ( nLHoods )
-    lhoodtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
+#    lhoodtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     lhoodtree.Branch("vars",lhoodvars,varsOutName)
 
     # want to save best fit point entry number: create new tree and branch

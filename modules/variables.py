@@ -93,6 +93,23 @@ def mc_variables() :
             "ssmH+-"       : MCV( b["ssmH+-"],        index_offset=33, offset_relative_to="SpectrumIndex" ),
             "BsmumuRatio"  : DMCV(b["BsmumuRatio"],     f["BsmumuRatio"] ,  ["Bsmumu"] ),
             "Dm_stau1_neu1": DMCV(b["Dm_stau1_neu1"],   f["Dm_stau1_neu1"] ,["stau_1","neu1"] ),
+            "Dm_nslp_lsp"  : DMCV(b["Dm_nslp_lsp"],   f["Dm_nslp_lsp"] ,["neu1",
+    "chi1"    , 
+    "sel_r"   , 
+    "sel_l"   , 
+    "snu_e"   , 
+    "smu_r"   , 
+    "smu_l"   , 
+    "snu_mu"  , 
+    "stau_1"  , 
+    "snu_tau" , 
+    "squark_r",  
+    "squark_l", 
+    "stop1"   , 
+    "sbottom1", 
+    "mH0"     , 
+    "mA0"     , 
+    "mH+-"    ] ),
 #            "BsmumuRatio"  : DMCV(b["BsmumuRatio"], ["Bsmumu"] ),
             "sigma_pp^SI_cm-2"  : DMCV(b["sigma_pp^SI_cm-2"], f["sigma_pp^SI_cm-2"],["sigma_pp^SI"]   )
     }
@@ -116,6 +133,7 @@ def base_variables() :
         "Bsmumu"       : Var( "Bsmumu",        r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})$"),
         "BsmumuRatio"  : Var( "BsmumuRatio",   r"$BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{pred} /BR(B_{s}\rightarrow\mu^{+}\mu^{-})^{SM} $"),
         "Dm_stau1_neu1": Var( "Dm_stau1_neu1", r"$m_{\tilde{\tau}_{1}} - m_{\tilde{\chi}^{0}_{1}} %s $"%GeV),
+        "Dm_nslp_lsp"  : Var( "Dm_nslp_lsp",   r"$m_{NLSP} - m_{\tilde{\chi}^{0}_{1}} %s $"%GeV),
         "R(B->taunu)"  : Var( "R(B->taunu)",   r"$R(B\rightarrow\tau\nu)$"           ),
         "R(B->Xsll)"   : Var( "R(B->Xsll)",    r"$R(B\rightarrow X_{s}\ell\ell$"     ),
         "R(K->lnu)"    : Var( "R(K->lnu)",     r"$R(K\rightarrow\ell\nu)$",          ),
@@ -189,7 +207,8 @@ def get_variables_funtions():
     function_dict= {
        "BsmumuRatio" :  get_bsmumu_ratio,
        "Dm_stau1_neu1" :  get_delta_mstau1_mneu1,
-       "sigma_pp^SI_cm-2" : get_sigma_pp_si_cm
+       "sigma_pp^SI_cm-2" : get_sigma_pp_si_cm,
+       "Dm_nslp_lsp" : get_delta_nlsp_lsp,
     }
     return function_dict
 
@@ -207,17 +226,9 @@ def get_sigma_pp_si_cm(vals):
     ssi=vals[0]
     return (ssi*1e-36)
 
+def get_delta_nlsp_lsp(vals):
+    neu1=vals[0]
+    nlsp=min(vals[1:])
+    return (nlsp-neu1)
 
-#def x2_from_ssi_mchi_lhood(mchi,ssi ):
-#    return 1
-#
-#
-#def get_sigma_pp_si_cm_KO(vals):
-#    mchi=vals[0]
-##    ssiMicr=vals[1]
-#    ssiKOs=vals[1:21]
-#    ZSigPiNs=[0,0, 0.2,-0.,2, 0.4,-0.4, 0.6,-0.6, 0.8,-0.8, 1.0,-1.0,
-#               1.33,-1.33, 1.66,-1.66, 2.0,-2.0, 2.5,-2.5, 3.0,-3.0]
-#    X2s=[Z**2 + x2_from_ssi_mchi_lhood(mchi,ssi ) for Z,ssi in zip(ZSigPiNs, ssiKOs ) ]
-#    ssiKO=ssiKOs[ X2s.index(min(X2s))  ]
-#    return (ssiKO*1e-36)
+
