@@ -232,7 +232,7 @@ def recalc_to_file( collection, output_file = "" ) :
     MCVdict=v.mc_variables()
 
     chain = MCRecalcChain( collection )
-    if chain == None:
+    if not chain.state :
         return
     nentries = chain.GetEntries()
 
