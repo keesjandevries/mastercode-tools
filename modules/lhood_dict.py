@@ -23,6 +23,12 @@ def get_lhood_dict() :
                                   "name"   : "BR(B_s->mumu) LHCb [MC8 Diego] ",
                                   "vars"   : [ "Bsmumu" ],
                               },
+          "Bsmumu_HCP12_X2" : {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/HCP/HCP_bsmm_2012.dat",10 ],
+                                  "name"   : "BR(B_s->mumu) LHCb+CMS+ATLAS+CDF [HCP12 Diego unofficial comb] ",
+                                  "vars"   : [ "Bsmumu" ],
+                              },
           "BsmumuMC8DiegoX2" :   {
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/bsmm_X2_lookup.dat",10 ],
