@@ -13,7 +13,8 @@ from math import sqrt
 # avoid namespace clash
 __DEBUG=False
 
-def good_point( point, mcfc, verbose = 0) :
+
+def good_point( point, mcfc,MCVdict,verbose = 0 ) :
     problem = ""
     good = True
 
@@ -23,6 +24,14 @@ def good_point( point, mcfc, verbose = 0) :
         good = False
         if verbose > 0 : problem += "\t! Gravitino LSP (mSUGRA)\n"
 
+
+    #29/11/2012: Only keep points with m_stau - m_neutralino < m_tau
+    if getattr( mcfc, "LongLivedStua", False ): 
+        mneu1 = point[MCVdict["neu1"].get_index(mcfc)]
+        mstau = point[MCVdict["stau_1"].get_index(mcfc)]
+        if  mstau-mneu1 > 1.777 :
+            good = False
+            if verbose > 0 : problem += "\t! Cut away mstau-mneu1 > mstau. \n"
 
     #16/08/2012: cut on tanb for long lived stau's  
     if getattr( mcfc, "LongLivedStuaTanbCut", False ): 
@@ -239,6 +248,9 @@ def recalc_to_file( collection, output_file = "" ) :
     begin = getattr( collection, "StartEntry", 0)
     end   = getattr( collection, "EndEntry", nentries+1)
 
+    # want to keep track of this
+    count_fill_points = 0
+
     total_delta = 0
 
     # create trees in scope of outfile
@@ -273,6 +285,7 @@ def recalc_to_file( collection, output_file = "" ) :
     count=-1 # becuase the first entry has number 0
 
     prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
+    print end-begin, " points to process..."
     for entry in xrange(begin,end) :
 
         prog.increment_amount()
@@ -280,7 +293,7 @@ def recalc_to_file( collection, output_file = "" ) :
         stdout.flush()
 
         chain.GetEntry(entry)
-        if good_point( chain.treeVars["predictions"], collection ) :
+        if good_point( chain.treeVars["predictions"], collection,MCVdict ) :
             delta = 0.
             chi2 = 0
 
@@ -309,6 +322,7 @@ def recalc_to_file( collection, output_file = "" ) :
                 chain.treeVars["predictions"][0] = chi2
                 contribvars[0] = chi2
                 chi2tree.Fill()
+                count_fill_points+=1
                 contribtree.Fill()
                 lhoodtree.Fill()
                 count+=1
@@ -328,6 +342,9 @@ def recalc_to_file( collection, output_file = "" ) :
     lhoodtree.AutoSave()
 
     out.Close()
+    # some output for Monitoring:
+    print "Total number of points       : ",end-begin
+    print "Accepted number of points    : ",count_fill_points
 
     if __DEBUG :
         print "\n--------------------------\n"
