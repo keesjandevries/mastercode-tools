@@ -38,7 +38,10 @@ def main( argv=None ) :
         if options.bf_mode :
             print "\nSearch for best it point in ", mcf.FileName
             n=pt.get_best_fit_entry(mcf)
-            pt.print_info(n,mcf)
+            if n >= 0:
+                pt.print_info(n,mcf)
+            else:
+                print "Error has occured, leaving program"
 
         if options.entry_nr >= 0 :
             n=options.entry_nr
