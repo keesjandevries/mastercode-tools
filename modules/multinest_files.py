@@ -11,6 +11,9 @@ def base_directory() :
 def iter_directory() :
     return  "/vols/cms04/kjd110/multinest_cmssm-1000-live-10-step-200-iter/"
 
+def nuhm2_boxes_directory():
+    return "/vols/cms04/kjd110/nuhm2_sampling_2"
+
 def boxes_directory():
 #  return "/vols/cms04/kjd110/small_mn_parallel/"
     return "/vols/cms04/kjd110/mn_parallel/"
@@ -442,5 +445,43 @@ def cmssm_multinest_all_sessions_comb_histo_dict() :
 def cmssm_multinest_all_sessions_comb_histo() :
     return [MCFile(cmssm_multinest_all_sessions_comb_histo_dict() )]
 
+
+##########################################################################################
+
+def nuhm2_mn_boxes_input(box_n ) :
+    # output / global options
+    gd = nuhm2_mn_boxes_histo_dict(box_n)
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    fds=[]
+    for step in range(1,201):
+        fd = {
+                 "FileName"          : "%s/%s/cmssm-step-%i.root" % (nuhm2_boxes_directory(),nuhm2_boxes_sub_dirs(box_n), step) ,
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_mn_boxes_histo_dict( box_n) :
+    d= {
+        "FileName"          : "%s/%s/nuhm2_all.root" % (nuhm2_boxes_directory(), nuhm2_boxes_sub_dirs(box_n) ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 76,
+        "Inputs"            : 9, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+#        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_mn_boxes_histo(box_n) :
+    return [MCFile(nuhm2_mn_boxes_histo_dict(box_n) )]
+
+def nuhm2_mn_boxes_histo_range(range_begin, range_end) :
+    return [MCFile(nuhm2_mn_boxes_histo_dict(box_n) ) for box_n in range(range_begin,range_end)]
 
 ##########################################################################################
