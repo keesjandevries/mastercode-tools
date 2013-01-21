@@ -12,7 +12,13 @@ def iter_directory() :
     return  "/vols/cms04/kjd110/multinest_cmssm-1000-live-10-step-200-iter/"
 
 def nuhm2_boxes_directory():
-    return "/vols/cms04/kjd110/nuhm2_sampling_2"
+    return "/vols/cms04/kjd110/nuhm2_sampling"
+
+def nuhm2_xmas_directory():
+    return "/vols/cms04/kjd110/nuhm2_xmas"
+
+def nuhm2_ndn_directory():
+    return "/vols/cms04/kjd110/nuhm2_ndn"
 
 def boxes_directory():
 #  return "/vols/cms04/kjd110/small_mn_parallel/"
@@ -21,6 +27,79 @@ def boxes_directory():
 def boxes_N_directory(n):
     dir = ("/vols/cms04/kjd110/mn_parallel_%i/" % n)
     return dir
+
+def nuhm2_ndn_sub_dirs(i):
+    l=[
+            ]
+    return l
+
+def nuhm2_xmas_sub_dirs(i):
+    l=[
+"1800_0_0_2_0_0_4000_2000_5000_35_10M_10M_",
+"1800_0_0_2_0_-10M_4000_2000_5000_35_10M_0_",
+"1800_0_0_2_-10M_0_4000_2000_5000_35_0_10M_",
+"1800_0_0_2_-10M_-10M_4000_2000_5000_35_0_0_",
+"1800_0_0_35_0_0_4000_2000_5000_68_10M_10M_",
+"1800_0_0_35_0_-10M_4000_2000_5000_68_10M_0_",
+"1800_0_0_35_-10M_0_4000_2000_5000_68_0_10M_",
+"1800_0_0_35_-10M_-10M_4000_2000_5000_68_0_0_",
+"1800_0_-5000_2_0_0_4000_2000_0_35_10M_10M_",
+"1800_0_-5000_2_0_-10M_4000_2000_0_35_10M_0_",
+"1800_0_-5000_2_-10M_0_4000_2000_0_35_0_10M_",
+"1800_0_-5000_2_-10M_-10M_4000_2000_0_35_0_0_",
+"1800_0_-5000_35_0_0_4000_2000_0_68_10M_10M_",
+"1800_0_-5000_35_0_-10M_4000_2000_0_68_10M_0_",
+"1800_0_-5000_35_-10M_0_4000_2000_0_68_0_10M_",
+"1800_0_-5000_35_-10M_-10M_4000_2000_0_68_0_0_",
+"1800_2000_0_2_0_0_4000_4000_5000_35_10M_10M_",
+"1800_2000_0_2_0_-10M_4000_4000_5000_35_10M_0_",
+"1800_2000_0_2_-10M_0_4000_4000_5000_35_0_10M_",
+"1800_2000_0_2_-10M_-10M_4000_4000_5000_35_0_0_",
+"1800_2000_0_35_0_0_4000_4000_5000_68_10M_10M_",
+"1800_2000_0_35_0_-10M_4000_4000_5000_68_10M_0_",
+"1800_2000_0_35_-10M_0_4000_4000_5000_68_0_10M_",
+"1800_2000_0_35_-10M_-10M_4000_4000_5000_68_0_0_",
+"1800_2000_-5000_2_0_0_4000_4000_0_35_10M_10M_",
+"1800_2000_-5000_2_0_-10M_4000_4000_0_35_10M_0_",
+"1800_2000_-5000_2_-10M_0_4000_4000_0_35_0_10M_",
+"1800_2000_-5000_2_-10M_-10M_4000_4000_0_35_0_0_",
+"1800_2000_-5000_35_0_0_4000_4000_0_68_10M_10M_",
+"1800_2000_-5000_35_0_-10M_4000_4000_0_68_10M_0_",
+"1800_2000_-5000_35_-10M_0_4000_4000_0_68_0_10M_",
+"1800_2000_-5000_35_-10M_-10M_4000_4000_0_68_0_0_",
+"-400_0_0_2_0_0_1800_2000_5000_35_10M_10M_",
+"-400_0_0_2_0_-10M_1800_2000_5000_35_10M_0_",
+"-400_0_0_2_-10M_0_1800_2000_5000_35_0_10M_",
+"-400_0_0_2_-10M_-10M_1800_2000_5000_35_0_0_",
+"-400_0_0_35_0_0_1800_2000_5000_68_10M_10M_",
+"-400_0_0_35_0_-10M_1800_2000_5000_68_10M_0_",
+"-400_0_0_35_-10M_0_1800_2000_5000_68_0_10M_",
+"-400_0_0_35_-10M_-10M_1800_2000_5000_68_0_0_",
+"-400_0_-5000_2_0_0_1800_2000_0_35_10M_10M_",
+"-400_0_-5000_2_0_-10M_1800_2000_0_35_10M_0_",
+"-400_0_-5000_2_-10M_0_1800_2000_0_35_0_10M_",
+"-400_0_-5000_2_-10M_-10M_1800_2000_0_35_0_0_",
+"-400_0_-5000_35_0_0_1800_2000_0_68_10M_10M_",
+"-400_0_-5000_35_0_-10M_1800_2000_0_68_10M_0_",
+"-400_0_-5000_35_-10M_0_1800_2000_0_68_0_10M_",
+"-400_0_-5000_35_-10M_-10M_1800_2000_0_68_0_0_",
+"-400_2000_0_2_0_0_1800_4000_5000_35_10M_10M_",
+"-400_2000_0_2_0_-10M_1800_4000_5000_35_10M_0_",
+"-400_2000_0_2_-10M_0_1800_4000_5000_35_0_10M_",
+"-400_2000_0_2_-10M_-10M_1800_4000_5000_35_0_0_",
+"-400_2000_0_35_0_0_1800_4000_5000_68_10M_10M_",
+"-400_2000_0_35_0_-10M_1800_4000_5000_68_10M_0_",
+"-400_2000_0_35_-10M_0_1800_4000_5000_68_0_10M_",
+"-400_2000_0_35_-10M_-10M_1800_4000_5000_68_0_0_",
+"-400_2000_-5000_2_0_0_1800_4000_0_35_10M_10M_",
+"-400_2000_-5000_2_0_-10M_1800_4000_0_35_10M_0_",
+"-400_2000_-5000_2_-10M_0_1800_4000_0_35_0_10M_",
+"-400_2000_-5000_2_-10M_-10M_1800_4000_0_35_0_0_",
+"-400_2000_-5000_35_0_0_1800_4000_0_68_10M_10M_",
+"-400_2000_-5000_35_0_-10M_1800_4000_0_68_10M_0_",
+"-400_2000_-5000_35_-10M_0_1800_4000_0_68_0_10M_",
+"-400_2000_-5000_35_-10M_-10M_1800_4000_0_68_0_0_",]
+    return l[i]
 
 def cmssm_boxes_sub_dirs(i):
     l=[    
@@ -155,6 +234,42 @@ def cmssm_boxes_N_sub_dirs(i):
 "2666_1333_-1667_24_3999_2666_1666_46",
 "2666_1333_-1667_46_3999_2666_1666_68",
 "2666_1333_-5000_46_3999_2666_-1667_68",]
+    return l[i]
+
+def nuhm2_boxes_sub_dirs(i):
+    l= [
+"_0_0_0_2_0_0_2000_2000_5000_68_10M_10M",
+"_0_0_0_2_0_-10M_2000_2000_5000_68_10M_0",
+"_0_0_0_2_-10M_0_2000_2000_5000_68_0_10M",
+"_0_0_0_2_-10M_-10M_2000_2000_5000_68_0_0",
+"_0_0_-5000_2_0_0_2000_2000_0_68_10M_10M",
+"_0_0_-5000_2_0_-10M_2000_2000_0_68_10M_0",
+"_0_0_-5000_2_-10M_0_2000_2000_0_68_0_10M",
+"_0_0_-5000_2_-10M_-10M_2000_2000_0_68_0_0",
+"_0_2000_0_2_0_0_2000_4000_5000_68_10M_10M",
+"_0_2000_0_2_0_-10M_2000_4000_5000_68_10M_0",
+"_0_2000_0_2_-10M_0_2000_4000_5000_68_0_10M",
+"_0_2000_0_2_-10M_-10M_2000_4000_5000_68_0_0",
+"_0_2000_-5000_2_0_0_2000_4000_0_68_10M_10M",
+"_0_2000_-5000_2_0_-10M_2000_4000_0_68_10M_0",
+"_0_2000_-5000_2_-10M_0_2000_4000_0_68_0_10M",
+"_0_2000_-5000_2_-10M_-10M_2000_4000_0_68_0_0",
+"_2000_0_0_2_0_0_4000_2000_5000_68_10M_10M",
+"_2000_0_0_2_0_-10M_4000_2000_5000_68_10M_0",
+"_2000_0_0_2_-10M_0_4000_2000_5000_68_0_10M",
+"_2000_0_0_2_-10M_-10M_4000_2000_5000_68_0_0",
+"_2000_0_-5000_2_0_0_4000_2000_0_68_10M_10M",
+"_2000_0_-5000_2_0_-10M_4000_2000_0_68_10M_0",
+"_2000_0_-5000_2_-10M_0_4000_2000_0_68_0_10M",
+"_2000_0_-5000_2_-10M_-10M_4000_2000_0_68_0_0",
+"_2000_2000_0_2_0_0_4000_4000_5000_68_10M_10M",
+"_2000_2000_0_2_0_-10M_4000_4000_5000_68_10M_0",
+"_2000_2000_0_2_-10M_0_4000_4000_5000_68_0_10M",
+"_2000_2000_0_2_-10M_-10M_4000_4000_5000_68_0_0",
+"_2000_2000_-5000_2_0_0_4000_4000_0_68_10M_10M",
+"_2000_2000_-5000_2_0_-10M_4000_4000_0_68_10M_0",
+"_2000_2000_-5000_2_-10M_0_4000_4000_0_68_0_10M",
+"_2000_2000_-5000_2_-10M_-10M_4000_4000_0_68_0_0",]
     return l[i]
 
 ##########################################################################################
@@ -454,7 +569,7 @@ def nuhm2_mn_boxes_input(box_n ) :
 #    gd["StartEntry"] = 0
 #    gd["EndEntry"]   = 50000
     fds=[]
-    for step in range(1,201):
+    for step in range(1, 401):
         fd = {
                  "FileName"          : "%s/%s/cmssm-step-%i.root" % (nuhm2_boxes_directory(),nuhm2_boxes_sub_dirs(box_n), step) ,
                  "Chi2TreeName"      : "tree",
@@ -483,5 +598,224 @@ def nuhm2_mn_boxes_histo(box_n) :
 
 def nuhm2_mn_boxes_histo_range(range_begin, range_end) :
     return [MCFile(nuhm2_mn_boxes_histo_dict(box_n) ) for box_n in range(range_begin,range_end)]
+
+##########################################################################################
+
+def nuhm2_mn_boxes_combined_input( ) :
+    # output / global options
+    gd = nuhm2_mn_boxes_combined_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    fds=[]
+    for box_n in range(0,32):
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2_all.root" % (nuhm2_boxes_directory(), nuhm2_boxes_sub_dirs(box_n) ),
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_mn_boxes_combined_histo_dict() :
+    d= {
+        "FileName"          : "%s/nuhm2_all_boxes_combined.root" % (boxes_directory(),  ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 76,
+        "Inputs"            : 7, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+#        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_mn_boxes_combined_histo() :
+    return [MCFile(nuhm2_mn_boxes_combined_histo_dict() )]
+
+
+##########################################################################################
+
+def nuhm2_mn_xmas_box_steps_input(box_n,first,last ) :
+    # output / global options
+    gd = nuhm2_mn_xmas_histo_dict(box_n)
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    fds=[]
+    for step in range(first,last + 1 ):
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2-step-%i.root" % (nuhm2_xmas_directory(),nuhm2_xmas_sub_dirs(box_n), step) ,
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+def nuhm2_mn_xmas_box_all_steps_input(box_n) :
+    dir=nuhm2_xmas_directory()+'/'+nuhm2_xmas_sub_dirs(box_n)
+    print dir
+    import os
+    steps=[int(f.replace('nuhm2-step-','').replace('.root','')) for f in os.listdir(dir) if 'nuhm2-step-' in f and '.root' in f]
+    steps.pop(steps.index(max(steps)))
+    gd = nuhm2_mn_xmas_histo_dict(box_n)
+    fds=[]
+    for step in steps:
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2-step-%i.root" % (nuhm2_xmas_directory(),nuhm2_xmas_sub_dirs(box_n), step) ,
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_mn_xmas_histo_dict( box_n) :
+    d= {
+        "FileName"          : "%s/%s/nuhm2_all.root" % (nuhm2_xmas_directory(), nuhm2_xmas_sub_dirs(box_n) ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 76,
+        "Inputs"            : 9, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+#        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_mn_xmas_histo(box_n) :
+    return [MCFile(nuhm2_mn_xmas_histo_dict(box_n) )]
+
+def nuhm2_mn_xmas_histo_range(range_begin, range_end) :
+    return [MCFile(nuhm2_mn_xmas_histo_dict(box_n) ) for box_n in range(range_begin,range_end)]
+
+##########################################################################################
+
+def nuhm2_mn_xmas_combined_input( ) :
+    # output / global options
+    gd = nuhm2_mn_xmas_combined_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    fds=[]
+    for box_n in range(0,64):
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2_all.root" % (nuhm2_xmas_directory(), nuhm2_xmas_sub_dirs(box_n) ),
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_mn_xmas_combined_histo_dict() :
+    d= {
+        "FileName"          : "%s/nuhm2_all_xmas_combined.root" % (nuhm2_xmas_directory(),  ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 76,
+        "Inputs"            : 7, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_mn_xmas_combined_histo() :
+    return [MCFile(nuhm2_mn_xmas_combined_histo_dict() )]
+
+
+##########################################################################################
+##########################################################################################
+
+def nuhm2_mn_ndn_box_steps_input(box_n,first,last ) :
+    # output / global options
+    gd = nuhm2_mn_ndn_histo_dict(box_n)
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    fds=[]
+    for step in range(first,last + 1 ):
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2-step-%i.root" % (nuhm2_ndn_directory(),nuhm2_ndn_sub_dirs(box_n), step) ,
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+def nuhm2_mn_ndn_box_all_steps_input(box_n) :
+    dir=nuhm2_ndn_directory()+'/'+nuhm2_ndn_sub_dirs(box_n)
+    print dir
+    import os
+    steps=[int(f.replace('nuhm2-step-','').replace('.root','')) for f in os.listdir(dir) if 'nuhm2-step-' in f and '.root' in f]
+    steps.pop(steps.index(max(steps)))
+    gd = nuhm2_mn_ndn_histo_dict(box_n)
+    fds=[]
+    for step in steps:
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2-step-%i.root" % (nuhm2_ndn_directory(),nuhm2_ndn_sub_dirs(box_n), step) ,
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_mn_ndn_histo_dict( box_n) :
+    d= {
+        "FileName"          : "%s/%s/nuhm2_all.root" % (nuhm2_ndn_directory(), nuhm2_ndn_sub_dirs(box_n) ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 76,
+        "Inputs"            : 9, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+#        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_mn_ndn_histo(box_n) :
+    return [MCFile(nuhm2_mn_ndn_histo_dict(box_n) )]
+
+def nuhm2_mn_ndn_histo_range(range_begin, range_end) :
+    return [MCFile(nuhm2_mn_ndn_histo_dict(box_n) ) for box_n in range(range_begin,range_end)]
+
+##########################################################################################
+
+def nuhm2_mn_ndn_combined_input( ) :
+    # output / global options
+    gd = nuhm2_mn_ndn_combined_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    fds=[]
+    for box_n in range(0,64):
+        fd = {
+                 "FileName"          : "%s/%s/nuhm2_all.root" % (nuhm2_ndn_directory(), nuhm2_ndn_sub_dirs(box_n) ),
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds ]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_mn_ndn_combined_histo_dict() :
+    d= {
+        "FileName"          : "%s/nuhm2_all_ndn_combined.root" % (nuhm2_ndn_directory(),  ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 76,
+        "Inputs"            : 7, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_mn_ndn_combined_histo() :
+    return [MCFile(nuhm2_mn_ndn_combined_histo_dict() )]
+
 
 ##########################################################################################
