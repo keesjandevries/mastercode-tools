@@ -1,3 +1,5 @@
+*.log
+*.txt
 *.swp
 *.pyc
 *.png
@@ -7,3 +9,4 @@
 *.so
 *~
 submit*sh
+CELMOV*
