@@ -66,6 +66,7 @@ def hist_exists(name, mcf) :
         hOld.ClassName()
     except ReferenceError :
         exists = False
+    f.Close()
     return exists
 
 def list_permutations( l ) :
@@ -104,7 +105,9 @@ def get_best_fit_entry(mcf):
     try:
         t=f.Get(bfName).Clone()
     except ReferenceError:
-        assert False,   "%s does not contain a tree with the best fit point" % mcf.FileName
+        print "%s does not contain a tree with the best fit point" % mcf.FileName
+        return -1
+#        assert False,   "%s does not contain a tree with the best fit point" % mcf.FileName
 
     for entry in t:
         n=entry.EntryNo
@@ -257,7 +260,8 @@ def print_parameters(chain,mcf):
     for sn in para_shortnames:
         print_prediction(chain,mcf,sn)
     if mcf.PredictionIndex==12:
-        print_prediction(chain,mcf,"mh2")
+        print_prediction(chain,mcf,"mhu2")
+        print_prediction(chain,mcf,"mhd2")
         
 def print_mu(chain,mcf):
     #print "\nmu:\n"
@@ -275,7 +279,7 @@ def print_sigma_si(chain,mcf):
     print_prediction(chain,mcf,"KOsigma_pp^SI_cen50")
     print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_14")
     print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_7")
-    
+   
 #    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 50 +- Z*14:\n"
 #    import variables as v
 #    MCVdict=v.mc_variables()
@@ -294,15 +298,18 @@ def print_sigma_si(chain,mcf):
 #        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
 
 def print_info(n,mcf) :
-    chain = MCAnalysisChain( mcf )
-    chain.GetEntry(n)
-    print_n(n)
-    print_afterburner_coordinates(chain, mcf)
-    print_chi2(chain,n,mcf)
-    print_parameters(chain,mcf)
-    print_mu(chain,mcf)
-    print_bsmmm(chain,mcf)
-    print_sigma_si(chain,mcf)
-    print_spectrum(chain,mcf) 
-    print_chi2_breakdown(chain,mcf)
-    print_ma_info(chain,mcf)
+    if n >=0:
+        chain = MCAnalysisChain( mcf )
+        chain.GetEntry(n)
+        print_n(n)
+        print_afterburner_coordinates(chain, mcf)
+        print_chi2(chain,n,mcf)
+        print_parameters(chain,mcf)
+    #    print_mu(chain,mcf)
+    #    print_bsmmm(chain,mcf)
+        print_sigma_si(chain,mcf)
+        print_spectrum(chain,mcf) 
+        print_chi2_breakdown(chain,mcf)
+    #    print_ma_info(chain,mcf)
+    else:
+        print "\nEntry number was ", n, " probably an Error has occurred\n"
