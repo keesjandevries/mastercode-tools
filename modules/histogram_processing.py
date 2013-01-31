@@ -44,9 +44,17 @@ def get_histogram_dimension_from_name( name, delim = "_" ) :
 def get_histogram_dimension( h ):
     return int( h.ClassName()[2] )
 
-def get_histogram_bin_range(h, minimums = None, maximums = None):
+def get_histogram_bin_range(h, minimums = None, maximums = None,space=None):
     dim = get_histogram_dimension(h)
     axes = ["X", "Y", "Z"]
+
+    if not space is None:
+        maximums=[]
+        minimums=[]
+        bcs = get_bin_centres(space)
+        for i in range(dim):
+            minimums.append(bcs[i][0])
+            maximums.append(bcs[i][-1])
 
     if maximums is None:
         maximums = []
@@ -151,7 +159,8 @@ def initialize_histo( space,hname,entry=False, data=False,chi2=False ) :
 
     up_bin = [ abin + 1 for abin in space.nbins ]
 
-    first_bin, last_bin = get_histogram_bin_range(histo)
+    first_bin, last_bin = get_histogram_bin_range(histo,space=space)
+#    print "first and last bin", first_bin, last_bin
     for i in range(first_bin,last_bin+1) :
         if not histo.IsBinUnderflow(i) and not histo.IsBinOverflow(i) :
             histo.SetBinContent(i,content)
@@ -402,7 +411,7 @@ def plot_and_save_smooth_spline(dchi_histos,mcf,spaces):
                 s_hist.GetXaxis().SetRangeUser(xmin,xmax)
                 s_hist.Smooth(smooth,"R")
                 s_hist.GetXaxis().SetRange(0,0)
-            perform_zero_offset(s_hist)
+            perform_zero_offset(s_hist,space=space)
             hd[sn]=s_hist
     save_hdict_to_root_file( hd, mcf.FileName, mcf.SmoothDirectory ) 
 
@@ -425,7 +434,7 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
         predict_cont = {}
 
         print p.short_names
-        firstbin, lastbin = get_histogram_bin_range(h)
+        firstbin, lastbin = get_histogram_bin_range(h,space=p)
         for mode in modes :
             # here need to add in check on contrib and make one for each contribution
             hname = histo_name( p.short_names, entry_histo_prefix )+ "_" + mode
@@ -461,7 +470,7 @@ def fill_and_save_data_hists( mcf, plots,entry_hists, modes, contribs,predicts )
                      KOhack.set_ssi_bin_centre(h,i)
 #############################################
                 fill_bins( histo_cont, contrib_cont,predict_cont, contribs,predicts  , i, chain, mcf, KOhack )
-        perform_zero_offset( histo_cont["dchi"] )
+        perform_zero_offset( histo_cont["dchi"],space=p )
         print
         save_hdict_to_root_file( histo_cont,  mcf.FileName, mcf.DataDirectory)
         save_hdict_to_root_file( contrib_cont, mcf.FileName, mcf.DataDirectory)
@@ -496,26 +505,26 @@ def get_dchi_hists( mcf, plots ) :
         hl.append( f.Get( hn ).Clone()) 
     f.Close()
     return hl
+# this function seems redundant
+#def get_hist_minimum_values( hl ) :
+#    mins = []
+#    for h in hl :
+#        nbins = h.GetNbinsX()*h.GetNbinsY()
+#        min_val = 1e9
+#        first_bin, last_bin = get_histogram_bin_range(h)
+#        for bin in range(first_bin,last_bin+1):
+#            c = h.GetBinContent(bin)
+#            if c < min_val and c > 0 : min_val = c
+#        mins.append(min_val)
+#    return mins
 
-def get_hist_minimum_values( hl ) :
-    mins = []
-    for h in hl :
-        nbins = h.GetNbinsX()*h.GetNbinsY()
-        min_val = 1e9
-        first_bin, last_bin = get_histogram_bin_range(h)
-        for bin in range(first_bin,last_bin+1):
-            c = h.GetBinContent(bin)
-            if c < min_val and c > 0 : min_val = c
-        mins.append(min_val)
-    return mins
-
-def perform_zero_offset( h ) :
+def perform_zero_offset( h,space=None ) :
     axes = ["X", "Y", "Z"]
     h_dim = get_histogram_dimension(h)
     axes_nbins = []
     for axis in range(h_dim) :
         axes_nbins.append( eval(" h.GetNbins%s()" % axes[axis] ) )
-    first_bin, last_bin = get_histogram_bin_range(h)
+    first_bin, last_bin = get_histogram_bin_range(h,space=space)
     min_val = 1e9
     for bin in range(first_bin, last_bin+1) :
         c = h.GetBinContent(bin)
