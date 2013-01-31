@@ -1071,6 +1071,34 @@ def cmssm_mc8_all_histo_dict() :
 def cmssm_mc8_all_histo() :
     return [MCFile(cmssm_mc8_all_histo_dict() )]
 
+def cmssm_mc8_all_tanb_cut_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_mc8_all_tanb_cut.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+#        "SpectrumIndex"     : 117,
+        "SpectrumIndex"     : 124,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+        "LongLivedStuaTanbCut": True,
+    #    "MaxMADiff"         : 0.4,
+     }
+def cmssm_mc8_all_tanb_cut_histo() :
+    return [MCFile(cmssm_mc8_all_tanb_cut_histo_dict() )]
+
 def cmssm_mc8_drop_Xenon2012_histo_dict() :
     return {
         "FileName"          : "%s/cmssm_mc8_drop_Xenon2012.root" % base_directory(),
@@ -1698,3 +1726,92 @@ def nuhm1_mcmh_mc7_histo_dict() :
      }
 def nuhm1_mcmh_mc7_histo() :
     return [MCFile(nuhm1_mcmh_mc7_histo_dict() )]
+
+
+#####################################################################################
+def cmssm_mc8_all_stop_nlsp_input() :
+    # output / global options
+    gd = cmssm_mc8_all_stop_nlsp_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 5000
+
+    # input files: 1 dict per file
+    fd = {
+             "FileName"          : "%s/cmssm_mc8_all_stop_nlsp_input.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def cmssm_mc8_all_stop_nlsp_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_mc8_all_stop_nlsp.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+        "SpectrumIndex"     : 117,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+#        "LongLivedStuaTanbCut": True,
+    #    "MaxMADiff"         : 0.4,
+        'CharginoNLSPCut'   : True, 
+     }
+def cmssm_mc8_all_stop_nlsp_histo() :
+    return [MCFile(cmssm_mc8_all_stop_nlsp_histo_dict() )]
+
+
+#####################################################################################
+
+def nuhm1_mc8_all_stop_nlsp_input() :
+    gd = nuhm1_mc8_all_stop_nlsp_histo_dict()
+#    gd["StartEntry"] = 0      
+#    gd["EndEntry"]   = 20000 
+    fd = {
+             "FileName"          : "%s/nuhm1_combine_sampling.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+def nuhm1_mc8_all_stop_nlsp_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_mc8_all_stop_nlsp.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+#        "SpectrumIndex"     : 126,
+        "Inputs"            : 8, # FIXME: check this number is right!!!
+        "LHoodFile"         : "models/mc8-all.lhood" ,
+        "ModelFile"         : "models/mc8.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+#        "MaxChi2"           : 1e9,
+#        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+        "MaxMADiff"         : 0.45,
+        'CharginoNLSPCut'   : True, 
+     }
+def nuhm1_mc8_all_stop_nlsp_histo() :
+    return [MCFile(nuhm1_mc8_all_stop_nlsp_histo_dict() )]
+
+#####################################################################################
