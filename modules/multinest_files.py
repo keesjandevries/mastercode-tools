@@ -960,7 +960,7 @@ def nuhm2_mn_ndn_histo_dict( box_n) :
         "Inputs"            : 9, 
         "ModelFile"         : "models/mc7.model",
 #        "MinChi2"           : 0,
-        "MaxChi2"           : 45, 
+#        "MaxChi2"           : 45, 
         "MinContrib"        : 0,
      }
     d.update(standard_names())
@@ -998,7 +998,7 @@ def nuhm2_mn_ndn_combined_histo_dict() :
         "Inputs"            : 7, 
         "ModelFile"         : "models/mc7.model",
 #        "MinChi2"           : 0,
-#        "MaxChi2"           : 45, 
+        "MaxChi2"           : 45, 
         "MinContrib"        : 0,
      }
     d.update(standard_names())

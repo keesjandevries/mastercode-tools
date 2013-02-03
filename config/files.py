@@ -56,11 +56,12 @@ def recalc_files() :
 #    d = mn_files.cmssm_multinest_all_sessions_comb_input()
 #    d = mn_files.nuhm2_mn_boxes_combined_input()
 #    d = mn_files.nuhm2_mn_xmas_combined_input()
-    d = mn_files.nuhm2_mn_ndn_combined_input()
+#    d = mn_files.nuhm2_mn_ndn_combined_input()
 # CELMOV
 #    d = celmov_files.cmssm_mc8_all_stable_stau_input()
-#    d = nuhm2_old.nuhm2_old_combined_input()
 #OLD NUHM2
+#    d = nuhm2_old.nuhm2_old_combined_input()
+    d = nuhm2_old.nuhm2_all_old_combined_input()
     return d
 
 def recalc_file_list():
@@ -121,9 +122,10 @@ def histo_files() :
 #    d = mn_files.nuhm2_mn_ndn_combined_histo()
 #OLD MASTERCODE
 #    d = nuhm2_old.nuhm2_old_combined_histo()
+    d = nuhm2_old.nuhm2_all_old_combined_histo()
 # CELMOV
 #   d = celmov_files.cmssm_mc8_all_stable_stau_histo()
-    d = files.cmssm_mc8_all_tanb_cut_histo()
+#    d = files.cmssm_mc8_all_tanb_cut_histo()
     return d
 
 
@@ -169,8 +171,10 @@ def point_files() :
 #    d = mn_files.nuhm2_mn_boxes_histo_range(0,32)
 #    d = mn_files.nuhm2_mn_boxes_combined_histo()
 #    d = mn_files.nuhm2_mn_xmas_combined_histo()
-    d = mn_files.nuhm2_mn_ndn_combined_histo()
+#    d = mn_files.nuhm2_mn_ndn_combined_histo()
 # CELMOV
 #    d = celmov_files.cmssm_mc8_all_stable_stau_histo()
+#    d = nuhm2_old.nuhm2_old_combined_histo()
+    d = nuhm2_old.nuhm2_new_old_combined_histo()
     return d
 

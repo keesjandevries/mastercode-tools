@@ -668,13 +668,12 @@ def cmssm_test_file_histo_dict() :
         "LHoodBranchName"   : "vars",
         "BestFitEntryName"  : "BestFitEntry",
         "PredictionIndex"   : 10,
-        "SpectrumIndex"     : 124,
+#        "SpectrumIndex"     : 124,
 #        "SpectrumIndex"     : 122,
-#        "SpectrumIndex"     : 117,
+        "SpectrumIndex"     : 117,
 #        "SpectrumIndex"     : 74,
         "Inputs"            :  7, # FIXME: check this number is right!!!
 #        "LHoodFile"         : "models/mc8-all.lhood" ,
-        "LHoodFile"         : "models/mc8-all.lhood",
         "ModelFile"         : "models/mc8.model" ,
 
 #        "LHoodFile"         : "models/test.lhood" ,

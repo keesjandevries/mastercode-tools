@@ -11,6 +11,10 @@ def base_directory() :
 def vols_directory() :
     return  "/vols/cms04/kjd110/nuhm2_old"
 
+def jads_directory() :
+    #/vols/cms03/jm1103/mastercode_output/dmdata_points1.root
+    return  "/vols/cms03/jm1103/mastercode_output"
+
 def standard_names():
     return{
         "Chi2TreeName"      : "tree",
@@ -64,6 +68,54 @@ def nuhm2_old_combined_histo_dict() :
 
 def nuhm2_old_combined_histo() :
     return [MCFile(nuhm2_old_combined_histo_dict() )]
+
+
+##########################################################################################
+##########################################################################################
+
+def nuhm2_all_old_combined_input( ) :
+    # output / global options
+    gd = nuhm2_all_old_combined_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+    dir = jads_directory()
+#    steps=[f.replace('dmdata_force_out_','').replace('.root','') for f in os.listdir(dir) if 'dmdata_force_out_' in f and '.root' in f]
+    files=[f for f in os.listdir(dir) if 'dmdata_points' in f and '.root' in f]
+    #/vols/cms03/jm1103/mastercode_output/dmdata_points1.root
+    fds=[]
+#    for i in steps:
+    for f in files:
+        fd = {
+#                 "FileName"          : "%s/dmdata_force_out_%s.root" % (base_directory(),steps )
+                 "FileName"          : "%s/%s" % (jads_directory(),f ),
+                 "Chi2TreeName"      : "tree",
+             }
+        fds.append(fd)
+    fd={
+        "FileName"          : "%s/nuhm2_old_combined.root" % (vols_directory(),  ),
+        "Chi2TreeName"      : "tree",
+            }
+    fds.append(fd)
+    mcfs = [MCFile( fd, warn = False ) for fd in fds]  
+    return MCFileCollection(  mcfs , gd, warn = False)
+
+
+def nuhm2_all_old_combined_histo_dict() :
+    d= {
+        "FileName"          : "%s/nuhm2_all_old_combined.root" % (vols_directory(),  ),
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+        "Inputs"            : 7, 
+        "ModelFile"         : "models/mc7.model",
+#        "MinChi2"           : 0,
+        "MaxChi2"           : 45, 
+        "MinContrib"        : 0,
+     }
+    d.update(standard_names())
+    return d
+
+def nuhm2_all_old_combined_histo() :
+    return [MCFile(nuhm2_all_old_combined_histo_dict() )]
 
 
 ##########################################################################################
