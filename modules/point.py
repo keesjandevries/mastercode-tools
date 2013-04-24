@@ -275,10 +275,10 @@ def print_sigma_si(chain,mcf):
     print "\nsigma^SI from MicroOMEGAs [pb]:\n"
     print_prediction(chain,mcf,"sigma_pp^SI")
     
-    print "\nsigma^SI from modified dmtool [pb]:\n"
-    print_prediction(chain,mcf,"KOsigma_pp^SI_cen50")
-    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_14")
-    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_7")
+#    print "\nsigma^SI from modified dmtool [pb]:\n"
+#    print_prediction(chain,mcf,"KOsigma_pp^SI_cen50")
+#    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_14")
+#    print_prediction(chain,mcf,"KOsigma_pp^SI_unc50_7")
    
 #    print "\nsigma^SI values [pb] from Keith's code with Sigma_pi_N = 50 +- Z*14:\n"
 #    import variables as v
@@ -296,6 +296,25 @@ def print_sigma_si(chain,mcf):
 #    for i ,Z in enumerate(ZSigPiNs):
 #        prediction=chain.treeVars["predictions"][index+i+21]
 #        print  "{:3.2f} :  {:11.4g}   ,".format(Z, prediction)
+def print_mcpp_coord_dict(chain,mcf):
+    d={'mc_slha_update':{
+                ('SMINPUTS', 'MZ'): get_prediction(chain,mcf,"MZ")
+                }, 
+            'SUSY-POPE': {
+                'non_slha_inputs': {
+                    'DeltaAlfa5had': get_prediction(chain,mcf,"DAlpha_had")
+                    }
+                }, 
+            'SoftSUSY': {
+                ('MINPAR', 'M0'): get_prediction(chain,mcf,"m0"),
+                ('MINPAR', 'M12'): get_prediction(chain,mcf,"m12"),
+                ('MINPAR', 'A'): get_prediction(chain,mcf,"A0"),
+                ('MINPAR', 'TB'): get_prediction(chain,mcf,"tanb"),
+                ('SMINPUTS', 'Mt'): get_prediction(chain,mcf,"mtop"),
+                ('MINPAR', 'signMUE') : 1,
+                }
+            }
+    print d
 
 def print_info(n,mcf) :
     if n >=0:
@@ -303,6 +322,7 @@ def print_info(n,mcf) :
         chain.GetEntry(n)
         print_n(n)
         print_afterburner_coordinates(chain, mcf)
+        print_mcpp_coord_dict(chain,mcf)
         print_chi2(chain,n,mcf)
         print_parameters(chain,mcf)
     #    print_mu(chain,mcf)

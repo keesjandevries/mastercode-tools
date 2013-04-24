@@ -176,6 +176,21 @@ def cmssm_pre_lhc_input() :
     mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
     return MCFileCollection( [ mcf ], gd, warn = False)
 
+def nuhm1_pre_lhc_input() :
+    # output / global options
+    gd = nuhm1_pre_lhc_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+#             "FileName"          : "%s/cmssm_combine_sampling.root" % base_directory(),
+             "FileName"          : "%s/nuhm1_pre_lhc_including_cmssm_KO_50_7_14.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
 def cmssm_mcmh_mc7_input() :
     # output / global options
     gd = cmssm_mcmh_mc7_histo_dict()
@@ -1611,7 +1626,7 @@ def nuhm1_pre_lhc_histo_dict() :
         "LHoodBranchName"   : "vars",
         "BestFitEntryName"  : "BestFitEntry",
         "PredictionIndex"   : 12,
-        "SpectrumIndex"     : 119,
+        "SpectrumIndex"     : 126,
         "Inputs"            : 8, # FIXME: check this number is right!!!
 #        "LHoodFile"         : "models/mc7.lhood" ,
         "ModelFile"         : "models/mc7.model" ,
@@ -1814,3 +1829,86 @@ def nuhm1_mc8_all_stop_nlsp_histo() :
     return [MCFile(nuhm1_mc8_all_stop_nlsp_histo_dict() )]
 
 #####################################################################################
+def cmssm_pre_lhc_drop_mh_input() :
+    # output / global options
+    gd = cmssm_pre_lhc_drop_mh_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+#             "FileName"          : "%s/cmssm_combine_sampling.root" % base_directory(),
+             "FileName"          : "%s/cmssm_pre_lhc_temp_in.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+
+def cmssm_pre_lhc_drop_mh_histo_dict() :
+    return {
+        "FileName"          : "%s/cmssm_pre_lhc_drop_mh.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 10,
+#        "SpectrumIndex"     : 117,
+        "SpectrumIndex"     : 124,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "ModelFile"         : "models/mc7_drop_mh.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+     }
+def cmssm_pre_lhc_drop_mh_histo() :
+    return [MCFile(cmssm_pre_lhc_drop_mh_histo_dict() )]
+#####################################################################################
+def nuhm1_pre_lhc_drop_mh_input() :
+    # output / global options
+    gd = nuhm1_pre_lhc_drop_mh_histo_dict()
+#    gd["StartEntry"] = 0
+#    gd["EndEntry"]   = 50000
+
+    # input files: 1 dict per file
+    fd = {
+#             "FileName"          : "%s/nuhm1_combine_sampling.root" % base_directory(),
+             "FileName"          : "%s/nuhm1_pre_lhc_including_cmssm_no_KO.root" % base_directory(),
+             "Chi2TreeName"      : "tree",
+         }
+    mcf = MCFile( fd, warn = False ) # dont warn us on missing attributes as they're handled by MCFC
+    return MCFileCollection( [ mcf ], gd, warn = False)
+
+
+def nuhm1_pre_lhc_drop_mh_histo_dict() :
+    return {
+        "FileName"          : "%s/nuhm1_pre_lhc_drop_mh.root" % base_directory(),
+        "Chi2TreeName"      : "tree",
+        "Chi2BranchName"    : "vars",
+        "ContribTreeName"   : "contribtree",
+        "ContribBranchName" : "vars",
+        "LHoodTreeName"     : "lhoodtree",
+        "LHoodBranchName"   : "vars",
+        "BestFitEntryName"  : "BestFitEntry",
+        "PredictionIndex"   : 12,
+        "SpectrumIndex"     : 119,
+#        "SpectrumIndex"     : 126,
+        "Inputs"            : 7, # FIXME: check this number is right!!!
+        "ModelFile"         : "models/mc7_drop_mh.model" ,
+        "EntryDirectory"    : "entry_histograms",
+        "DataDirectory"     : "data_histograms",
+        "SmoothDirectory"   : "smooth_histograms",
+        "MinChi2"           : 0,
+        "MaxChi2"           : 1e9,
+        "MaxChi2"           : 45.,
+        "MinContrib"        : 0,
+     }
+def nuhm1_pre_lhc_drop_mh_histo() :
+    return [MCFile(nuhm1_pre_lhc_drop_mh_histo_dict() )]

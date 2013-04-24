@@ -313,7 +313,8 @@ class KOhack_class(object):
     def init_hack(self,space=None):
         self.ssi_axis = 'Y' # FIXME:this is now hard coded!!!
         self.hack_applied=True
-        if not space == None:
+        #if not space == None:
+        if space is not None:
             self.init_lhood(space)
             self.init_var_indices()
             self.df=get_dimension_factor(space)

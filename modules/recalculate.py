@@ -246,7 +246,7 @@ def recalc_to_file( collection, output_file = "" ) :
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)
-    end   = getattr( collection, "EndEntry", nentries+1)
+    end   = getattr( collection, "EndEntry", nentries)
 
     # want to keep track of this
     count_fill_points = 0
@@ -286,6 +286,14 @@ def recalc_to_file( collection, output_file = "" ) :
 
     prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
     print end-begin, " points to process..."
+
+    #initialise index numbers
+    v_indices=[]
+    for constraint in model :
+        MCV=MCVdict[constraint.short_name]
+        v_indices.append( MCV.get_index(collection))
+
+
     for entry in xrange(begin,end) :
 
         prog.increment_amount()
@@ -297,9 +305,9 @@ def recalc_to_file( collection, output_file = "" ) :
             delta = 0.
             chi2 = 0
 
-            for constraint in model :
-                MCV=MCVdict[constraint.short_name]
-                v_index = MCV.get_index(collection)
+            for constraint, v_index in zip(model,v_indices) :
+#                MCV=MCVdict[constraint.short_name]
+#                v_index = MCV.get_index(collection)
 
                 chi2_t = constraint.get_chi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
