@@ -61,7 +61,7 @@ class CartesianLikelihood( object ) :
 
 class LHood( object ) :
     def __init__( self, var_pos, lhd ) :
-        self.var_pos = var_pos # i.e. [1,2] for m0,m12
+        self.var_pos = var_pos # i.e. [1,2] for m0,m12 FIXME: I don't think we need the var positions, or they could be in lhd
         lh_type = lhd["lhtype"]
         self.name = lhd["name"]
         if lh_type == "Radial" :

@@ -23,6 +23,12 @@ def get_lhood_dict() :
                                   "name"   : "BR(B_s->mumu) LHCb [MC8 Diego] ",
                                   "vars"   : [ "Bsmumu" ],
                               },
+          "Bsmumu_HCP12_X2" : {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/HCP/HCP_bsmm_2012.dat",10 ],
+                                  "name"   : "BR(B_s->mumu) LHCb+CMS+ATLAS+CDF [HCP12 Diego unofficial comb] ",
+                                  "vars"   : [ "Bsmumu" ],
+                              },
           "BsmumuMC8DiegoX2" :   {
                                   "lhtype" : "Cartesian",
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/bsmm_X2_lookup.dat",10 ],
@@ -40,6 +46,18 @@ def get_lhood_dict() :
                                   "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc7/bs_cms_lhcb_s_sb.dat" ],
                                   "name"   : "BR(B_s->mumu) LHCb+CMS [MC7]",
                                   "vars"   : [ "Bsmumu" ],
+                              },
+          "Xenon2012LogUnc"  :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/xenon2012_contour.csv",12, 1.0, 2.7,1 ],
+                                  "name"   :"Xenon 2012 [MC8] with log unc on ssi",
+                                  "vars"   : [ "neu1", "sigma_pp^SI" ],
+                              },
+          "Xenon2012"     :   {
+                                  "lhtype" : "Cartesian",
+                                  "c_args" : [ "reprocessing/lhoods/lookups/1d_lookups/mc8/xenon2012_contour.csv",11, 1.0, 2.7,1 ],
+                                  "name"   :"Xenon 2012 [MC8]",
+                                  "vars"   : [ "neu1", "sigma_pp^SI" ],
                               },
           "Xenon2011"     :   {
                                   "lhtype" : "Cartesian",

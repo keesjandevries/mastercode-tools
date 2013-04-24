@@ -45,6 +45,17 @@ double getGaussChi2(double x, double mu, double sigma, int ndof)
   return chi2;
 }
 
+double getGaussChi2XenonModified(double x, double mu, double sigma, int ndof)
+{
+  double Earg = fabs(x-mu)/(sqrt(2*(sigma*sigma + x*x*0.1505*0.1505  ) ));
+  double cdf = 0.5*(1+erf(Earg));
+  double pval = cdf*2.-1.;
+  double chi2=0;
+  if(pval<1.) chi2 = TMath::ChisquareQuantile(pval,ndof);
+  else if (pval==1) chi2 = 1e9;
+  return chi2;
+}
+
 void CartesianLikelihoodFunctions::add_supplementary(std::vector<std::string>& files)
 {
     c_.resize( files.size() ); 
@@ -93,6 +104,30 @@ double CartesianLikelihoodFunctions::XenonMC6( double P, double Q, Coords &c )
     double x0 = 6.0548;
     double R = x0*r;
     chi2 = getGaussChi2(R,mu_,sigma_,ndof_);
+    return chi2;
+}
+
+double CartesianLikelihoodFunctions::XenonMC8( double P, double Q, Coords &c )
+{
+    double chi2 = 0;
+    /* for Xenon implementation */
+    double yval = c.getYVal(P);
+    double r = Q/yval;
+    double x0 = 5.1;
+    double R = x0*r;
+    chi2 = getGaussChi2(R,mu_,sigma_,ndof_);
+    return chi2;
+}
+
+double CartesianLikelihoodFunctions::XenonMC8Modified( double P, double Q, Coords &c )
+{
+    double chi2 = 0;
+    /* for Xenon implementation */
+    double yval = c.getYVal(P);
+    double r = Q/yval;
+    double x0 = 5.1;
+    double R = x0*r;
+    chi2 = getGaussChi2XenonModified(R,mu_,sigma_,ndof_);
     return chi2;
 }
 

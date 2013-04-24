@@ -25,7 +25,7 @@ def checkState( filename, dataToCheck ) :
     tf = r.TFile( filename )
     state = True
     for tData in dataToCheck :
-        if tf.Get(tData.treeName) is None : state = False
+        if not tf.Get(tData.treeName)  : state = False
     return state
 
 #-- Chain Classes
@@ -33,11 +33,14 @@ def checkState( filename, dataToCheck ) :
 
 class MCChain( object ) :
     def __init__(self, mcfc) :
+        self.state=True
         if mcfc.__class__.__name__ == "MCFile" :
             mcfc = MCFileCollection([mcfc])
         if not hasattr(self, "treeFiles") : setattr( self, "treeFiles", [] )
-        self.initialize_chains()
-        self.setup_branches()
+
+        if self.state: self.initialize_chains()
+        if self.state: self.setup_branches()
+        if not self.state: print "MCChain has a problem for", mcfc.FileName
 
     def initialize_chains( self ) :
         self.chains = {}
@@ -51,10 +54,13 @@ class MCChain( object ) :
                     self.chains[ tData.content ].AddFile( tFile.fileName, -1, tData.treeName )
         for chain in self.chains.values() :
             chain.SetCacheSize(0)
-        ## we dont use this
-        #self.nentries = self.chain.values()[-1].GetEntries()
-        self.contentKeys = sorted(self.chains.keys())
-        self.baseKey = self.contentKeys[0]
+        # it can happen that all of the treeFiles are in a "false" state
+        if len(self.chains):
+            self.contentKeys = sorted(self.chains.keys())
+            self.baseKey = self.contentKeys[0]
+        else : 
+            print "No files made it into the chain"
+            self.state = False
 
     def setup_branches( self ) :
         self.nTotVars = {}

@@ -13,7 +13,8 @@ from math import sqrt
 # avoid namespace clash
 __DEBUG=False
 
-def good_point( point, mcfc, verbose = 0) :
+
+def good_point( point, mcfc,MCVdict,verbose = 0 ) :
     problem = ""
     good = True
 
@@ -22,6 +23,138 @@ def good_point( point, mcfc, verbose = 0) :
     if getattr( mcfc, "DisallowGravitinoLSP", False ) and mneu1 > m32 :
         good = False
         if verbose > 0 : problem += "\t! Gravitino LSP (mSUGRA)\n"
+
+
+    #29/11/2012: Only keep points with m_stau - m_neutralino < m_tau
+    if getattr( mcfc, "LongLivedStua", False ): 
+        mneu1 = point[MCVdict["neu1"].get_index(mcfc)]
+        mstau = point[MCVdict["stau_1"].get_index(mcfc)]
+        if  mstau-mneu1 > 1.777 :
+            good = False
+            if verbose > 0 : problem += "\t! Cut away mstau-mneu1 > mstau. \n"
+
+    #16/08/2012: cut on tanb for long lived stau's  
+    if getattr( mcfc, "LongLivedStuaTanbCut", False ): 
+        tanb = point[4]
+        if not tanb < 41.:
+            good = False
+            if verbose > 0 : problem += "\t! Cut away tanb > 41. \n"
+
+    #10/09/2012 
+    if getattr( mcfc, "CharginoNLSPCut", False ): 
+        index_offset=mcfc.SpectrumIndex
+#        spectrum=[abs(m) for m in (point[spi:spi+1]+point[spi+3:spi+21])]
+#        m_nlsp=min(spectrum)
+#        m_stau=point[spi+12]
+#        m_char=point[spi]
+        chi1     =  abs(point[index_offset+0 ])  
+#       chi2     =  abs(point[index_offset+1 ])  
+#       neu1     =  abs(point[index_offset+2 ])  
+        neu2     =  abs(point[index_offset+3 ])  
+        neu3     =  abs(point[index_offset+4 ])  
+        neu4     =  abs(point[index_offset+5 ])  
+        sel_r    =  abs(point[index_offset+6 ])  
+        sel_l    =  abs(point[index_offset+7 ])  
+        snu_e    =  abs(point[index_offset+8 ])  
+        smu_r    =  abs(point[index_offset+9 ])  
+        smu_l    =  abs(point[index_offset+10])
+        snu_mu   =  abs(point[index_offset+11])
+        stau_1   =  abs(point[index_offset+12])
+#       stau_2   =  abs(point[index_offset+13])
+        snu_tau  =  abs(point[index_offset+14])
+        squark_r =  abs(point[index_offset+15])
+        squark_l =  abs(point[index_offset+16])
+        stop1    =  abs(point[index_offset+17])
+#       stop2    =  abs(point[index_offset+18])
+        sbottom1 =  abs(point[index_offset+19])
+#       sbottom2 =  abs(point[index_offset+20])
+        gluino   =  abs(point[index_offset+21])
+#       mh0      =  abs(point[index_offset+22])
+        mH0      =  abs(point[index_offset+23])
+        mA0      =  abs(point[index_offset+24])
+        mH       =  abs(point[index_offset+25])
+        spectrum=[
+        chi1     ,  
+#       chi2     ,  
+#       neu1     ,  
+        neu2     ,  
+        neu3     ,  
+        neu4     ,  
+        sel_r    ,  
+        sel_l    ,  
+        snu_e    ,  
+        smu_r    ,  
+        smu_l    ,
+        snu_mu   ,
+        stau_1   ,
+#       stau_2   ,
+        snu_tau  ,
+        squark_r ,
+        squark_l ,
+        stop1    ,
+#       stop2    ,
+        sbottom1 ,
+#       sbottom2 ,
+        gluino   ,
+#       mh0      ,
+        mH0      ,
+        mA0      ,
+        mH       ,
+                        ]
+        abs_spectrum=[abs(m) for m in spectrum]
+        m_nlsp = min(abs_spectrum)
+#        print  abs_spectrum
+#        if not m_nlsp==stau_1  :
+        if not m_nlsp==neu2    :
+#            print abs_spectrum
+            good = False
+            if verbose > 0 : problem += "\t! Cut away Chargino is not LSP \n"
+
+    #June 2012: make the cut for resampling the SuFla buggy points, see mail (Final (?) reprocessing? II)
+    if getattr( mcfc, "SelectSuFlaBugPoints", False ): 
+        MA = point[mcfc.SpectrumIndex+24]
+        tanb = point[4]
+        if not ( (mcfc.SpectrumIndex==117 and tanb >40) or (mcfc.SpectrumIndex==119 and( ( tanb >30 and MA<2000) or (tanb>40 and MA>=200) ))):
+            good = False
+            if verbose > 0 : problem += "\t! In bugged region \n"
+
+    # July 2012: to redo the CMSSM points in the lower triangle, see mail (tanb cut for the CMSSM probably to sharp )
+    if getattr( mcfc, "SelectSuFlaCMSSMLowerTrianglePoints", False ): 
+        m0  = point[1]
+        m12 = point[2]
+        tanb = point[4]
+        if not ( mcfc.SpectrumIndex==117 and tanb < 40 and m12 < (0.3995*m0 -388  )  ):
+            good = False
+            if verbose > 0 : problem += "\t! Not in triangle \n"
+
+    #July 2012: to redo the NUHM1 point with low tanb and MA>1500
+    if getattr( mcfc, "SelectSuFlaNUHM1LowTanbPoints", False ): 
+        tanb = point[4]
+        MA = point[mcfc.SpectrumIndex+24]
+        if not ( mcfc.SpectrumIndex==119 and ((MA > 1500 and tanb <30 ) or (MA>2000 and tanb<40)  )):
+            good = False
+            if verbose > 0 : problem += "\t! Not in the NUHM1 low tanb high MA region \n"
+
+    # make the cut for resampling the SuFla buggy points, see mail (Final (?) reprocessing? II)
+    if getattr( mcfc, "SelectSuFlaNoneBugPoints", False ): 
+        m0  = point[1]
+        m12 = point[2]
+        MA = point[mcfc.SpectrumIndex+24]
+        tanb = point[4]
+        if ((mcfc.SpectrumIndex==117 and tanb >40 or (tanb < 40 and m12 < (0.3995*m0 -388  ))) or  
+            (mcfc.SpectrumIndex==119 and  (tanb>30 or MA>1500   ) )):
+            good = False
+            if verbose > 0 : problem += "\t! Not in bugged region \n"
+
+    # The so called surgical amputation: removing points from " the infamous region C  "
+    if getattr( mcfc, "SelectRegionC", False ) and point[2] < (600+2.7*point[1]) :
+        good = False
+        if verbose > 0 : problem += "\t! Point not in region C\n"
+
+    # The so called surgical amputation: removing points from " the infamous region C  "
+    if getattr( mcfc, "SurgicalAmputation", False ) and point[2] > (600+2.7*point[1]) :
+        good = False
+        if verbose > 0 : problem += "\t! Apply surgical amputation of point in region C\n"
 
     tanb = point[4]
     if tanb > 70 :
@@ -108,10 +241,15 @@ def recalc_to_file( collection, output_file = "" ) :
     MCVdict=v.mc_variables()
 
     chain = MCRecalcChain( collection )
+    if not chain.state :
+        return
     nentries = chain.GetEntries()
 
     begin = getattr( collection, "StartEntry", 0)
-    end   = getattr( collection, "EndEntry", nentries+1)
+    end   = getattr( collection, "EndEntry", nentries)
+
+    # want to keep track of this
+    count_fill_points = 0
 
     total_delta = 0
 
@@ -124,7 +262,7 @@ def recalc_to_file( collection, output_file = "" ) :
     contribvars = array('d',[0.0]*nTotVars)
     contribtree = r.TTree( 'contribtree', 'chi2 contributions')
     varsOutName = "vars[%d]/D" % ( nTotVars )
-    contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
+#    contribtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     contribtree.Branch("vars",contribvars,varsOutName)
 
     # same with lhood
@@ -132,7 +270,7 @@ def recalc_to_file( collection, output_file = "" ) :
     lhoodvars = array('d',[0.0]*nLHoods)
     lhoodtree = r.TTree( 'lhoodtree', 'lhood contributions')
     varsOutName = "vars[%d]/D" % ( nLHoods )
-    lhoodtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
+#    lhoodtree.SetMaxTreeSize(10*chi2tree.GetMaxTreeSize())
     lhoodtree.Branch("vars",lhoodvars,varsOutName)
 
     # want to save best fit point entry number: create new tree and branch
@@ -147,20 +285,29 @@ def recalc_to_file( collection, output_file = "" ) :
     count=-1 # becuase the first entry has number 0
 
     prog = ProgressBar(begin, end, 77, mode='fixed', char='#')
-    for entry in range(begin,end) :
+    print end-begin, " points to process..."
+
+    #initialise index numbers
+    v_indices=[]
+    for constraint in model :
+        MCV=MCVdict[constraint.short_name]
+        v_indices.append( MCV.get_index(collection))
+
+
+    for entry in xrange(begin,end) :
 
         prog.increment_amount()
         print prog,'\r',
         stdout.flush()
 
         chain.GetEntry(entry)
-        if good_point( chain.treeVars["predictions"], collection ) :
+        if good_point( chain.treeVars["predictions"], collection,MCVdict ) :
             delta = 0.
             chi2 = 0
 
-            for constraint in model :
-                MCV=MCVdict[constraint.short_name]
-                v_index = MCV.get_index(collection)
+            for constraint, v_index in zip(model,v_indices) :
+#                MCV=MCVdict[constraint.short_name]
+#                v_index = MCV.get_index(collection)
 
                 chi2_t = constraint.get_chi2( chain.treeVars["predictions"][v_index] )
                 contribvars[v_index] = chi2_t
@@ -183,6 +330,7 @@ def recalc_to_file( collection, output_file = "" ) :
                 chain.treeVars["predictions"][0] = chi2
                 contribvars[0] = chi2
                 chi2tree.Fill()
+                count_fill_points+=1
                 contribtree.Fill()
                 lhoodtree.Fill()
                 count+=1
@@ -202,6 +350,9 @@ def recalc_to_file( collection, output_file = "" ) :
     lhoodtree.AutoSave()
 
     out.Close()
+    # some output for Monitoring:
+    print "Total number of points       : ",end-begin
+    print "Accepted number of points    : ",count_fill_points
 
     if __DEBUG :
         print "\n--------------------------\n"

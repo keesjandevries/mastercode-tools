@@ -22,6 +22,7 @@ def get_lhood_from_file( mcf ) :
                     out[name] = lhm.LHood( var_ints, lhs[name] )
                 else :
                     print "Unknown Likelihood: %s, ignoring!" % name
+        f.close()
     return out
 
 def get_lhood_names( mcf ) :
@@ -34,6 +35,7 @@ def get_lhood_names( mcf ) :
             for line in f :
                 name = line[:-1] #cut EOL
                 out[name] = lhd[name]["name"] 
+        f.close()
     return out
 
 def get_model_from_file( mcf ) :
@@ -47,4 +49,5 @@ def get_model_from_file( mcf ) :
                 out.append(d[constraint])
             else :
                 print ">", constraint, "< not in variable list (check modules/constraint_dict.py)"
+    f.close()
     return out

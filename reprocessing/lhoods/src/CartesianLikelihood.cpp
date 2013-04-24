@@ -126,6 +126,24 @@ void CartesianLikelihood::configure(int function, double mu, double sigma, int n
             break;
 
         }
+        case 11: //Xenon MC8 
+        {
+            std::cout << "Using CartesianLikelihood default Xenon MC8" << std::endl;
+            lfuncs.set_values(mu,sigma,ndf);
+            lhood = new LikelihoodFunctor1D<CartesianLikelihoodFunctions> 
+                (&lfuncs,&CartesianLikelihoodFunctions::XenonMC8);
+            valindex.doPopulate(filename);
+            break;
+        }
+        case 12: //Xenon MC8 
+        {
+            std::cout << "Using CartesianLikelihood modified Xenon MC8 with log(sqrt(2)) uncertainty on the X-section" << std::endl;
+            lfuncs.set_values(mu,sigma,ndf);
+            lhood = new LikelihoodFunctor1D<CartesianLikelihoodFunctions> 
+                (&lfuncs,&CartesianLikelihoodFunctions::XenonMC8Modified);
+            valindex.doPopulate(filename);
+            break;
+        }
         default: // Gaussian
         {
             lfuncs.set_values(mu,sigma,ndf);
